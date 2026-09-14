@@ -25,7 +25,7 @@ synthetic fixture chains built by :func:`synthetic_chain`.
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 
 import numpy as np
 import pandas as pd
@@ -62,7 +62,16 @@ class CleaningReport:
     n_dropped_nonpositive_ask: int = 0
     n_dropped_arbitrage_violation: int = 0
     n_flagged_zero_bid: int = 0
-    dropped_reasons: dict[str, int] = field(default_factory=dict)
+
+    @property
+    def dropped_reasons(self) -> dict[str, int]:
+        return {
+            "expired": self.n_dropped_expired,
+            "negative_bid": self.n_dropped_negative_bid,
+            "crossed": self.n_dropped_crossed,
+            "nonpositive_ask": self.n_dropped_nonpositive_ask,
+            "arbitrage_violation": self.n_dropped_arbitrage_violation,
+        }
 
 
 def _year_fraction(timestamp: pd.Series, expiration: pd.Series) -> pd.Series:
@@ -150,13 +159,6 @@ def clean_chain(raw: pd.DataFrame) -> tuple[pd.DataFrame, CleaningReport]:
         n_dropped_nonpositive_ask=n_dropped_nonpositive_ask,
         n_dropped_arbitrage_violation=n_dropped_arbitrage_violation,
         n_flagged_zero_bid=n_flagged_zero_bid,
-        dropped_reasons={
-            "expired": n_dropped_expired,
-            "negative_bid": n_dropped_negative_bid,
-            "crossed": n_dropped_crossed,
-            "nonpositive_ask": n_dropped_nonpositive_ask,
-            "arbitrage_violation": n_dropped_arbitrage_violation,
-        },
     )
     return df.reset_index(drop=True), report
 

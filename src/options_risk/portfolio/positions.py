@@ -15,15 +15,9 @@ actual dollar/share exposure of the position — not "per contract" or
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Protocol
 
 from options_risk.pricing.black_scholes import OptionType, bsm_price
 from options_risk.pricing.greeks import Greeks, greeks
-
-
-class Position(Protocol):
-    def market_value(self) -> float: ...
-    def position_greeks(self) -> Greeks: ...
 
 
 @dataclass(frozen=True)
