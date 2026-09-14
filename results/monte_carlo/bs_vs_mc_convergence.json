@@ -1,0 +1,55 @@
+{
+  "inputs": {
+    "S": 100.0,
+    "K": 100.0,
+    "T": 1.0,
+    "r": 0.03,
+    "sigma": 0.25,
+    "option_type": "call",
+    "q": 0.0
+  },
+  "analytic_price": 11.348476825143514,
+  "seed": 42,
+  "variance_reduction": {
+    "antithetic": true,
+    "control_variate": true
+  },
+  "convergence_table": [
+    {
+      "n_paths": 1000,
+      "mc_price": 11.341250855684235,
+      "standard_error": 0.10246515206094126,
+      "ci_low": 11.14042284797437,
+      "ci_high": 11.5420788633941,
+      "analytic_in_ci": true,
+      "abs_error_vs_analytic": 0.0072259694592791135
+    },
+    {
+      "n_paths": 10000,
+      "mc_price": 11.298600948868227,
+      "standard_error": 0.03564521742598228,
+      "ci_low": 11.228737606492203,
+      "ci_high": 11.368464291244251,
+      "analytic_in_ci": true,
+      "abs_error_vs_analytic": 0.04987587627528711
+    },
+    {
+      "n_paths": 100000,
+      "mc_price": 11.33319974306051,
+      "standard_error": 0.011583573970483261,
+      "ci_low": 11.310496355266107,
+      "ci_high": 11.355903130854912,
+      "analytic_in_ci": true,
+      "abs_error_vs_analytic": 0.0152770820830046
+    },
+    {
+      "n_paths": 1000000,
+      "mc_price": 11.345529999121151,
+      "standard_error": 0.0036305988492360665,
+      "ci_low": 11.338414156134336,
+      "ci_high": 11.352645842107966,
+      "analytic_in_ci": true,
+      "abs_error_vs_analytic": 0.0029468260223630693
+    }
+  ]
+}

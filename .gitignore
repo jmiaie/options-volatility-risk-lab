@@ -18,7 +18,9 @@ lib/
 lib64/
 parts/
 sdist/
-var/
+# Root-anchored (not "var/") so this doesn't also match results/var/, this
+# repo's VaR results directory.
+/var/
 wheels/
 share/python-wheels/
 *.egg-info/

@@ -1,0 +1,53 @@
+{
+  "data_source": "SYNTHETIC fixture (options_risk.data.chain.synthetic_chain, seed=7) -- not real market data",
+  "cleaning_report": {
+    "n_input": 59,
+    "n_output": 52,
+    "dropped_reasons": {
+      "expired": 1,
+      "negative_bid": 1,
+      "crossed": 1,
+      "nonpositive_ask": 0,
+      "arbitrage_violation": 4
+    }
+  },
+  "sanity_report": {
+    "n_rows": 52,
+    "n_duplicate_contracts": 0,
+    "n_negative_iv": 0,
+    "n_extreme_spread": 6
+  },
+  "expiries_years": [
+    0.019164955509924708,
+    0.08213552361396304,
+    0.2464065708418891,
+    0.4928131416837782
+  ],
+  "smile_at_shortest_expiry": [
+    {
+      "k": -0.15,
+      "iv": 0.3816267646771553,
+      "extrapolated_in_moneyness": false
+    },
+    {
+      "k": -0.05,
+      "iv": 0.28408097463849036,
+      "extrapolated_in_moneyness": false
+    },
+    {
+      "k": 0.0,
+      "iv": 0.28348787324819685,
+      "extrapolated_in_moneyness": false
+    },
+    {
+      "k": 0.05,
+      "iv": 0.2764575134359816,
+      "extrapolated_in_moneyness": false
+    },
+    {
+      "k": 0.15,
+      "iv": 0.38024746505566626,
+      "extrapolated_in_moneyness": false
+    }
+  ]
+}
