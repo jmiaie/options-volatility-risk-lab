@@ -1,0 +1,15 @@
+{
+  "note": "Synthetic deterministic example only",
+  "price": 9.227006,
+  "delta": 0.586851,
+  "gamma": 0.018951,
+  "vega": 37.901158,
+  "theta": -5.089319,
+  "rho": 49.458109,
+  "fd_delta": 0.586851,
+  "implied_volatility": 0.2,
+  "mc_price": 9.241294,
+  "mc_standard_error": 0.043919,
+  "mc_ci_low": 9.155214,
+  "mc_ci_high": 9.327373
+}
