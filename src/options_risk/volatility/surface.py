@@ -28,6 +28,7 @@ the nearest boundary) but the caller is told so.
 from __future__ import annotations
 
 from dataclasses import dataclass
+from typing import cast
 
 import numpy as np
 import pandas as pd
@@ -68,7 +69,7 @@ class VolSurface:
             raise ValueError("VolSurface requires at least one observation")
         df = pd.DataFrame({"T": T, "k": k, "iv": iv}).sort_values(["T", "k"])
         self._by_expiry: dict[float, pd.DataFrame] = {
-            t: grp.sort_values("k").reset_index(drop=True) for t, grp in df.groupby("T")
+            float(t): grp.sort_values("k").reset_index(drop=True) for t, grp in df.groupby("T")
         }
         self._expiries = np.array(sorted(self._by_expiry.keys()))
 
@@ -174,15 +175,22 @@ def build_surface_from_chain(df: pd.DataFrame) -> VolSurface:
     :mod:`options_risk.pricing.implied_vol`) are dropped from the surface
     rather than included with a placeholder value.
     """
+    from options_risk.pricing.black_scholes import OptionType
     from options_risk.pricing.implied_vol import solve_iv
 
     Ts, ks, ivs = [], [], []
     for row in df.itertuples():
-        result = solve_iv(row.mid, row.spot, row.strike, row.T, row.r, row.option_type, row.q)
+        # itertuples() loses per-column dtypes (each attribute types as a
+        # broad Union at the type-checker level), so cast explicitly even
+        # though the cleaned chain guarantees these are numeric/str at runtime.
+        mid, spot, strike = float(row.mid), float(row.spot), float(row.strike)
+        T, r, q = float(row.T), float(row.r), float(row.q)
+        option_type = cast(OptionType, row.option_type)
+        result = solve_iv(mid, spot, strike, T, r, option_type, q)
         if not result.converged or result.iv is None:
             continue
-        k = float(log_forward_moneyness(row.strike, row.spot, row.T, row.r, row.q))
-        Ts.append(row.T)
+        k = float(log_forward_moneyness(strike, spot, T, r, q))
+        Ts.append(T)
         ks.append(k)
         ivs.append(result.iv)
 
