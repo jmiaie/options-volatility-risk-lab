@@ -1,0 +1,35 @@
+{
+  "note": "Synthetic deterministic example only",
+  "portfolio_value": 338.540762,
+  "delta": 4.426124,
+  "gamma": 0.013907,
+  "vega": 52.962596,
+  "theta": -3.936744,
+  "rho": 111.59134,
+  "historical_var_95": 42.438542,
+  "historical_es_95": 42.438542,
+  "delta_normal_var_95": 9.173187,
+  "delta_normal_es_95": 11.503547,
+  "monte_carlo_var_95": 9.084255,
+  "monte_carlo_es_95": 11.383312,
+  "stress_scenarios": [
+    {
+      "scenario": "spot_down_10pct_vol_up_3pts",
+      "repriced_value": 296.191121,
+      "pnl": -42.349641,
+      "spot_return": -0.105361,
+      "vol_shift": 0.03,
+      "rate_shift": 0.0,
+      "time_shift": 0.0
+    },
+    {
+      "scenario": "spot_up_5pct_vol_down_1pt",
+      "repriced_value": 360.295755,
+      "pnl": 21.754994,
+      "spot_return": 0.04879,
+      "vol_shift": -0.01,
+      "rate_shift": 0.0,
+      "time_shift": 0.0
+    }
+  ]
+}
