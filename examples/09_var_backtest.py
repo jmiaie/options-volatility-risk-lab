@@ -17,6 +17,7 @@ import numpy as np
 from _common import build_example_portfolio
 
 from options_risk.risk.backtesting import (
+    breaches_from_losses,
     christoffersen_independence_test,
     conditional_coverage_test,
     kupiec_pof_test,
@@ -36,7 +37,6 @@ def main() -> None:
     rng = np.random.default_rng(99)
     daily_log_returns = rng.normal(0.0, 0.014, size=n_total_days)  # SYNTHETIC returns
 
-    breaches = []
     var_forecasts = []
     realized_losses = []
     for t in range(window, n_total_days):
@@ -48,13 +48,10 @@ def main() -> None:
             portfolio,
             Scenario(name=f"day_{t}", spot_shock_pct=float(np.exp(daily_log_returns[t]) - 1)),
         )
-        realized_loss = -realized_result.pnl
-
         var_forecasts.append(var_summary.var)
-        realized_losses.append(realized_loss)
-        breaches.append(realized_loss > var_summary.var)
+        realized_losses.append(-realized_result.pnl)
 
-    breaches_arr = np.array(breaches)
+    breaches_arr = breaches_from_losses(np.array(realized_losses), np.array(var_forecasts))
     kupiec = kupiec_pof_test(breaches_arr, confidence_level)
     christoffersen = christoffersen_independence_test(breaches_arr, confidence_level)
     cc = conditional_coverage_test(breaches_arr, confidence_level)
