@@ -34,6 +34,33 @@ def test_final_wealth_equals_terminal_cash() -> None:
     assert result.final_wealth == pytest.approx(result.path.iloc[-1]["cash"])
 
 
+def test_dividend_yield_hedge_is_unbiased_in_expectation() -> None:
+    # With q != 0, correctly-specified vol, and zero cost, the hedge should
+    # still be unbiased on average -- this is the regression check for the
+    # dividend-income cash flow: without it, holding a long stock hedge on
+    # a dividend-paying underlying would leak value and bias final_wealth
+    # systematically negative (for a short-call hedge, long-stock position).
+    from options_risk.pricing.black_scholes import bsm_price
+
+    case = dict(**{**BASE, "q": 0.03})
+    premium = bsm_price(
+        S=case["S0"],
+        K=case["K"],
+        T=case["T"],
+        r=case["r"],
+        sigma=case["sigma_pricing"],
+        option_type=case["option_type"],
+        q=case["q"],
+    )
+    errors = [
+        simulate_delta_hedge(
+            **case, option_qty=-1.0, n_steps=252, cost_rate=0.0, seed=s
+        ).final_wealth
+        for s in range(100)
+    ]
+    assert abs(np.mean(errors)) < 0.05 * premium
+
+
 def test_zero_cost_zero_vol_gives_near_perfect_replication_in_continuum_limit() -> None:
     # With realized == pricing vol and many rebalances, the average hedging
     # error across seeds should be small relative to the option premium.

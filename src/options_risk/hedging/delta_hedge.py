@@ -19,6 +19,11 @@ Setup and sign conventions:
   each rebalance interval, then absorbs the cash flow from any hedge trade
   (buy = cash outflow, sell = cash inflow) net of a proportional
   transaction cost (``cost_rate`` as a fraction of traded notional).
+* When ``q != 0``, the held stock position also earns continuous dividend
+  yield ``q`` between rebalances, credited to ``cash`` (approximated against
+  each interval's starting price) — without this cash flow, a long stock
+  hedge would silently leak value and the self-financing property below
+  would not actually hold for a dividend-paying underlying.
 * The account is **self-financing except for the initial option premium
   cash flow**: entering the option position at ``t=0`` costs
   ``-option_qty * price_0`` in cash (this is the one explicit external cash
@@ -142,6 +147,12 @@ def simulate_delta_hedge(
         )
 
         if i < n_steps:
+            # Dividend income on the held stock position over [t_i, t_i+dt),
+            # accrued at continuous yield q against the interval's starting
+            # price (a standard discrete-time approximation) and paid as
+            # cash -- without this, a long stock hedge would "leak" value
+            # whenever q != 0 and the self-financing property would not hold.
+            cash += shares_held * S_i * (np.exp(q * dt) - 1.0)
             cash *= np.exp(r * dt)  # financing/interest accrual over the next interval
 
     path = pd.DataFrame(rows)
