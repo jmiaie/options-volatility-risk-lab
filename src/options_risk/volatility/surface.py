@@ -28,7 +28,7 @@ the nearest boundary) but the caller is told so.
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import cast
+from typing import Any, cast
 
 import numpy as np
 import pandas as pd
@@ -69,7 +69,8 @@ class VolSurface:
             raise ValueError("VolSurface requires at least one observation")
         df = pd.DataFrame({"T": T, "k": k, "iv": iv}).sort_values(["T", "k"])
         self._by_expiry: dict[float, pd.DataFrame] = {
-            float(t): grp.sort_values("k").reset_index(drop=True) for t, grp in df.groupby("T")
+            float(cast(Any, t)): grp.sort_values("k").reset_index(drop=True)
+            for t, grp in df.groupby("T")
         }
         self._expiries = np.array(sorted(self._by_expiry.keys()))
 
@@ -183,8 +184,12 @@ def build_surface_from_chain(df: pd.DataFrame) -> VolSurface:
         # itertuples() loses per-column dtypes (each attribute types as a
         # broad Union at the type-checker level), so cast explicitly even
         # though the cleaned chain guarantees these are numeric/str at runtime.
-        mid, spot, strike = float(row.mid), float(row.spot), float(row.strike)
-        T, r, q = float(row.T), float(row.r), float(row.q)
+        mid = float(cast(Any, row.mid))
+        spot = float(cast(Any, row.spot))
+        strike = float(cast(Any, row.strike))
+        T = float(cast(Any, row.T))
+        r = float(cast(Any, row.r))
+        q = float(cast(Any, row.q))
         option_type = cast(OptionType, row.option_type)
         result = solve_iv(mid, spot, strike, T, r, option_type, q)
         if not result.converged or result.iv is None:
