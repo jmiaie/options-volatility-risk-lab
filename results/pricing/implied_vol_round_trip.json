@@ -1,0 +1,20 @@
+{
+  "true_sigma": 0.27,
+  "price_from_true_sigma": 7.766894202956976,
+  "brent_result": {
+    "iv": 0.26999999817895565,
+    "converged": true,
+    "iterations": 9
+  },
+  "newton_result": {
+    "iv": 0.27000000014779746,
+    "converged": true,
+    "iterations": 3
+  },
+  "recovered_sigma_matches_true": true,
+  "arbitrage_violating_price_refused": {
+    "price_tried": 500.0,
+    "converged": false,
+    "failure_reason": "observed price violates static no-arbitrage bounds; no Black-Scholes volatility is consistent with this price"
+  }
+}

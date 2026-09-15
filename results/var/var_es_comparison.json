@@ -1,0 +1,28 @@
+{
+  "portfolio_market_value": 74818.17146382923,
+  "confidence_level": 0.95,
+  "return_series_note": "SYNTHETIC daily log returns (mean 0.02%, vol 1.5%), seed=2024 -- not real market data",
+  "historical_simulation_var": {
+    "var": 2260.439812861675,
+    "es": 3068.2339674108375,
+    "n_obs": 500,
+    "mean_loss": -14.915570732678491,
+    "std_loss": 1432.592903078939
+  },
+  "delta_normal_var": {
+    "var": 2349.3492860717447,
+    "es": 2946.178785932535,
+    "portfolio_dollar_delta": 95220.19660095697,
+    "assumption": "linear P&L, normal returns -- see docs/model-risk.md #5"
+  },
+  "monte_carlo_var": {
+    "var": 2347.1861947422117,
+    "es": 2969.9071202812083,
+    "n_obs": 20000,
+    "seed": 2024
+  },
+  "model_disagreement": {
+    "historical_vs_delta_normal_var_ratio": 0.96215570254403,
+    "note": "Delta-Normal ignores Gamma; for this short-put/long-call convex book its VaR is expected to differ materially from full-revaluation historical/MC VaR."
+  }
+}

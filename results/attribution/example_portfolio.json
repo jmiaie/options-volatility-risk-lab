@@ -1,0 +1,49 @@
+{
+  "positions": [
+    {
+      "type": "EquityPosition",
+      "symbol": "ABC",
+      "quantity": 500,
+      "price": 100.0
+    },
+    {
+      "type": "OptionPosition",
+      "symbol": "ABC",
+      "option_type": "put",
+      "quantity": -10,
+      "strike": 95.0,
+      "T": 0.25,
+      "S": 100.0,
+      "r": 0.03,
+      "sigma": 0.22,
+      "q": 0.0,
+      "multiplier": 100
+    },
+    {
+      "type": "OptionPosition",
+      "symbol": "ABC",
+      "option_type": "call",
+      "quantity": 5,
+      "strike": 110.0,
+      "T": 0.5,
+      "S": 100.0,
+      "r": 0.03,
+      "sigma": 0.24,
+      "q": 0.0,
+      "multiplier": 100
+    },
+    {
+      "type": "CashPosition",
+      "amount": 25000.0
+    }
+  ],
+  "market_value": 74818.17146382923,
+  "portfolio_greeks": {
+    "delta": 952.2019660095698,
+    "gamma": -19.583114329368573,
+    "vega": -3685.661629500026,
+    "theta": 2875.6492865533264,
+    "rho": 15256.874785851289
+  },
+  "note": "Delta/Gamma/Vega/Theta/Rho are already scaled by quantity and contract multiplier (total dollar/share exposure), per options_risk.pricing.greeks conventions."
+}

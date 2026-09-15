@@ -1,0 +1,60 @@
+{
+  "portfolio_market_value": 5261.968478081744,
+  "shock_table": [
+    {
+      "dS": 0.5,
+      "delta_pnl": 361.36270628129523,
+      "gamma_pnl": 1.7456608974774002,
+      "explained_pnl": 363.10836717877265,
+      "actual_pnl_full_reval": 363.1070153544997,
+      "residual": -0.0013518242729446683,
+      "residual_pct_of_actual": -3.722936257854695e-06
+    },
+    {
+      "dS": 1.0,
+      "delta_pnl": 722.7254125625905,
+      "gamma_pnl": 6.982643589909601,
+      "explained_pnl": 729.7080561525,
+      "actual_pnl_full_reval": 729.6958863147975,
+      "residual": -0.012169837702572295,
+      "residual_pct_of_actual": -1.6677958490397897e-05
+    },
+    {
+      "dS": 2.0,
+      "delta_pnl": 1445.450825125181,
+      "gamma_pnl": 27.930574359638403,
+      "explained_pnl": 1473.3813994848194,
+      "actual_pnl_full_reval": 1473.262729346573,
+      "residual": -0.11867013824644346,
+      "residual_pct_of_actual": -8.054920272032978e-05
+    },
+    {
+      "dS": 5.0,
+      "delta_pnl": 3613.6270628129523,
+      "gamma_pnl": 174.56608974774002,
+      "explained_pnl": 3788.1931525606924,
+      "actual_pnl_full_reval": 3785.3921614756637,
+      "residual": -2.800991085028727,
+      "residual_pct_of_actual": -0.0007399473992509176
+    },
+    {
+      "dS": 10.0,
+      "delta_pnl": 7227.254125625905,
+      "gamma_pnl": 698.2643589909601,
+      "explained_pnl": 7925.518484616865,
+      "actual_pnl_full_reval": 7892.095712370838,
+      "residual": -33.42277224602731,
+      "residual_pct_of_actual": -0.00423496793046202
+    },
+    {
+      "dS": 20.0,
+      "delta_pnl": 14454.50825125181,
+      "gamma_pnl": 2793.0574359638404,
+      "explained_pnl": 17247.56568721565,
+      "actual_pnl_full_reval": 16856.349415209603,
+      "residual": -391.2162720060478,
+      "residual_pct_of_actual": -0.023208837356744078
+    }
+  ],
+  "note": "residual (unexplained P&L) should grow with |dS| -- the Taylor approximation is never claimed to equal full-revaluation P&L. See docs/model-risk.md #6."
+}

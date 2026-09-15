@@ -1,0 +1,97 @@
+{
+  "config": {
+    "S0": 100.0,
+    "K": 100.0,
+    "T": 0.5,
+    "r": 0.03,
+    "sigma": 0.25,
+    "option_type": "call",
+    "q": 0.0,
+    "option_qty": -1.0,
+    "seed": 0
+  },
+  "single_run_summary": {
+    "final_wealth": -0.11313581234769288,
+    "total_transaction_costs": 0.4279917809328673,
+    "n_rebalances": 52
+  },
+  "rebalance_frequency_experiment": [
+    {
+      "n_steps": 12,
+      "mean_final_wealth": 0.07581357823756313,
+      "std_final_wealth": 1.6853872427679895,
+      "mean_total_costs": 0.0
+    },
+    {
+      "n_steps": 52,
+      "mean_final_wealth": -0.012767892091540271,
+      "std_final_wealth": 0.8607955520196727,
+      "mean_total_costs": 0.0
+    },
+    {
+      "n_steps": 252,
+      "mean_final_wealth": 0.0021746064178365435,
+      "std_final_wealth": 0.3892252417060832,
+      "mean_total_costs": 0.0
+    }
+  ],
+  "transaction_cost_experiment": [
+    {
+      "cost_rate": 0.0,
+      "mean_final_wealth": -0.012767892091540271,
+      "std_final_wealth": 0.8607955520196727,
+      "mean_total_costs": 0.0
+    },
+    {
+      "cost_rate": 0.0005,
+      "mean_final_wealth": -0.1889430507867529,
+      "std_final_wealth": 0.8741211807077992,
+      "mean_total_costs": 0.17489272530621178
+    },
+    {
+      "cost_rate": 0.002,
+      "mean_final_wealth": -0.7174685268724056,
+      "std_final_wealth": 0.9288382593675426,
+      "mean_total_costs": 0.6995709012248471
+    },
+    {
+      "cost_rate": 0.01,
+      "mean_final_wealth": -3.5362710659958556,
+      "std_final_wealth": 1.4598137196519743,
+      "mean_total_costs": 3.4978545061242357
+    }
+  ],
+  "vol_misspecification_experiment": [
+    {
+      "realized_vol_multiplier": 0.5,
+      "realized_vol": 0.125,
+      "mean_final_wealth": 3.5369083543480033,
+      "std_final_wealth": 0.9686539107651451
+    },
+    {
+      "realized_vol_multiplier": 0.8,
+      "realized_vol": 0.2,
+      "mean_final_wealth": 1.4198217914346423,
+      "std_final_wealth": 0.8091711884125332
+    },
+    {
+      "realized_vol_multiplier": 1.0,
+      "realized_vol": 0.25,
+      "mean_final_wealth": -0.012767892091540271,
+      "std_final_wealth": 0.8607955520196727
+    },
+    {
+      "realized_vol_multiplier": 1.25,
+      "realized_vol": 0.3125,
+      "mean_final_wealth": -1.8157166924710282,
+      "std_final_wealth": 1.3847222841188027
+    },
+    {
+      "realized_vol_multiplier": 2.0,
+      "realized_vol": 0.5,
+      "mean_final_wealth": -7.3337119767351515,
+      "std_final_wealth": 4.398638812961705
+    }
+  ],
+  "note": "final_wealth is hedging P&L (replication error) net of the initial option premium; 0 would mean perfect replication. See docs/model-risk.md #4."
+}
