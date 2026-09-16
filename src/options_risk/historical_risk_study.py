@@ -185,7 +185,7 @@ def rolling_hs_var_backtest(
 
 def equity_and_option_var_snapshot(
     spot: float,
-    eval_returns: np.ndarray,
+    shock_returns: np.ndarray,
     *,
     formation_vol: float,
     confidence_level: float,
@@ -196,7 +196,19 @@ def equity_and_option_var_snapshot(
     dividend_yield: float,
     multiplier: float,
 ) -> dict[str, Any]:
-    """One-shot HS + delta-normal VaR on stylized equity + short ATM call book."""
+    """One-shot HS + delta-normal VaR, as of the eval period's first bar, on a
+    stylized equity + short ATM call book.
+
+    ``shock_returns`` must be a trailing window of returns dated BEFORE the
+    eval period starts (e.g. the tail of the formation period) -- this is
+    what makes the estimate a genuine as-of-that-date VaR forecast rather
+    than a retrospective characterization built from information the
+    position holder would not yet have had. historical_simulation_var's own
+    docstring states this same requirement ("uses only a rolling window of
+    past returns"); an earlier version of this function violated it for
+    both the historical-simulation shocks and the delta-normal factor vol by
+    passing the eval period's own returns.
+    """
     equity = EquityPosition(symbol="UNDERLYING", quantity=equity_shares, price=spot)
     opt = OptionPosition(
         symbol="UNDERLYING",
@@ -213,7 +225,7 @@ def equity_and_option_var_snapshot(
     portfolio = Portfolio(positions=[equity, opt])
     hs = historical_simulation_var(
         portfolio,
-        eval_returns,
+        shock_returns,
         confidence_level=confidence_level,
         return_type="log",
         horizon=1,
@@ -222,14 +234,14 @@ def equity_and_option_var_snapshot(
     dollar_delta = float(g.delta) * float(spot)
     dn = delta_normal_var(
         dollar_delta=dollar_delta,
-        factor_vol=float(np.std(eval_returns, ddof=1)),
+        factor_vol=float(np.std(shock_returns, ddof=1)),
         confidence_level=confidence_level,
         horizon=1,
     )
     return {
         "spot": float(spot),
         "formation_vol_used_for_option_mark": float(formation_vol),
-        "n_eval_returns": int(len(eval_returns)),
+        "n_shock_returns": int(len(shock_returns)),
         "portfolio_share_delta": float(g.delta),
         "portfolio_dollar_delta": float(dollar_delta),
         "portfolio_gamma": float(g.gamma),
@@ -254,7 +266,11 @@ def equity_and_option_var_snapshot(
         },
         "notes": (
             "Option mark uses formation-period realized vol as BSM sigma — "
-            "not market implied vol. No options tape used."
+            "not market implied vol. No options tape used. Historical-"
+            "simulation shocks and delta-normal factor vol are drawn from a "
+            "trailing pre-eval-period window (the formation tail), not the "
+            "eval period's own returns, so this is a genuine as-of-start-of-"
+            "period VaR estimate, not a retrospective one."
         ),
     }
 
@@ -403,7 +419,7 @@ def run_period_study(
     spot = float(eval_prices.iloc[0]) if len(eval_prices) else float(form_prices.iloc[-1])
     option_snapshot = equity_and_option_var_snapshot(
         spot,
-        eval_rets.to_numpy(),
+        seed_rets.to_numpy(),
         formation_vol=formation_vol if np.isfinite(formation_vol) else 0.2,
         confidence_level=confidence_level,
         equity_shares=float(book_cfg.get("equity_shares", 0.0)),
