@@ -2,7 +2,9 @@
 
 | Path | Tracked? | Purpose |
 |---|---|---|
-| `data/raw/` | **No** (must be gitignored) | Frozen FRED/Yahoo snapshots. Never commit. |
-| `data/manifests/` | **Yes** | Provenance manifests + checksums after freeze. |
+| `data/raw/` | **No** (gitignored) | Frozen Yahoo Finance underlying snapshots. Never commit. |
+| `data/manifests/` | **Yes** | Provenance manifests + SHA-256 after freeze. |
 
-Scaffold only — acquisition not started.
+**Acquisition:** local/agent only via `scripts/acquire_yf_options_risk_underlyings_daily.py`. Never from CI.
+
+**Scope:** underlyings (SPY/QQQ/IWM) only. No paid options tapes.

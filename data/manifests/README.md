@@ -1,5 +1,9 @@
 # Dataset manifests (Directive #9)
 
-Placeholder. No frozen dataset yet for Options D9.
-Checksums remain **null** until freeze.
-Ensure `data/raw/` is gitignored before acquiring FRED/Yahoo snapshots.
+Committed provenance for frozen historical underlyings.
+
+| Dataset ID | Status | Notes |
+|---|---|---|
+| `yf_options_risk_underlyings_daily_2015_2025_v1` | after acquire | SPY, QQQ, IWM daily OHLCV via yfinance |
+
+Schema: `manifest.schema.json`. Raw files under `data/raw/<dataset_id>/` are gitignored.
