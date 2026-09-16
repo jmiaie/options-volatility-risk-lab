@@ -19,7 +19,7 @@ import hashlib
 import json
 from dataclasses import asdict, dataclass
 from pathlib import Path
-from typing import Any
+from typing import Any, cast
 
 import numpy as np
 import pandas as pd
@@ -53,6 +53,14 @@ class PeriodSpec:
         return (idx >= start) & (idx <= end)
 
 
+def _datetime_index(index: pd.Index) -> pd.DatetimeIndex:
+    """load_close_panel() always parses dates (parse_dates=True), so every
+    price Series' index genuinely is a DatetimeIndex at runtime; pandas-stubs
+    types DataFrame column access as returning the generic Index, so this
+    documents and narrows that known-true fact for PeriodSpec.mask()."""
+    return cast(pd.DatetimeIndex, index)
+
+
 def load_close_panel(raw_dir: Path, symbols: list[str]) -> pd.DataFrame:
     frames: dict[str, pd.Series] = {}
     for symbol in symbols:
@@ -69,7 +77,12 @@ def load_close_panel(raw_dir: Path, symbols: list[str]) -> pd.DataFrame:
 
 
 def log_returns(prices: pd.Series) -> pd.Series:
-    return np.log(prices / prices.shift(1)).dropna()
+    ratio = prices / prices.shift(1)
+    # np.log() on a Series is typed by numpy's stubs as returning an ndarray
+    # (it actually returns a Series at runtime via __array_ufunc__); rebuild
+    # the Series explicitly so downstream .dropna() has a correct static type.
+    logged = pd.Series(np.log(ratio.to_numpy()), index=ratio.index)
+    return logged.dropna()
 
 
 def realized_vol_annualized(returns: pd.Series, window: int = 21) -> float:
@@ -320,10 +333,9 @@ def run_period_study(
         raise KeyError(f"primary_symbol {primary_symbol!r} not in panel")
 
     prices = full_panel[primary_symbol].dropna()
-    rets_all = log_returns(prices)
 
-    form_mask = formation.mask(prices.index)
-    eval_mask = eval_period.mask(prices.index)
+    form_mask = formation.mask(_datetime_index(prices.index))
+    eval_mask = eval_period.mask(_datetime_index(prices.index))
     form_prices = prices.loc[form_mask]
     eval_prices = prices.loc[eval_mask]
     form_rets = log_returns(form_prices)
@@ -365,6 +377,7 @@ def run_period_study(
             var_i, _ = compute_var_es(hist_losses, confidence_level)
             losses_list.append(float(-r.iloc[i] * notional))
             vars_list.append(float(var_i))
+    equity_var_backtest: dict[str, Any]
     if losses_list:
         losses_arr = np.asarray(losses_list, dtype=float)
         vars_arr = np.asarray(vars_list, dtype=float)
@@ -417,8 +430,8 @@ def run_period_study(
     per_symbol_vol: dict[str, Any] = {}
     for symbol in full_panel.columns:
         s_prices = full_panel[symbol].dropna()
-        s_form = log_returns(s_prices.loc[formation.mask(s_prices.index)])
-        s_eval = log_returns(s_prices.loc[eval_period.mask(s_prices.index)])
+        s_form = log_returns(s_prices.loc[formation.mask(_datetime_index(s_prices.index))])
+        s_eval = log_returns(s_prices.loc[eval_period.mask(_datetime_index(s_prices.index))])
         per_symbol_vol[symbol] = {
             "formation_realized_vol_ann": period_realized_vol(s_form),
             "eval_realized_vol_ann": period_realized_vol(s_eval),

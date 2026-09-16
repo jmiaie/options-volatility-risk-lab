@@ -10,9 +10,7 @@ import pandas as pd
 import pytest
 
 SCRIPT = (
-    Path(__file__).resolve().parents[1]
-    / "scripts"
-    / "acquire_yf_options_risk_underlyings_daily.py"
+    Path(__file__).resolve().parents[1] / "scripts" / "acquire_yf_options_risk_underlyings_daily.py"
 )
 
 
