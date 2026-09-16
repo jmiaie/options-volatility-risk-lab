@@ -49,3 +49,42 @@ Copyright / changelog year strings do **not** count as empirical holdout inspect
 ## Post-freeze holdout execution
 
 YAML status was set to `frozen-for-holdout` after formation+validation; calendar-2025 evaluation may then be run once under frozen config `options_hist_risk_v1` (experiment `options_hist_risk_v1_holdout_2025`). Tracker confirmation: **FINAL CONFIGURATION FROZEN — Options D9-C** on Issue #3 (https://github.com/jmiaie/quant-research-portfolio/issues/3#issuecomment-5691759004). No retune after freeze.
+
+## Post-execution code defect found (2026-09-16) — partial, scoped correction
+
+Independent code review of `src/options_risk/historical_risk_study.py` (after
+the holdout above had already executed) found that
+`equity_and_option_var_snapshot` — the one-shot HS + delta-normal VaR/ES on
+the stylized equity+option book — shocked the book, and set its
+delta-normal factor vol, using the **eval period's own returns**
+(`eval_rets`), not a window of returns dated before the eval period's first
+bar. `historical_simulation_var`'s own docstring documents the required
+contract ("uses only a rolling window of *past* returns"); this call site
+violated it. Concretely: the "as of the start of the 2025 holdout" VaR
+estimate was partly computed from market moves realized *later in 2025* —
+information a real position holder would not have had yet. This is a
+look-ahead, not a retune-on-observed-outcomes issue (it was found by
+reading the code against its own documented contract, not by inspecting or
+reacting to the 2025 numbers themselves), but it means the
+`stylized_option_book_var` component of the already-executed
+`options_hist_risk_v1_holdout_2025` (and `_val_2024`, `_dev_formation`)
+artifacts needs re-execution before its numbers can be trusted.
+
+**Scope of the defect, precisely:**
+- **Affected:** `stylized_option_book_var.historical_simulation.{var,es}` and
+  `stylized_option_book_var.delta_normal.{var,es}` in all three committed
+  result artifacts (dev_formation, val_2024, holdout_2025).
+- **Not affected:** `realized_vol` (per-symbol and primary),
+  `equity_rolling_hs_var_backtest` (the Kupiec/Christoffersen-tested rolling
+  backtest was already correctly point-in-time — `hist = r.iloc[i-lookback:i]`
+  never includes the day being forecast), and `discrete_hedging_error`
+  (a separately-simulated GBM path study, not affected by this call site).
+
+Fixed in commit `e6a2aa4` on this branch: shocks/factor-vol now come from
+the trailing formation-period window (`seed_rets`, the same pre-eval-period
+data already used to seed the rolling backtest), with a regression test
+proving the snapshot no longer depends on the eval period's own returns.
+**Re-execution of the three artifacts is blocked in this environment** (no
+raw data locally — same acquisition constraint as the rest of Directive #9's
+work); the existing artifacts' `stylized_option_book_var` numbers should be
+treated as unreliable until regenerated under the fixed code.
