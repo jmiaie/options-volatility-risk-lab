@@ -714,10 +714,23 @@ def run_nonlinear_portfolio_study(
             }
         )
 
-        # Next-session realized P&L vs this roll's 95% VaR forecast, for Kupiec/Christoffersen.
+        # Next-session realized P&L vs this roll's 95% VaR forecast, for
+        # Kupiec/Christoffersen. Date-keyed, not positional: returns.iloc[k]
+        # is the return ENDING ON returns.index[k] (log_returns shifts the
+        # index by dropping the leading NaN), so the return whose index
+        # position equals roll_date's own position in `returns` is the
+        # return ENDING ON roll_date -- already realized before the roll,
+        # not the next-session outcome the backtest claims to test. The
+        # correct observation is the return ending on the very next trading
+        # session in `full_prices`, looked up by that session's own date so
+        # the alignment is explicit rather than inferred from arithmetic.
         if idx_pos + 1 < len(full_prices):
-            next_return = float(returns.iloc[ret_pos_val]) if ret_pos_val < len(returns) else None
-            if next_return is not None:
+            next_price_date = full_prices.index[idx_pos + 1]
+            assert next_price_date != pd.Timestamp(roll_date), (
+                "next-session date must differ from the roll date itself"
+            )
+            if next_price_date in returns.index:
+                next_return = float(returns.loc[next_price_date])
                 scenario = Scenario(
                     name="next_day", spot_shock_pct=float(np.exp(next_return) - 1.0)
                 )

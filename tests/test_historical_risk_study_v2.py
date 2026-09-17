@@ -3,6 +3,8 @@ study helpers. Synthetic fixtures only -- no network, no real market data."""
 
 from __future__ import annotations
 
+from typing import Any
+
 import numpy as np
 import pandas as pd
 import pytest
@@ -397,3 +399,187 @@ class TestRunNonlinearPortfolioStudy:
             assert np.isfinite(snap["hs_var_95_primary_every_roll"])
             assert "primary" in snap["var_es"]
             assert "secondary" in snap["var_es"]
+
+
+def _monthly_roll_positions(idx: pd.DatetimeIndex) -> list[int]:
+    """Independently computed (not via the module's own private helper) --
+    the position of the first business day of each calendar month in `idx`.
+    Mirrors _first_eligible_session_of_each_month's intent so these tests
+    verify against the production behavior rather than assume it."""
+    months = pd.Series(idx).dt.to_period("M")
+    first_positions = pd.Series(range(len(idx))).groupby(months.to_numpy()).min()
+    return sorted(int(p) for p in first_positions.to_numpy())
+
+
+class TestNextSessionBacktestAlignment:
+    """Real defect (independent review, 2026-09-17): the Kupiec/Christoffersen
+    backtest compared each roll's 95% VaR forecast against the return ENDING
+    ON the roll date (already realized before the roll) instead of the
+    return from the roll date to the NEXT trading session. The VaR forecast
+    inputs stayed causal throughout -- only the realized-return side of the
+    comparison was misaligned. Fixed via a date-keyed lookup
+    (full_prices.index[idx_pos + 1] -> returns.loc[that date]) instead of
+    the old positional returns.iloc[ret_pos_val].
+
+    All fixtures here use exact-zero returns for "the session immediately
+    after a roll" everywhere except one deliberately engineered roll, so
+    every control roll's realized P&L is deterministically zero (never
+    breaches, regardless of the VaR magnitude) -- no reliance on tail
+    probabilities, so nothing here is flaky.
+    """
+
+    def _build_fixture(
+        self, *, spike_return: float, spike_next_return: float = 0.0, n: int = 600
+    ) -> tuple[pd.Series, list[int], int]:
+        idx = pd.bdate_range("2015-01-02", periods=n)
+        roll_positions = _monthly_roll_positions(idx)
+        # Need HS lookback history before the first usable roll, and >=10
+        # more rolls after the spike so Kupiec/Christoffersen actually runs.
+        usable_rolls = [p for p in roll_positions if p >= HS_LOOKBACKS["primary"] + 5]
+        assert len(usable_rolls) >= 12, "fixture too short for this test's roll-count needs"
+        spike_position = usable_rolls[0]
+        rolls_after_spike = [p for p in usable_rolls if p > spike_position]
+        assert len(rolls_after_spike) >= 10
+
+        daily_returns = np.zeros(n)
+        next_session_positions = {p + 1 for p in roll_positions if p + 1 < n}
+        for i in range(1, n):
+            if i in next_session_positions:
+                daily_returns[i] = 0.0  # every roll's own next session: forced flat
+            else:
+                daily_returns[i] = 0.0002 if i % 2 == 0 else -0.0002
+        daily_returns[spike_position] = spike_return
+        if spike_position + 1 < n:
+            daily_returns[spike_position + 1] = spike_next_return
+        prices = pd.Series(100.0 * np.exp(np.cumsum(daily_returns)), index=idx)
+        return prices, usable_rolls, spike_position
+
+    def _run(self, prices: pd.Series, usable_rolls: list[int]) -> dict[str, Any]:
+        period = PeriodSpec(
+            "eval",
+            str(prices.index[usable_rolls[0]].date()),
+            str(prices.index[-1].date()),
+        )
+        rate_series = pd.Series(0.02, index=prices.index)
+        vix_series = pd.Series(0.18, index=prices.index)
+        return run_nonlinear_portfolio_study(
+            prices, rate_series, vix_series, period, mc_n_sims=200, mc_seed=0
+        )
+
+    def test_breach_uses_next_session_return_not_roll_date_return(self):
+        """The return ENDING ON the roll date is a huge -30% shock (this is
+        exactly what the pre-fix code, returns.iloc[ret_pos_val], would have
+        used, and it would have registered as a breach against any
+        realistic VaR forecast). The return for the NEXT session is exactly
+        0.0 (like every other roll's next session in this fixture). Under
+        the fix, every roll -- including this one -- must show zero
+        breaches, since every actual next-session return is 0."""
+        prices, usable_rolls, spike_position = self._build_fixture(
+            spike_return=0.30, spike_next_return=0.0
+        )
+        out = self._run(prices, usable_rolls)
+        backtest = out["kupiec_christoffersen_backtest"]
+        assert "kupiec" in backtest, backtest.get("note")
+        assert backtest["kupiec"]["n_breaches"] == 0
+        assert backtest["kupiec"]["n_obs"] == len(usable_rolls)
+
+    def test_breach_direction_flips_when_next_session_is_the_shock(self):
+        """Mirror image of the test above: this time the return ENDING ON
+        the roll date is flat (0.0) and the NEXT session carries the -30%
+        shock. This must now register a breach for that roll -- proving the
+        implementation is actually reading the next-session value, not just
+        coincidentally always reporting zero breaches."""
+        prices, usable_rolls, spike_position = self._build_fixture(
+            spike_return=0.0, spike_next_return=0.30
+        )
+        out = self._run(prices, usable_rolls)
+        backtest = out["kupiec_christoffersen_backtest"]
+        assert "kupiec" in backtest, backtest.get("note")
+        assert backtest["kupiec"]["n_breaches"] == 1
+        assert backtest["kupiec"]["n_obs"] == len(usable_rolls)
+
+    def test_last_roll_with_no_next_session_is_excluded_not_fabricated(self):
+        """Truncate the price series so the LAST usable roll date is also
+        the very last price in the series -- it has no next trading session
+        at all. That roll must be excluded from the backtest's observation
+        count, not silently given a fabricated or missing-becomes-zero
+        return."""
+        prices, usable_rolls, spike_position = self._build_fixture(spike_return=0.0)
+        last_roll = usable_rolls[-1]
+        truncated_prices = prices.iloc[: last_roll + 1]  # ends exactly on the last roll date
+        period = PeriodSpec(
+            "eval",
+            str(truncated_prices.index[usable_rolls[0]].date()),
+            str(truncated_prices.index[-1].date()),
+        )
+        rate_series = pd.Series(0.02, index=truncated_prices.index)
+        vix_series = pd.Series(0.18, index=truncated_prices.index)
+        out = run_nonlinear_portfolio_study(
+            truncated_prices, rate_series, vix_series, period, mc_n_sims=200, mc_seed=0
+        )
+        # The truncated series still produces a snapshot for the last roll
+        # (VaR forecasting doesn't need a next session)...
+        assert out["n_roll_snapshots"] == len(usable_rolls)
+        # ...but the backtest must count one fewer observation: the last
+        # roll has no valid next-session realization to compare against.
+        backtest = out["kupiec_christoffersen_backtest"]
+        assert "kupiec" in backtest, backtest.get("note")
+        assert backtest["kupiec"]["n_obs"] == len(usable_rolls) - 1
+
+    def test_var_forecast_is_unaffected_by_the_next_session_outcome(self):
+        """The spike roll's OWN VaR forecast must be identical regardless of
+        what actually happens in its next session -- it is computed purely
+        from history strictly before that roll. Re-running the same fixture
+        with two different next-session outcomes for the spike roll (which
+        is usable_rolls[0], i.e. snapshots[0]) must leave that one snapshot's
+        hs_var_95_primary_every_roll byte-identical, proving the fix didn't
+        (and the original defect never did) leak the forward-looking return
+        into the forecast itself.
+
+        Later rolls' own forecasts are deliberately NOT compared here: their
+        trailing history legitimately includes the spike roll's next session
+        once enough calendar time has passed, so their VaR forecasts are
+        SUPPOSED to differ between prices_a and prices_b -- that's ordinary
+        causal history, not a leak.
+        """
+        prices_a, usable_rolls, spike_position = self._build_fixture(
+            spike_return=0.0, spike_next_return=0.0
+        )
+        prices_b, _, _ = self._build_fixture(spike_return=0.0, spike_next_return=0.30)
+        out_a = self._run(prices_a, usable_rolls)
+        out_b = self._run(prices_b, usable_rolls)
+        assert out_a["snapshots"][0]["roll_date"] == out_b["snapshots"][0]["roll_date"]
+        assert (
+            out_a["snapshots"][0]["hs_var_95_primary_every_roll"]
+            == out_b["snapshots"][0]["hs_var_95_primary_every_roll"]
+        )
+
+    def test_next_session_is_the_next_trading_day_not_a_calendar_day(self):
+        """Pick whichever usable roll in the fixture falls on a Friday (bdate_range
+        guarantees the very next entry in the index is the following Monday,
+        never a nonexistent Saturday) and engineer that specific roll's
+        Friday-to-Monday return as the shock. A calendar-day (roll_date + 1
+        day) computation would land on a Saturday that isn't in the returns
+        index at all; this test only passes if the actual next TRADING
+        session (Monday) was used."""
+        prices, usable_rolls, _ = self._build_fixture(spike_return=0.0, spike_next_return=0.0)
+        idx = prices.index
+        friday_rolls = [p for p in usable_rolls[:-1] if idx[p].dayofweek == 4]
+        assert friday_rolls, "fixture must contain at least one Friday roll for this test"
+        friday_roll = friday_rolls[0]
+        assert idx[friday_roll + 1].dayofweek == 0, "next entry must be the following Monday"
+
+        daily_returns = np.zeros(len(idx))
+        next_session_positions = {p + 1 for p in usable_rolls if p + 1 < len(idx)}
+        for i in range(1, len(idx)):
+            if i in next_session_positions:
+                daily_returns[i] = 0.0
+            else:
+                daily_returns[i] = 0.0002 if i % 2 == 0 else -0.0002
+        daily_returns[friday_roll + 1] = 0.30  # the Monday shock
+        engineered_prices = pd.Series(100.0 * np.exp(np.cumsum(daily_returns)), index=idx)
+
+        out = self._run(engineered_prices, usable_rolls)
+        backtest = out["kupiec_christoffersen_backtest"]
+        assert "kupiec" in backtest, backtest.get("note")
+        assert backtest["kupiec"]["n_breaches"] == 1

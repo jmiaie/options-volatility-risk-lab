@@ -12838,22 +12838,22 @@
     },
     "kupiec_christoffersen_backtest": {
       "christoffersen": {
-        "conclusion": "Fail to reject H0: no statistically significant clustering detected (pi01=0.1059, pi11=0.0000) at the 5% level.",
-        "n_breaches": 9,
+        "conclusion": "Fail to reject H0: no statistically significant clustering detected (pi01=0.0444, pi11=0.0000) at the 5% level.",
+        "n_breaches": 4,
         "n_obs": 95,
-        "p_value": 0.16702330134274923,
+        "p_value": 0.5509193829547435,
         "reject_null": false,
         "sample_size_caveat": "n_obs=95 is below the ~250-observation (roughly one trading year) rule of thumb for reasonable test power; failing to reject the null here is weak evidence, not proof of a correct model.",
         "test_name": "Christoffersen independence"
       },
       "confidence_level": 0.95,
       "kupiec": {
-        "breach_rate": 0.09473684210526316,
-        "conclusion": "Fail to reject H0: observed breach rate 0.0947 is not statistically distinguishable from the expected 0.0500 at the 5% level.",
+        "breach_rate": 0.042105263157894736,
+        "conclusion": "Fail to reject H0: observed breach rate 0.0421 is not statistically distinguishable from the expected 0.0500 at the 5% level.",
         "expected_breach_rate": 0.050000000000000044,
-        "n_breaches": 9,
+        "n_breaches": 4,
         "n_obs": 95,
-        "p_value": 0.07333297658640303,
+        "p_value": 0.7169710161910925,
         "reject_null": false,
         "sample_size_caveat": "n_obs=95 is below the ~250-observation (roughly one trading year) rule of thumb for reasonable test power; failing to reject the null here is weak evidence, not proof of a correct model.",
         "test_name": "Kupiec POF"

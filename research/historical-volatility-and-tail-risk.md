@@ -320,32 +320,62 @@ One forecast per monthly roll's own next trading session (HS-primary
 252-day 95% VaR vs. realized full-revaluation P&L) — a small,
 monthly-cadence sample, not a daily rolling backtest.
 
-| Period | n forecasts | Breaches | Kupiec p-value | Kupiec conclusion | Christoffersen p-value |
-|---|---:|---:|---:|---|---:|
-| DEV | 95 | 4 | 0.717 | Fail to reject H0 (observed 4.21% vs. expected 5.00%) | 0.551 |
-| VAL 2024 | 12 | 0 | 0.267 | Fail to reject H0 (observed 0.00% vs. expected 5.00%) | 1.000 |
-| 2025 HISTORICAL EVALUATION | 12 | 0 | 0.267 | Fail to reject H0 (observed 0.00% vs. expected 5.00%) | 1.000 |
+**Corrected 2026-09-17 (independent review): the realized-return side of
+this comparison was off by one trading session.** The code compared each
+roll's VaR forecast against the return ENDING ON the roll date itself
+(already realized before the roll, not a next-session outcome at all) —
+`returns.iloc[ret_pos_val]`, where positional arithmetic on the
+`log_returns`-shifted index landed one session too early. The VaR forecast
+inputs were never affected (they were always computed strictly from
+history before the roll), so this was a backtest-alignment defect, not a
+future-leak in the risk model. Fixed with a date-keyed lookup
+(`full_prices.index[idx_pos + 1]` → `returns.loc[that date]`, with a
+strict existence check and no silent fallback) — see
+`src/options_risk/historical_risk_study_v2.py` and the regression tests in
+`tests/test_historical_risk_study_v2.py::TestNextSessionBacktestAlignment`.
+Every other field in every artifact (VaR/ES values at every roll, method
+methodology, confidence levels, lookbacks, Monte Carlo sims/seed, portfolio
+construction, costs, realized-vol inputs, DGS3MO/VIX usage) is
+byte-identical before and after this fix — verified by diffing the
+corrected artifacts against the preserved pre-fix ones field by field; only
+the breach sequence and the two backtest statistics below changed. Pre-fix
+artifacts are preserved, not deleted, at
+`results/historical_risk/superseded_next_session_backtest_fix/`.
 
-**VAL 2024 and 2025's Kupiec p-values are identical to floating-point
-precision (0.26720505975226316) — this is not a bug.** The Kupiec
-proportion-of-failures statistic is a deterministic function of
-`(n_obs, n_breaches, expected_rate)` alone; both periods have exactly
-`n_obs=12, n_breaches=0` against the same 5% expected rate, so the
-statistic (and its p-value) is bit-for-bit identical by construction,
-independent of the actual VaR or P&L magnitudes in either period.
+| Period | n forecasts | Breaches (before → after) | Kupiec p-value (before → after) | Kupiec conclusion (after fix) | Christoffersen p-value (before → after) |
+|---|---:|---:|---:|---|---:|
+| DEV | 95 | 4 → 9 | 0.717 → 0.073 | Fail to reject H0 (observed 9.47% vs. expected 5.00%) | 0.551 → 0.167 |
+| VAL 2024 | 12 | 0 → 0 | 0.267 → 0.267 (unchanged) | Fail to reject H0 (observed 0.00% vs. expected 5.00%) | 1.000 → 1.000 (unchanged) |
+| 2025 HISTORICAL EVALUATION | 12 | 0 → 1 | 0.267 → 0.627 | Fail to reject H0 (observed 8.33% vs. expected 5.00%) | 1.000 → 1.000 (unchanged) |
+
+**VAL 2024's breach count and p-value are genuinely unchanged by the fix**
+— not a leftover from the pre-fix numbers. All 12 rolls in that period
+happen to show zero breaches under both the old (wrong) and the new
+(correct) realized-return definition; since Kupiec and Christoffersen are
+both deterministic functions of the breach/no-breach sequence alone (not
+of the underlying P&L magnitudes), a period where every roll's
+classification happens to land the same way under both definitions
+produces byte-identical backtest statistics even though the two
+definitions genuinely compare against different daily returns underneath.
+This is a property of this specific period's realized 2024 path, not
+evidence the fix was a no-op elsewhere: DEV's breach count more than
+doubled (4 → 9) and 2025 picked up its first breach (0 → 1).
 
 **None of the three periods reject the null of correct VaR coverage or
-independence at the 5% level.** This is honestly a weak result, not a
-strong endorsement: DEV's 95 observations sit below the ~250-observation
-(roughly one trading year of *daily* observations) rule of thumb this
-codebase's own `kupiec_pof_test` documents for reasonable test power, and
-VAL/2025's 12-observation samples are far below it — `sample_size_caveat`
-on every backtest result says so explicitly. Zero breaches in 12
-observations at a 5% expected rate is also the single most likely outcome
-under the null (≈54% probability), so "fail to reject" in the two
-one-year periods is close to uninformative on its own; DEV's 95-forecast,
-4-breach result is the more informative of the three, and it too is
-consistent with correct coverage.
+independence at the 5% level, even after the correction** — but DEV's
+Kupiec p-value dropped from 0.717 to 0.073, materially closer to the 5%
+rejection boundary than the pre-fix number suggested. This is reported
+factually, not smoothed over: the corrected DEV observed breach rate
+(9.47%) sits well above the expected 5.00%, and while the test still fails
+to reject at the conventional 5% significance level, it would reject at a
+10% level. Combined with the small-sample caveat below, this is weaker
+evidence for correct coverage than the pre-fix numbers implied, not
+stronger. DEV's 95 observations sit below the ~250-observation (roughly
+one trading year of *daily* observations) rule of thumb this codebase's
+own `kupiec_pof_test` documents for reasonable test power, and VAL/2025's
+12-observation samples are far below it — `sample_size_caveat` on every
+backtest result says so explicitly. No parameter, threshold, or
+methodology choice was changed in response to these corrected numbers.
 
 ## 7. Cross-study comparison: 2025 vs. DEV/VAL
 
@@ -366,6 +396,18 @@ data and methodology in scope.
 - DGS3MO is a short-term Treasury constant-maturity yield proxy, never a
   full option discount curve; used point-in-time, carry-forward only,
   never future-backfilled.
+- **DGS3MO vintage disclosure (added 2026-09-17, P2):** this study uses
+  FRED's standard `DGS3MO` series, keyed by its recorded
+  `observation_date`, with causal carry-forward to the latest observation
+  at or before each decision date (§2). This is **not** an ALFRED
+  real-time vintage / release-calendar series. Concretely: no future
+  observation is ever backfilled (the causal carry-forward guarantees
+  that), but this study does **not** separately model the publication or
+  revision lag between an observation's dated value and when that value
+  actually became publicly available — a real point-in-time-correct
+  pipeline would additionally need ALFRED's release-date metadata to rule
+  that out. This does not change the dataset or methodology; it narrows
+  what "point-in-time" is actually claimed to mean here.
 - VIXCLS is market-volatility context/reference only — attached to every
   nonlinear-portfolio snapshot but never used as a pricing input and never
   described as this study's option's implied volatility.

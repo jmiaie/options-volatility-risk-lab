@@ -6,7 +6,25 @@
 **Holdout window under D9:** calendar **2025-01-01 ≤ t < 2026-01-01**  
 **Dataset ID (planned):** `yf_options_risk_underlyings_daily_2015_2025_v1`
 
-## Verdict
+## CURRENT D9-C 2025 CLASSIFICATION (read this first)
+
+**PREVIOUSLY INSPECTED / HISTORICAL EVALUATION.**
+
+The original **CLEAR** verdict directly below was accurate on the date it
+was written (2026-09-15, before this study's 2025 evaluation had been
+executed at all). It is **no longer the current status** and is preserved
+below as a dated historical record, not deleted or edited in place. Once
+v1's `options_hist_risk_v1_holdout_2025` executed (see "Post-freeze holdout
+execution" below) and v2 was built as the authoritative rebuild reusing the
+same underlying SPY history, calendar-2025 outcomes for this study's
+universe had already been inspected once. Per Directive #9's own
+classification rules, that makes every subsequent 2025 result here —
+including the corrected `options_hist_risk_v2_historical_evaluation_2025`
+artifact (see the next-session backtest fix, 2026-09-17) — **`HISTORICAL
+EVALUATION`**, never an untouched final holdout, and never re-labeled back
+to `CLEAR`.
+
+## Verdict (as of the original 2026-09-15 audit — historical record, superseded above)
 
 **CLEAR** — no evidence that calendar-year **2025** market data was previously inspected, tuned against, or used for empirical evaluation / performance claims in this repository.
 
@@ -111,3 +129,40 @@ manufacture an untouched window. All three periods (DEV 2015-2023, VAL
 2024, HISTORICAL EVALUATION 2025) were executed in this session under the
 already-frozen v2 config; results are committed at
 `results/historical_risk/options_hist_risk_v2_{dev_formation,val_2024,historical_evaluation_2025}.json`.
+
+## v2 post-execution defect found and corrected (2026-09-17) — Kupiec/Christoffersen backtest realized-return alignment
+
+Independent review of `src/options_risk/historical_risk_study_v2.py`'s
+`run_nonlinear_portfolio_study` (after the v2 execution above had already
+run) found that the Kupiec/Christoffersen backtest compared each monthly
+roll's 95% VaR forecast against the realized return **ending on the roll
+date itself** — already fully realized before the roll, not a next-session
+outcome — instead of the return from the roll date to the next trading
+session. The bug was purely positional-index arithmetic
+(`returns.iloc[ret_pos_val]` landed one session too early once
+`log_returns`'s leading-NaN drop shifts its index); the VaR forecast inputs
+themselves were always computed strictly from history before the roll, so
+this was a backtest-alignment defect, not a future-leak in the risk model.
+This is a mechanical implementation defect found by reading the code
+against its own stated intent ("Next-session realized P&L vs this roll's
+95% VaR forecast"), not by reacting to the 2025 numbers themselves — the
+same standard applied to the v1 look-ahead defect above.
+
+Fixed with a date-keyed lookup (`full_prices.index[idx_pos + 1]` →
+`returns.loc[that date]`, with a strict existence check and no silent
+fallback) plus 5 new regression tests in
+`tests/test_historical_risk_study_v2.py::TestNextSessionBacktestAlignment`
+proving the fix (a deterministic case where the two definitions produce
+different breach classifications; the next-session mapping correctly skips
+weekends; a roll with no next session is excluded from the backtest count,
+not fabricated; the VaR forecast itself is provably unaffected by the
+next-session outcome). All three v2 artifacts (DEV, VAL 2024, 2025
+HISTORICAL EVALUATION) were regenerated under the fix; every field except
+the Kupiec/Christoffersen backtest section is byte-identical to the
+pre-fix artifacts (verified by full field-level diff, not just spot-check).
+Pre-fix artifacts preserved at
+`results/historical_risk/superseded_next_session_backtest_fix/`, not
+deleted. Full before/after numbers in
+`research/historical-volatility-and-tail-risk.md` §6.3. No parameter,
+threshold, or methodology was changed in response to the corrected
+numbers, and 2025 remains labeled `HISTORICAL EVALUATION` throughout.

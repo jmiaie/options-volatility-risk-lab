@@ -1439,7 +1439,7 @@
     "kupiec_christoffersen_backtest": {
       "christoffersen": {
         "conclusion": "Fail to reject H0: no statistically significant clustering detected (pi01=0.0000, pi11=0.0000) at the 5% level.",
-        "n_breaches": 1,
+        "n_breaches": 0,
         "n_obs": 12,
         "p_value": 1.0,
         "reject_null": false,
@@ -1448,12 +1448,12 @@
       },
       "confidence_level": 0.95,
       "kupiec": {
-        "breach_rate": 0.08333333333333333,
-        "conclusion": "Fail to reject H0: observed breach rate 0.0833 is not statistically distinguishable from the expected 0.0500 at the 5% level.",
+        "breach_rate": 0.0,
+        "conclusion": "Fail to reject H0: observed breach rate 0.0000 is not statistically distinguishable from the expected 0.0500 at the 5% level.",
         "expected_breach_rate": 0.050000000000000044,
-        "n_breaches": 1,
+        "n_breaches": 0,
         "n_obs": 12,
-        "p_value": 0.6272171591486012,
+        "p_value": 0.26720505975226316,
         "reject_null": false,
         "sample_size_caveat": "n_obs=12 is below the ~250-observation (roughly one trading year) rule of thumb for reasonable test power; failing to reject the null here is weak evidence, not proof of a correct model.",
         "test_name": "Kupiec POF"
