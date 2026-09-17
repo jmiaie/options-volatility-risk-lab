@@ -1,0 +1,34 @@
+{
+  "dataset_id": "fred_macro_daily_2015_2025_v1",
+  "source": "fred",
+  "source_endpoint": "https://fred.stlouisfed.org/graph/fredgraph.csv?id={sid}",
+  "auth": "none (keyless CSV endpoint)",
+  "series": [
+    "DGS3MO",
+    "VIXCLS"
+  ],
+  "requested_start": "2015-01-01",
+  "requested_end_exclusive": "2026-01-01",
+  "per_series": {
+    "DGS3MO": {
+      "row_count": 2870,
+      "actual_start": "2015-01-01",
+      "actual_end": "2025-12-31",
+      "missing_values": 120
+    },
+    "VIXCLS": {
+      "row_count": 2870,
+      "actual_start": "2015-01-01",
+      "actual_end": "2025-12-31",
+      "missing_values": 77
+    }
+  },
+  "retrieval_timestamp_utc": "2026-09-17T02:30:12Z",
+  "status": "DATA FROZEN",
+  "sha256": {
+    "DGS3MO.csv": "31ad77f46517b4a51a2313ad86524d3f0f07634e4ca450ba2c387adbddf42a9f",
+    "VIXCLS.csv": "b727ab1751d4c9c180159cc1eb3358a2fef6ebf1abe15c74adb46f93019753b1",
+    "dataset_canonical": "00b8c33e7a5f617435d6abe24a91216623a0b3b688ada3724c75fe624734781c"
+  },
+  "notes": "Keyless FRED acquisition. Payload committed under data/snapshots/ so the snapshot stays recoverable. Series list is provisional pending the authoritative D9-C spec."
+}
