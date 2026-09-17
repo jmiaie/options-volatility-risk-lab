@@ -88,3 +88,26 @@ proving the snapshot no longer depends on the eval period's own returns.
 raw data locally — same acquisition constraint as the rest of Directive #9's
 work); the existing artifacts' `stylized_option_book_var` numbers should be
 treated as unreliable until regenerated under the fixed code.
+
+## v2 AUTHORITATIVE rebuild and 2025 execution (2026-09-17)
+
+The v1 study above remains preserved, unmodified, as EXPLORATORY /
+NON-CONFORMING (per Directive #9's own classification — wrong dataset IDs,
+no FRED integration, GBM-simulated hedging, no standardized nonlinear
+portfolio, single-method/single-confidence VaR). A new AUTHORITATIVE v2
+study was built from Directive #9's own D9-C spec text: real
+historical-path hedge replay, point-in-time DGS3MO/VIXCLS, the standardized
+nonlinear portfolio, three-method/two-confidence VaR/ES (including a
+50,000-sim Monte Carlo full revaluation), and Kupiec/Christoffersen
+backtesting. See `research/historical-volatility-and-tail-risk.md` for the
+full report and `configs/experiments/options_historical_risk_study_v2.yaml`
+for the frozen (on creation, per §4 of that report) configuration.
+
+Because SPY 2025 was already inspected once under v1
+(`options_hist_risk_v1_holdout_2025`), the v2 2025 result is labeled
+**`HISTORICAL EVALUATION`**, per Addendum 13 — **not** `UNTOUCHED FINAL
+HOLDOUT`, and the study was not shifted to 2026 (reserved program-wide) to
+manufacture an untouched window. All three periods (DEV 2015-2023, VAL
+2024, HISTORICAL EVALUATION 2025) were executed in this session under the
+already-frozen v2 config; results are committed at
+`results/historical_risk/options_hist_risk_v2_{dev_formation,val_2024,historical_evaluation_2025}.json`.
