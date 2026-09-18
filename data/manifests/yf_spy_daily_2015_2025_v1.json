@@ -1,0 +1,57 @@
+{
+  "dataset_id": "yf_spy_daily_2015_2025_v1",
+  "source": "yfinance",
+  "source_version": "1.7.0",
+  "symbols": [
+    "SPY"
+  ],
+  "interval": "1d",
+  "requested_start": "2015-01-01",
+  "requested_end_exclusive": "2026-01-01",
+  "actual_start": {
+    "SPY": "2015-01-02"
+  },
+  "actual_end": {
+    "SPY": "2025-12-31"
+  },
+  "row_counts": {
+    "SPY": 2766
+  },
+  "missing_counts": {
+    "SPY": 0
+  },
+  "actions": {
+    "SPY": {
+      "dividends": {
+        "present": true,
+        "nonzero_count": 44
+      },
+      "stock_splits": {
+        "present": true,
+        "nonzero_count": 0
+      },
+      "capital_gains": {
+        "present": true,
+        "nonzero_count": 0
+      }
+    }
+  },
+  "retrieval_timestamp_utc": "2026-09-16T17:28:49Z",
+  "freeze_timestamp_utc": "2026-09-17T04:47:33Z",
+  "status": "DATA FROZEN",
+  "sha256": {
+    "SPY.csv": "0c83ab20bf76ec39b97855ac393b7bc74363bd4ff373381f0a92842a2c7c6a63",
+    "dataset_canonical": "0c83ab20bf76ec39b97855ac393b7bc74363bd4ff373381f0a92842a2c7c6a63"
+  },
+  "parameters": {
+    "start": "2015-01-01",
+    "end": "2026-01-01",
+    "interval": "1d",
+    "auto_adjust": true,
+    "actions": true,
+    "repair": false,
+    "keepna": true
+  },
+  "acquisition_provenance": "REUSED, not freshly acquired in this repository -- disclosed explicitly. This session's own egress proxy returns an organization-policy 403 for Yahoo Finance (deliberate policy denial, not transient), so no fresh SPY pull could be run here. These exact bytes (sha256 verified to match) were already legitimately acquired, hash-verified against its own frozen manifest, and are locally present in a sibling Directive #9 repository -- jmiaie/Advanced_Algorithmic_Trading_Simulator_public, data/raw/yf_stat_arb_etfs_daily_2015_2025_v1/SPY.csv -- using the identical acquisition parameters this repo's own scripts/acquire_yf_options_risk_underlyings_daily.py would use (yfinance 1.7.0, start=2015-01-01, end=2026-01-01 exclusive, interval=1d, auto_adjust=True). Reusing this real, already-verified SPY series is not fabrication: it is the same instrument, same source, same date range, and same acquisition method, already frozen and hash-confirmed elsewhere in this program. This manifest exists so this repository has its own honest provenance record rather than silently treating a borrowed file as if freshly pulled here. If a fresh acquisition of this exact dataset_id is later run from a node with real egress, compare its dataset_canonical sha256 against the one recorded here (0c83ab20bf76ec39...) before treating the two as interchangeable.",
+  "notes": "Primary underlying for the D9-C options/volatility/portfolio-risk study, per Directive #9's exact dataset ID. Raw CSV kept local and gitignored under data/raw/ (not committed to this public repo) -- redistribution rights for vendor market data have not been separately checked."
+}

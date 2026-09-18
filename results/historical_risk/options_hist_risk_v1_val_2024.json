@@ -1,0 +1,167 @@
+{
+  "branch": "research/historical-risk-validation",
+  "config_path": "configs/experiments/options_historical_risk_study_v1.yaml",
+  "config_status": "not-yet-frozen-for-holdout",
+  "dataset_canonical_sha256": "ddd9e582198f12dd09ae96059e41d81e602c2fe3fd7ade07a451ef32d55ccd4c",
+  "dataset_id": "yf_options_risk_underlyings_daily_2015_2025_v1",
+  "experiment_id": "options_hist_risk_v1_val_2024",
+  "n_symbols": 3,
+  "result": {
+    "discrete_hedging_error": {
+      "cost_rate": 0.0005,
+      "mean_final_wealth": 9.952123638823231,
+      "mean_total_costs": 0.6980587092453057,
+      "n_seeds": 50,
+      "n_steps": 52,
+      "notes": "Paths are risk-neutral GBM with empirically estimated vols — not historical listed-option paths.",
+      "option_qty": -1.0,
+      "sigma_pricing_formation": 0.1815920601458922,
+      "sigma_realized_eval": 0.12593185831004822,
+      "std_final_wealth": 3.8587855258048958
+    },
+    "equity_rolling_hs_var_backtest": {
+      "christoffersen": {
+        "breach_rate": 0.055776892430278883,
+        "conclusion": "Reject H0 of independent breaches (pi01=0.0466 vs pi11=0.2143 differ significantly) at the 5% level -> breaches appear to cluster.",
+        "degrees_of_freedom": 1,
+        "expected_breach_rate": 0.050000000000000044,
+        "expected_breaches": 12.550000000000011,
+        "lr_statistic": 4.430271255618877,
+        "n_breaches": 14,
+        "n_obs": 251,
+        "p_value": 0.035306896317400915,
+        "reject_null": true,
+        "sample_size_caveat": "n_obs=251 observations: even at this sample size, VaR backtests have limited power to detect small calibration errors — treat any conclusion as provisional.",
+        "significance_level": 0.05,
+        "test_name": "Christoffersen independence"
+      },
+      "conditional_coverage": {
+        "breach_rate": 0.055776892430278883,
+        "conclusion": "Fail to reject H0: no statistically significant evidence against correct conditional coverage at the 5% level.",
+        "degrees_of_freedom": 2,
+        "expected_breach_rate": 0.050000000000000044,
+        "expected_breaches": 12.550000000000011,
+        "lr_statistic": 4.600533137953505,
+        "n_breaches": 14,
+        "n_obs": 251,
+        "p_value": 0.10023212138725324,
+        "reject_null": false,
+        "sample_size_caveat": "n_obs=251 observations: even at this sample size, VaR backtests have limited power to detect small calibration errors — treat any conclusion as provisional.",
+        "significance_level": 0.05,
+        "test_name": "Conditional coverage (Kupiec + Christoffersen)"
+      },
+      "confidence_level": 0.95,
+      "kupiec": {
+        "breach_rate": 0.055776892430278883,
+        "conclusion": "Fail to reject H0: observed breach rate 0.0558 is not statistically distinguishable from the expected 0.0500 at the 5% level.",
+        "degrees_of_freedom": 1,
+        "expected_breach_rate": 0.050000000000000044,
+        "expected_breaches": 12.550000000000011,
+        "lr_statistic": 0.17026188233462847,
+        "n_breaches": 14,
+        "n_obs": 251,
+        "p_value": 0.6798791693934747,
+        "reject_null": false,
+        "sample_size_caveat": "n_obs=251 observations: even at this sample size, VaR backtests have limited power to detect small calibration errors — treat any conclusion as provisional.",
+        "significance_level": 0.05,
+        "test_name": "Kupiec POF"
+      },
+      "lookback": 252,
+      "mean_realized_loss": -0.0009077562248161345,
+      "mean_var": 0.013182719067283343,
+      "n_forecasts": 251,
+      "notional": 1.0
+    },
+    "eval_period": {
+      "end_inclusive": "2024-12-31",
+      "name": "validation",
+      "start": "2024-01-01"
+    },
+    "formation": {
+      "end_inclusive": "2023-12-31",
+      "name": "formation_dev",
+      "start": "2015-01-01"
+    },
+    "key_metrics": {
+      "equity_var_breach_rate": 0.055776892430278883,
+      "equity_var_christoffersen_pvalue": 0.035306896317400915,
+      "equity_var_christoffersen_reject": true,
+      "equity_var_kupiec_pvalue": 0.6798791693934747,
+      "equity_var_kupiec_reject": false,
+      "equity_var_n_forecasts": 251,
+      "eval_realized_vol_ann": 0.12593185831004822,
+      "eval_realized_vol_ann_trailing_window": 0.1442009982316811,
+      "formation_realized_vol_ann": 0.1815920601458922,
+      "formation_realized_vol_ann_trailing_window": 0.09257069911635045,
+      "hedge_mean_final_wealth": 9.952123638823231,
+      "hedge_mean_total_costs": 0.6980587092453057,
+      "hedge_std_final_wealth": 3.8587855258048958,
+      "n_eval_bars": 252,
+      "n_formation_bars": 2264,
+      "option_dn_var": 309.07072701145745,
+      "option_hs_es": 435.45400439989595,
+      "option_hs_var": 310.6421399634769,
+      "primary_symbol": "SPY"
+    },
+    "notes": "Underlyings-only historical validation. Stylized option book uses formation realized vol as BSM mark (not market IV). Hedging uses GBM paths calibrated to empirical vols. No options tape.",
+    "primary_symbol": "SPY",
+    "realized_vol": {
+      "per_symbol": {
+        "IWM": {
+          "eval_realized_vol_ann": 0.2078391597713786,
+          "formation_realized_vol_ann": 0.2281362084231813,
+          "n_eval_returns": 251,
+          "n_formation_returns": 2263
+        },
+        "QQQ": {
+          "eval_realized_vol_ann": 0.17980616008428002,
+          "formation_realized_vol_ann": 0.22267100720678412,
+          "n_eval_returns": 251,
+          "n_formation_returns": 2263
+        },
+        "SPY": {
+          "eval_realized_vol_ann": 0.12593185831004822,
+          "formation_realized_vol_ann": 0.1815920601458922,
+          "n_eval_returns": 251,
+          "n_formation_returns": 2263
+        }
+      },
+      "primary": {
+        "eval_full_sample_ann": 0.12593185831004822,
+        "eval_trailing_window_ann": 0.1442009982316811,
+        "formation_full_sample_ann": 0.1815920601458922,
+        "formation_trailing_window_ann": 0.09257069911635045
+      },
+      "window": 21
+    },
+    "stylized_option_book_var": {
+      "delta_normal": {
+        "confidence_level": 0.95,
+        "es": 387.58716069692775,
+        "factor_vol": 0.007932961410205008,
+        "pnl_std": 187.90166003055293,
+        "portfolio_dollar_delta": -23686.19363114954,
+        "var": 309.07072701145745
+      },
+      "formation_vol_used_for_option_mark": 0.1815920601458922,
+      "historical_simulation": {
+        "confidence_level": 0.95,
+        "es": 263.30121299533147,
+        "max_loss": 693.9563775145075,
+        "mean_loss": 33.29412011705251,
+        "min_loss": -551.5288575010686,
+        "n_obs": 251,
+        "std_loss": 185.41565325272023,
+        "var": 310.6421399634769
+      },
+      "n_eval_returns": 251,
+      "notes": "Option mark uses formation-period realized vol as BSM sigma — not market implied vol. No options tape used.",
+      "portfolio_dollar_delta": -23686.19363114954,
+      "portfolio_gamma": -1.667363053485861,
+      "portfolio_share_delta": -51.62536375443092,
+      "portfolio_vega": -5238.654066989373,
+      "spot": 458.80923462
+    }
+  },
+  "symbols": ["SPY", "QQQ", "IWM"]
+}

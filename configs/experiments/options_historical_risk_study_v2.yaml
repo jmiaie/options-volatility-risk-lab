@@ -1,0 +1,134 @@
+# Options/Volatility/Portfolio-Risk historical validation (D9-C) — AUTHORITATIVE v2
+# Status: frozen-for-holdout
+#
+# Supersedes options_historical_risk_study_v1.yaml, which Directive #9 itself labels
+# EXPLORATORY / NON-CONFORMING TO FINAL D9-C SPEC (wrong dataset IDs, no FRED
+# integration, GBM-simulated hedging instead of real historical-path replay, no
+# standardized nonlinear portfolio, no Monte Carlo VaR, single confidence level,
+# single HS lookback). v1 remains preserved, unmodified, for audit trail.
+#
+# Methodology here is taken directly from Directive #9's own D9-C spec text
+# (hedging experiment, standardized nonlinear portfolio, VaR/ES methods and
+# confidence levels, realized-vol windows) -- none of it was derived from or tuned
+# against any observed result, so this config is frozen for holdout on creation
+# rather than staged through a separate dev/validation freeze gate.
+#
+# 2025 LABEL (per Directive #9 Addendum 13): SPY 2025 outcomes were already
+# inspected under v1 (options_hist_risk_v1_holdout_2025, same underlying SPY price
+# history in substance). The authoritative 2025 result here MUST be labeled
+# `HISTORICAL EVALUATION`, never `UNTOUCHED FINAL HOLDOUT`. Do not shift the study
+# to 2026 (2026 is reserved program-wide).
+
+experiment_id: options_hist_risk_v2
+status: frozen-for-holdout
+directive: 9
+dataset_ids:
+  underlying: yf_spy_daily_2015_2025_v1
+  short_rate: fred_dgs3mo_daily_2015_2025_v1
+  vol_context: fred_vixcls_daily_2015_2025_v1
+seed: 0
+
+universe:
+  primary_symbol: SPY
+  description: >
+    SPY only, per Directive #9's exact D9-C data spec. yf_spy_daily_2015_2025_v1's
+    raw bytes are REUSED (not freshly acquired in this repo) from a sibling
+    Directive #9 repository's already-verified acquisition -- see this dataset's
+    manifest acquisition_provenance field for the full disclosure.
+
+periods:
+  requested_data_start: "2015-01-01"
+  requested_data_end_exclusive: "2026-01-01"
+  formation_dev: {start: "2015-01-01", end_inclusive: "2023-12-31"}
+  validation: {start: "2024-01-01", end_inclusive: "2024-12-31"}
+  historical_evaluation: {start: "2025-01-01", end_inclusive: "2025-12-31"}
+  historical_evaluation_label: "HISTORICAL EVALUATION"
+  historical_evaluation_label_note: >
+    Not "UNTOUCHED FINAL HOLDOUT" -- SPY 2025 outcomes were already inspected
+    under v1 (options_hist_risk_v1_holdout_2025). Per Addendum 13.
+
+fred_dgs3mo:
+  description: 3-Month Treasury Bill Secondary Market Rate -- a short-term
+    Treasury constant-maturity yield proxy. Never described as a full option
+    discount curve.
+  usage: point_in_time_carry_forward_never_future_backfill
+  units: percent_converted_to_decimal
+
+fred_vixcls:
+  description: CBOE Volatility Index, Close -- market-volatility context/reference.
+    Never described as the exact implied volatility of the modeled SPY option.
+  usage: context_only_not_used_as_option_pricing_input
+
+realized_volatility:
+  primary_window_sessions: 20
+  secondary_window_sessions: 60
+  formula: "close-to-close log-return standard deviation x sqrt(252)"
+
+hedging_experiment:
+  required_label: "Historical underlying-path hypothetical option hedging experiment"
+  standardized_option:
+    type: European call
+    moneyness: ATM at initiation (K = S0)
+    maturity_sessions: 30
+    position: short one option
+  primary_rebalance_frequency: daily
+  secondary_rebalance_frequency: weekly
+  initial_volatility: trailing_20_session_realized_vol_known_before_initiation
+  initial_volatility_note: "Never called historical implied volatility."
+  episode_initiation: first_eligible_session_of_each_month
+  dividend_handling: "q=0.0 disclosed explicitly; this engine does not model discrete dividend dates"
+  cost_scenarios_bps: {GROSS: 0.0, BASE: 1.0, STRESS: 5.0}
+  metrics:
+    - replication_error
+    - absolute_replication_error
+    - transaction_cost
+    - n_rebalances
+    - realized_vol
+    - initial_vol_assumption
+    - realized_minus_assumed_vol
+    - max_cash_requirement
+
+standardized_nonlinear_portfolio:
+  required_label: "Hypothetical nonlinear portfolio evaluated on historical risk-factor paths"
+  legs:
+    equity_shares: 100.0
+    calls: {quantity: -2.0, moneyness: ATM, maturity_sessions: 30}
+    puts: {quantity: 2.0, moneyness: "95%", maturity_sessions: 30}
+  roll_frequency: monthly_standardized_rolls
+  primary_volatility: 20_day_realized
+  sensitivity_volatility: 60_day_realized
+
+var_es:
+  horizon_days: 1
+  confidence_levels: {primary: 0.95, secondary: 0.99}
+  methods: [historical_simulation, delta_normal, monte_carlo_full_revaluation]
+  historical_simulation_lookbacks: {primary: 252, sensitivity: 504}
+  monte_carlo: {n_sims: 50000, seed: 0, antithetic_sampling: "not included in this release"}
+
+backtesting:
+  kupiec_coverage_test: required
+  christoffersen_independence_test: included_and_validated
+
+constraints:
+  no_retune_after_freeze: true
+  no_universe_change_after_dataset_freeze: true
+  no_ci_network_fetch: true
+  no_paid_options_tapes: true
+  no_invented_option_panels: true
+  no_2026_use_yet: true
+
+freeze_record:
+  frozen_for_holdout_utc: "2026-09-17T00:00:00Z"
+  basis: >
+    Methodology taken directly from Directive #9's own D9-C spec text, not
+    derived from or tuned against any observed result -- frozen on creation.
+    Datasets: yf_spy_daily_2015_2025_v1 (reused, verified sha256, see manifest),
+    fred_dgs3mo_daily_2015_2025_v1, fred_vixcls_daily_2015_2025_v1 (repackaged
+    2026-09-17 from a provisional combined snapshot into authoritative IDs, same
+    underlying bytes, corrected documentation only).
+
+notes: >
+  FINAL CONFIGURATION FROZEN. This is NOT a historical options-trading alpha
+  study. No paid options tapes. No invented option panels. Options priced with
+  Black-Scholes-Merton using realized volatility, never a fabricated implied
+  volatility surface.

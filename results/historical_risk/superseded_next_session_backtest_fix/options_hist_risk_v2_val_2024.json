@@ -1,0 +1,2543 @@
+{
+  "branch": "research/historical-risk-validation",
+  "config_path": "configs/experiments/options_historical_risk_study_v2.yaml",
+  "config_status": "frozen-for-holdout",
+  "dataset_canonical_sha256": {
+    "short_rate": "31ad77f46517b4a51a2313ad86524d3f0f07634e4ca450ba2c387adbddf42a9f",
+    "underlying": "0c83ab20bf76ec39b97855ac393b7bc74363bd4ff373381f0a92842a2c7c6a63",
+    "vol_context": "b727ab1751d4c9c180159cc1eb3358a2fef6ebf1abe15c74adb46f93019753b1"
+  },
+  "dataset_ids": {
+    "short_rate": "fred_dgs3mo_daily_2015_2025_v1",
+    "underlying": "yf_spy_daily_2015_2025_v1",
+    "vol_context": "fred_vixcls_daily_2015_2025_v1"
+  },
+  "eval_period": {
+    "end_inclusive": "2024-12-31",
+    "start": "2024-01-01"
+  },
+  "experiment_id": "options_hist_risk_v2_val_2024",
+  "hedging_experiment": {
+    "cost_scenarios_bps": {
+      "BASE": 1.0,
+      "GROSS": 0.0,
+      "STRESS": 5.0
+    },
+    "dividend_handling": "Continuous dividend yield q=0.0 used uniformly (no discrete dividend-date modeling in this engine). Disclosed rather than silently assumed: if q=0.0 here, no dividend carry is modeled for this run.",
+    "episodes": [
+      {
+        "K": 458.8092651367188,
+        "S0": 458.8092651367188,
+        "absolute_replication_error": 0.7863083258971528,
+        "cost_scenario": "GROSS",
+        "dividend_yield_used": 0.0,
+        "expiry_date": "2024-02-14",
+        "initial_vol_assumption": 0.09478316146305306,
+        "initiation_date": "2024-01-02",
+        "max_cash_requirement": 459.5955734625959,
+        "n_rebalances": 31,
+        "rate_as_of": "2024-01-02",
+        "rate_source": "fred_dgs3mo_daily_2015_2025_v1 (point-in-time)",
+        "rate_staleness_days": 0,
+        "rate_used": 0.0546,
+        "realized_vol": 0.11615320069028072,
+        "rebalance_frequency": "daily",
+        "replication_error": -0.7863083258971528,
+        "transaction_cost": 0.0
+      },
+      {
+        "K": 458.8092651367188,
+        "S0": 458.8092651367188,
+        "absolute_replication_error": 0.9169644183567129,
+        "cost_scenario": "BASE",
+        "dividend_yield_used": 0.0,
+        "expiry_date": "2024-02-14",
+        "initial_vol_assumption": 0.09478316146305306,
+        "initiation_date": "2024-01-02",
+        "max_cash_requirement": 459.67783253357106,
+        "n_rebalances": 31,
+        "rate_as_of": "2024-01-02",
+        "rate_source": "fred_dgs3mo_daily_2015_2025_v1 (point-in-time)",
+        "rate_staleness_days": 0,
+        "rate_used": 0.0546,
+        "realized_vol": 0.11615320069028072,
+        "rebalance_frequency": "daily",
+        "replication_error": -0.9169644183567129,
+        "transaction_cost": 0.13024666298838503
+      },
+      {
+        "K": 458.8092651367188,
+        "S0": 458.8092651367188,
+        "absolute_replication_error": 1.4395887881933618,
+        "cost_scenario": "STRESS",
+        "dividend_yield_used": 0.0,
+        "expiry_date": "2024-02-14",
+        "initial_vol_assumption": 0.09478316146305306,
+        "initiation_date": "2024-01-02",
+        "max_cash_requirement": 460.00686881747026,
+        "n_rebalances": 31,
+        "rate_as_of": "2024-01-02",
+        "rate_source": "fred_dgs3mo_daily_2015_2025_v1 (point-in-time)",
+        "rate_staleness_days": 0,
+        "rate_used": 0.0546,
+        "realized_vol": 0.11615320069028072,
+        "rebalance_frequency": "daily",
+        "replication_error": -1.4395887881933618,
+        "transaction_cost": 0.6512333149419249
+      },
+      {
+        "K": 458.8092651367188,
+        "S0": 458.8092651367188,
+        "absolute_replication_error": 1.4819083583607267,
+        "cost_scenario": "GROSS",
+        "dividend_yield_used": 0.0,
+        "expiry_date": "2024-02-14",
+        "initial_vol_assumption": 0.09478316146305306,
+        "initiation_date": "2024-01-02",
+        "max_cash_requirement": 460.27685067092204,
+        "n_rebalances": 7,
+        "rate_as_of": "2024-01-02",
+        "rate_source": "fred_dgs3mo_daily_2015_2025_v1 (point-in-time)",
+        "rate_staleness_days": 0,
+        "rate_used": 0.0546,
+        "realized_vol": 0.11615320069028072,
+        "rebalance_frequency": "weekly",
+        "replication_error": -1.4819083583607267,
+        "transaction_cost": 0.0
+      },
+      {
+        "K": 458.8092651367188,
+        "S0": 458.8092651367188,
+        "absolute_replication_error": 1.5827104027988526,
+        "cost_scenario": "BASE",
+        "dividend_yield_used": 0.0,
+        "expiry_date": "2024-02-14",
+        "initial_vol_assumption": 0.09478316146305306,
+        "initiation_date": "2024-01-02",
+        "max_cash_requirement": 460.3292571261582,
+        "n_rebalances": 7,
+        "rate_as_of": "2024-01-02",
+        "rate_source": "fred_dgs3mo_daily_2015_2025_v1 (point-in-time)",
+        "rate_staleness_days": 0,
+        "rate_used": 0.0546,
+        "realized_vol": 0.11615320069028072,
+        "rebalance_frequency": "weekly",
+        "replication_error": -1.5827104027988526,
+        "transaction_cost": 0.10055061718188295
+      },
+      {
+        "K": 458.8092651367188,
+        "S0": 458.8092651367188,
+        "absolute_replication_error": 1.9859185805520383,
+        "cost_scenario": "STRESS",
+        "dividend_yield_used": 0.0,
+        "expiry_date": "2024-02-14",
+        "initial_vol_assumption": 0.09478316146305306,
+        "initiation_date": "2024-01-02",
+        "max_cash_requirement": 460.53888294710356,
+        "n_rebalances": 7,
+        "rate_as_of": "2024-01-02",
+        "rate_source": "fred_dgs3mo_daily_2015_2025_v1 (point-in-time)",
+        "rate_staleness_days": 0,
+        "rate_used": 0.0546,
+        "realized_vol": 0.11615320069028072,
+        "rebalance_frequency": "weekly",
+        "replication_error": -1.9859185805520383,
+        "transaction_cost": 0.5027530859094147
+      },
+      {
+        "K": 474.8745727539063,
+        "S0": 474.8745727539063,
+        "absolute_replication_error": 0.5236984228361621,
+        "cost_scenario": "GROSS",
+        "dividend_yield_used": 0.0,
+        "expiry_date": "2024-03-15",
+        "initial_vol_assumption": 0.11209900367144707,
+        "initiation_date": "2024-02-01",
+        "max_cash_requirement": 475.3982711766702,
+        "n_rebalances": 31,
+        "rate_as_of": "2024-02-01",
+        "rate_source": "fred_dgs3mo_daily_2015_2025_v1 (point-in-time)",
+        "rate_staleness_days": 0,
+        "rate_used": 0.0542,
+        "realized_vol": 0.11475052761619918,
+        "rebalance_frequency": "daily",
+        "replication_error": -0.5236984228361621,
+        "transaction_cost": 0.0
+      },
+      {
+        "K": 474.8745727539063,
+        "S0": 474.8745727539063,
+        "absolute_replication_error": 0.6495135266507077,
+        "cost_scenario": "BASE",
+        "dividend_yield_used": 0.0,
+        "expiry_date": "2024-03-15",
+        "initial_vol_assumption": 0.11209900367144707,
+        "initiation_date": "2024-02-01",
+        "max_cash_requirement": 475.4744424633461,
+        "n_rebalances": 31,
+        "rate_as_of": "2024-02-01",
+        "rate_source": "fred_dgs3mo_daily_2015_2025_v1 (point-in-time)",
+        "rate_staleness_days": 0,
+        "rate_used": 0.0542,
+        "realized_vol": 0.11475052761619918,
+        "rebalance_frequency": "daily",
+        "replication_error": -0.6495135266507077,
+        "transaction_cost": 0.12542719229038377
+      },
+      {
+        "K": 474.8745727539063,
+        "S0": 474.8745727539063,
+        "absolute_replication_error": 1.1527739419098566,
+        "cost_scenario": "STRESS",
+        "dividend_yield_used": 0.0,
+        "expiry_date": "2024-03-15",
+        "initial_vol_assumption": 0.11209900367144707,
+        "initiation_date": "2024-02-01",
+        "max_cash_requirement": 475.7791276100506,
+        "n_rebalances": 31,
+        "rate_as_of": "2024-02-01",
+        "rate_source": "fred_dgs3mo_daily_2015_2025_v1 (point-in-time)",
+        "rate_staleness_days": 0,
+        "rate_used": 0.0542,
+        "realized_vol": 0.11475052761619918,
+        "rebalance_frequency": "daily",
+        "replication_error": -1.1527739419098566,
+        "transaction_cost": 0.6271359614519192
+      },
+      {
+        "K": 474.8745727539063,
+        "S0": 474.8745727539063,
+        "absolute_replication_error": 0.46798899030386565,
+        "cost_scenario": "GROSS",
+        "dividend_yield_used": 0.0,
+        "expiry_date": "2024-03-15",
+        "initial_vol_assumption": 0.11209900367144707,
+        "initiation_date": "2024-02-01",
+        "max_cash_requirement": 473.55504715090234,
+        "n_rebalances": 7,
+        "rate_as_of": "2024-02-01",
+        "rate_source": "fred_dgs3mo_daily_2015_2025_v1 (point-in-time)",
+        "rate_staleness_days": 0,
+        "rate_used": 0.0542,
+        "realized_vol": 0.11475052761619918,
+        "rebalance_frequency": "weekly",
+        "replication_error": 0.46798899030386565,
+        "transaction_cost": 0.0
+      },
+      {
+        "K": 474.8745727539063,
+        "S0": 474.8745727539063,
+        "absolute_replication_error": 0.37017585184429436,
+        "cost_scenario": "BASE",
+        "dividend_yield_used": 0.0,
+        "expiry_date": "2024-03-15",
+        "initial_vol_assumption": 0.11209900367144707,
+        "initiation_date": "2024-02-01",
+        "max_cash_requirement": 473.6033016258845,
+        "n_rebalances": 7,
+        "rate_as_of": "2024-02-01",
+        "rate_source": "fred_dgs3mo_daily_2015_2025_v1 (point-in-time)",
+        "rate_staleness_days": 0,
+        "rate_used": 0.0542,
+        "realized_vol": 0.11475052761619918,
+        "rebalance_frequency": "weekly",
+        "replication_error": 0.37017585184429436,
+        "transaction_cost": 0.09755068773724179
+      },
+      {
+        "K": 474.8745727539063,
+        "S0": 474.8745727539063,
+        "absolute_replication_error": 0.021076701993877123,
+        "cost_scenario": "STRESS",
+        "dividend_yield_used": 0.0,
+        "expiry_date": "2024-03-15",
+        "initial_vol_assumption": 0.11209900367144707,
+        "initiation_date": "2024-02-01",
+        "max_cash_requirement": 473.7963195258131,
+        "n_rebalances": 7,
+        "rate_as_of": "2024-02-01",
+        "rate_source": "fred_dgs3mo_daily_2015_2025_v1 (point-in-time)",
+        "rate_staleness_days": 0,
+        "rate_used": 0.0542,
+        "realized_vol": 0.11475052761619918,
+        "rebalance_frequency": "weekly",
+        "replication_error": -0.021076701993877123,
+        "transaction_cost": 0.48775343868620896
+      },
+      {
+        "K": 497.83197021484375,
+        "S0": 497.83197021484375,
+        "absolute_replication_error": 1.0776099446690637,
+        "cost_scenario": "GROSS",
+        "dividend_yield_used": 0.0,
+        "expiry_date": "2024-04-15",
+        "initial_vol_assumption": 0.12094943748042501,
+        "initiation_date": "2024-03-01",
+        "max_cash_requirement": 443.9238000599629,
+        "n_rebalances": 31,
+        "rate_as_of": "2024-03-01",
+        "rate_source": "fred_dgs3mo_daily_2015_2025_v1 (point-in-time)",
+        "rate_staleness_days": 0,
+        "rate_used": 0.0542,
+        "realized_vol": 0.11363595483039576,
+        "rebalance_frequency": "daily",
+        "replication_error": -1.0776099446690637,
+        "transaction_cost": 0.0
+      },
+      {
+        "K": 497.83197021484375,
+        "S0": 497.83197021484375,
+        "absolute_replication_error": 1.247417387959075,
+        "cost_scenario": "BASE",
+        "dividend_yield_used": 0.0,
+        "expiry_date": "2024-04-15",
+        "initial_vol_assumption": 0.12094943748042501,
+        "initiation_date": "2024-03-01",
+        "max_cash_requirement": 444.0492863429169,
+        "n_rebalances": 31,
+        "rate_as_of": "2024-03-01",
+        "rate_source": "fred_dgs3mo_daily_2015_2025_v1 (point-in-time)",
+        "rate_staleness_days": 0,
+        "rate_used": 0.0542,
+        "realized_vol": 0.11363595483039576,
+        "rebalance_frequency": "daily",
+        "replication_error": -1.247417387959075,
+        "transaction_cost": 0.16934853123211213
+      },
+      {
+        "K": 497.83197021484375,
+        "S0": 497.83197021484375,
+        "absolute_replication_error": 1.9266471611195186,
+        "cost_scenario": "STRESS",
+        "dividend_yield_used": 0.0,
+        "expiry_date": "2024-04-15",
+        "initial_vol_assumption": 0.12094943748042501,
+        "initiation_date": "2024-03-01",
+        "max_cash_requirement": 444.55123147473336,
+        "n_rebalances": 31,
+        "rate_as_of": "2024-03-01",
+        "rate_source": "fred_dgs3mo_daily_2015_2025_v1 (point-in-time)",
+        "rate_staleness_days": 0,
+        "rate_used": 0.0542,
+        "realized_vol": 0.11363595483039576,
+        "rebalance_frequency": "daily",
+        "replication_error": -1.9266471611195186,
+        "transaction_cost": 0.8467426561605605
+      },
+      {
+        "K": 497.83197021484375,
+        "S0": 497.83197021484375,
+        "absolute_replication_error": 0.6406118689340019,
+        "cost_scenario": "GROSS",
+        "dividend_yield_used": 0.0,
+        "expiry_date": "2024-04-15",
+        "initial_vol_assumption": 0.12094943748042501,
+        "initiation_date": "2024-03-01",
+        "max_cash_requirement": 410.87549362635974,
+        "n_rebalances": 7,
+        "rate_as_of": "2024-03-01",
+        "rate_source": "fred_dgs3mo_daily_2015_2025_v1 (point-in-time)",
+        "rate_staleness_days": 0,
+        "rate_used": 0.0542,
+        "realized_vol": 0.11363595483039576,
+        "rebalance_frequency": "weekly",
+        "replication_error": -0.6406118689340019,
+        "transaction_cost": 0.0
+      },
+      {
+        "K": 497.83197021484375,
+        "S0": 497.83197021484375,
+        "absolute_replication_error": 0.7283387432549944,
+        "cost_scenario": "BASE",
+        "dividend_yield_used": 0.0,
+        "expiry_date": "2024-04-15",
+        "initial_vol_assumption": 0.12094943748042501,
+        "initiation_date": "2024-03-01",
+        "max_cash_requirement": 410.92210265315765,
+        "n_rebalances": 7,
+        "rate_as_of": "2024-03-01",
+        "rate_source": "fred_dgs3mo_daily_2015_2025_v1 (point-in-time)",
+        "rate_staleness_days": 0,
+        "rate_used": 0.0542,
+        "realized_vol": 0.11363595483039576,
+        "rebalance_frequency": "weekly",
+        "replication_error": -0.7283387432549944,
+        "transaction_cost": 0.0874831779152713
+      },
+      {
+        "K": 497.83197021484375,
+        "S0": 497.83197021484375,
+        "absolute_replication_error": 1.0792462405395895,
+        "cost_scenario": "STRESS",
+        "dividend_yield_used": 0.0,
+        "expiry_date": "2024-04-15",
+        "initial_vol_assumption": 0.12094943748042501,
+        "initiation_date": "2024-03-01",
+        "max_cash_requirement": 411.10853876034975,
+        "n_rebalances": 7,
+        "rate_as_of": "2024-03-01",
+        "rate_source": "fred_dgs3mo_daily_2015_2025_v1 (point-in-time)",
+        "rate_staleness_days": 0,
+        "rate_used": 0.0542,
+        "realized_vol": 0.11363595483039576,
+        "rebalance_frequency": "weekly",
+        "replication_error": -1.0792462405395895,
+        "transaction_cost": 0.4374158895763566
+      },
+      {
+        "K": 508.4442443847656,
+        "S0": 508.4442443847656,
+        "absolute_replication_error": 0.34801147931929677,
+        "cost_scenario": "GROSS",
+        "dividend_yield_used": 0.0,
+        "expiry_date": "2024-05-13",
+        "initial_vol_assumption": 0.09719324874314748,
+        "initiation_date": "2024-04-01",
+        "max_cash_requirement": 287.9999169831625,
+        "n_rebalances": 31,
+        "rate_as_of": "2024-04-01",
+        "rate_source": "fred_dgs3mo_daily_2015_2025_v1 (point-in-time)",
+        "rate_staleness_days": 0,
+        "rate_used": 0.054400000000000004,
+        "realized_vol": 0.12905128161927193,
+        "rebalance_frequency": "daily",
+        "replication_error": -0.34801147931929677,
+        "transaction_cost": 0.0
+      },
+      {
+        "K": 508.4442443847656,
+        "S0": 508.4442443847656,
+        "absolute_replication_error": 0.48668988448767436,
+        "cost_scenario": "BASE",
+        "dividend_yield_used": 0.0,
+        "expiry_date": "2024-05-13",
+        "initial_vol_assumption": 0.09719324874314748,
+        "initiation_date": "2024-04-01",
+        "max_cash_requirement": 288.02957186233283,
+        "n_rebalances": 31,
+        "rate_as_of": "2024-04-01",
+        "rate_source": "fred_dgs3mo_daily_2015_2025_v1 (point-in-time)",
+        "rate_staleness_days": 0,
+        "rate_used": 0.054400000000000004,
+        "realized_vol": 0.12905128161927193,
+        "rebalance_frequency": "daily",
+        "replication_error": -0.48668988448767436,
+        "transaction_cost": 0.13816540784270945
+      },
+      {
+        "K": 508.4442443847656,
+        "S0": 508.4442443847656,
+        "absolute_replication_error": 1.0414035051617248,
+        "cost_scenario": "STRESS",
+        "dividend_yield_used": 0.0,
+        "expiry_date": "2024-05-13",
+        "initial_vol_assumption": 0.09719324874314748,
+        "initiation_date": "2024-04-01",
+        "max_cash_requirement": 288.1481913790141,
+        "n_rebalances": 31,
+        "rate_as_of": "2024-04-01",
+        "rate_source": "fred_dgs3mo_daily_2015_2025_v1 (point-in-time)",
+        "rate_staleness_days": 0,
+        "rate_used": 0.054400000000000004,
+        "realized_vol": 0.12905128161927193,
+        "rebalance_frequency": "daily",
+        "replication_error": -1.0414035051617248,
+        "transaction_cost": 0.6908270392135475
+      },
+      {
+        "K": 508.4442443847656,
+        "S0": 508.4442443847656,
+        "absolute_replication_error": 0.6084953476322568,
+        "cost_scenario": "GROSS",
+        "dividend_yield_used": 0.0,
+        "expiry_date": "2024-05-13",
+        "initial_vol_assumption": 0.09719324874314748,
+        "initiation_date": "2024-04-01",
+        "max_cash_requirement": 288.248710025714,
+        "n_rebalances": 7,
+        "rate_as_of": "2024-04-01",
+        "rate_source": "fred_dgs3mo_daily_2015_2025_v1 (point-in-time)",
+        "rate_staleness_days": 0,
+        "rate_used": 0.054400000000000004,
+        "realized_vol": 0.12905128161927193,
+        "rebalance_frequency": "weekly",
+        "replication_error": 0.6084953476322568,
+        "transaction_cost": 0.0
+      },
+      {
+        "K": 508.4442443847656,
+        "S0": 508.4442443847656,
+        "absolute_replication_error": 0.5298191059617636,
+        "cost_scenario": "BASE",
+        "dividend_yield_used": 0.0,
+        "expiry_date": "2024-05-13",
+        "initial_vol_assumption": 0.09719324874314748,
+        "initiation_date": "2024-04-01",
+        "max_cash_requirement": 288.278390522696,
+        "n_rebalances": 7,
+        "rate_as_of": "2024-04-01",
+        "rate_source": "fred_dgs3mo_daily_2015_2025_v1 (point-in-time)",
+        "rate_staleness_days": 0,
+        "rate_used": 0.054400000000000004,
+        "realized_vol": 0.12905128161927193,
+        "rebalance_frequency": "weekly",
+        "replication_error": 0.5298191059617636,
+        "transaction_cost": 0.07835286175792487
+      },
+      {
+        "K": 508.4442443847656,
+        "S0": 508.4442443847656,
+        "absolute_replication_error": 0.2151141392799758,
+        "cost_scenario": "STRESS",
+        "dividend_yield_used": 0.0,
+        "expiry_date": "2024-05-13",
+        "initial_vol_assumption": 0.09719324874314748,
+        "initiation_date": "2024-04-01",
+        "max_cash_requirement": 288.39711251062374,
+        "n_rebalances": 7,
+        "rate_as_of": "2024-04-01",
+        "rate_source": "fred_dgs3mo_daily_2015_2025_v1 (point-in-time)",
+        "rate_staleness_days": 0,
+        "rate_used": 0.054400000000000004,
+        "realized_vol": 0.12905128161927193,
+        "rebalance_frequency": "weekly",
+        "replication_error": 0.2151141392799758,
+        "transaction_cost": 0.3917643087896243
+      },
+      {
+        "K": 487.2071228027344,
+        "S0": 487.2071228027344,
+        "absolute_replication_error": 0.6091114732412279,
+        "cost_scenario": "GROSS",
+        "dividend_yield_used": 0.0,
+        "expiry_date": "2024-06-13",
+        "initial_vol_assumption": 0.13776735313259494,
+        "initiation_date": "2024-05-01",
+        "max_cash_requirement": 486.59801132949315,
+        "n_rebalances": 31,
+        "rate_as_of": "2024-05-01",
+        "rate_source": "fred_dgs3mo_daily_2015_2025_v1 (point-in-time)",
+        "rate_staleness_days": 0,
+        "rate_used": 0.0546,
+        "realized_vol": 0.08642528682311698,
+        "rebalance_frequency": "daily",
+        "replication_error": 0.6091114732412279,
+        "transaction_cost": 0.0
+      },
+      {
+        "K": 487.2071228027344,
+        "S0": 487.2071228027344,
+        "absolute_replication_error": 0.5020369595152943,
+        "cost_scenario": "BASE",
+        "dividend_yield_used": 0.0,
+        "expiry_date": "2024-06-13",
+        "initial_vol_assumption": 0.13776735313259494,
+        "initiation_date": "2024-05-01",
+        "max_cash_requirement": 486.6522657138246,
+        "n_rebalances": 31,
+        "rate_as_of": "2024-05-01",
+        "rate_source": "fred_dgs3mo_daily_2015_2025_v1 (point-in-time)",
+        "rate_staleness_days": 0,
+        "rate_used": 0.0546,
+        "realized_vol": 0.08642528682311698,
+        "rebalance_frequency": "daily",
+        "replication_error": 0.5020369595152943,
+        "transaction_cost": 0.10676918029924112
+      },
+      {
+        "K": 487.2071228027344,
+        "S0": 487.2071228027344,
+        "absolute_replication_error": 0.07373890461173005,
+        "cost_scenario": "STRESS",
+        "dividend_yield_used": 0.0,
+        "expiry_date": "2024-06-13",
+        "initial_vol_assumption": 0.13776735313259494,
+        "initiation_date": "2024-05-01",
+        "max_cash_requirement": 486.86928325114997,
+        "n_rebalances": 31,
+        "rate_as_of": "2024-05-01",
+        "rate_source": "fred_dgs3mo_daily_2015_2025_v1 (point-in-time)",
+        "rate_staleness_days": 0,
+        "rate_used": 0.0546,
+        "realized_vol": 0.08642528682311698,
+        "rebalance_frequency": "daily",
+        "replication_error": 0.07373890461173005,
+        "transaction_cost": 0.5338459014962056
+      },
+      {
+        "K": 487.2071228027344,
+        "S0": 487.2071228027344,
+        "absolute_replication_error": 1.5624865594631956,
+        "cost_scenario": "GROSS",
+        "dividend_yield_used": 0.0,
+        "expiry_date": "2024-06-13",
+        "initial_vol_assumption": 0.13776735313259494,
+        "initiation_date": "2024-05-01",
+        "max_cash_requirement": 488.6387773877891,
+        "n_rebalances": 7,
+        "rate_as_of": "2024-05-01",
+        "rate_source": "fred_dgs3mo_daily_2015_2025_v1 (point-in-time)",
+        "rate_staleness_days": 0,
+        "rate_used": 0.0546,
+        "realized_vol": 0.08642528682311698,
+        "rebalance_frequency": "weekly",
+        "replication_error": -1.5624865594631956,
+        "transaction_cost": 0.0
+      },
+      {
+        "K": 487.2071228027344,
+        "S0": 487.2071228027344,
+        "absolute_replication_error": 1.6664729510708298,
+        "cost_scenario": "BASE",
+        "dividend_yield_used": 0.0,
+        "expiry_date": "2024-06-13",
+        "initial_vol_assumption": 0.13776735313259494,
+        "initiation_date": "2024-05-01",
+        "max_cash_requirement": 488.6899567331996,
+        "n_rebalances": 7,
+        "rate_as_of": "2024-05-01",
+        "rate_source": "fred_dgs3mo_daily_2015_2025_v1 (point-in-time)",
+        "rate_staleness_days": 0,
+        "rate_used": 0.0546,
+        "realized_vol": 0.08642528682311698,
+        "rebalance_frequency": "weekly",
+        "replication_error": -1.6664729510708298,
+        "transaction_cost": 0.10370187001326817
+      },
+      {
+        "K": 487.2071228027344,
+        "S0": 487.2071228027344,
+        "absolute_replication_error": 2.0824185175007983,
+        "cost_scenario": "STRESS",
+        "dividend_yield_used": 0.0,
+        "expiry_date": "2024-06-13",
+        "initial_vol_assumption": 0.13776735313259494,
+        "initiation_date": "2024-05-01",
+        "max_cash_requirement": 488.8946741148413,
+        "n_rebalances": 7,
+        "rate_as_of": "2024-05-01",
+        "rate_source": "fred_dgs3mo_daily_2015_2025_v1 (point-in-time)",
+        "rate_staleness_days": 0,
+        "rate_used": 0.0546,
+        "realized_vol": 0.08642528682311698,
+        "rebalance_frequency": "weekly",
+        "replication_error": -2.0824185175007983,
+        "transaction_cost": 0.5185093500663408
+      },
+      {
+        "K": 513.93603515625,
+        "S0": 513.93603515625,
+        "absolute_replication_error": 0.39194303373267303,
+        "cost_scenario": "GROSS",
+        "dividend_yield_used": 0.0,
+        "expiry_date": "2024-07-17",
+        "initial_vol_assumption": 0.09409307812008637,
+        "initiation_date": "2024-06-03",
+        "max_cash_requirement": 513.5440921225173,
+        "n_rebalances": 31,
+        "rate_as_of": "2024-06-03",
+        "rate_source": "fred_dgs3mo_daily_2015_2025_v1 (point-in-time)",
+        "rate_staleness_days": 0,
+        "rate_used": 0.0552,
+        "realized_vol": 0.08347973185733104,
+        "rebalance_frequency": "daily",
+        "replication_error": 0.39194303373267303,
+        "transaction_cost": 0.0
+      },
+      {
+        "K": 513.93603515625,
+        "S0": 513.93603515625,
+        "absolute_replication_error": 0.28074930277455223,
+        "cost_scenario": "BASE",
+        "dividend_yield_used": 0.0,
+        "expiry_date": "2024-07-17",
+        "initial_vol_assumption": 0.09409307812008637,
+        "initiation_date": "2024-06-03",
+        "max_cash_requirement": 513.6008798293055,
+        "n_rebalances": 31,
+        "rate_as_of": "2024-06-03",
+        "rate_source": "fred_dgs3mo_daily_2015_2025_v1 (point-in-time)",
+        "rate_staleness_days": 0,
+        "rate_used": 0.0552,
+        "realized_vol": 0.08347973185733104,
+        "rebalance_frequency": "daily",
+        "replication_error": 0.28074930277455223,
+        "transaction_cost": 0.11086751805213155
+      },
+      {
+        "K": 513.93603515625,
+        "S0": 513.93603515625,
+        "absolute_replication_error": 0.16402562105770357,
+        "cost_scenario": "STRESS",
+        "dividend_yield_used": 0.0,
+        "expiry_date": "2024-07-17",
+        "initial_vol_assumption": 0.09409307812008637,
+        "initiation_date": "2024-06-03",
+        "max_cash_requirement": 513.828030656458,
+        "n_rebalances": 31,
+        "rate_as_of": "2024-06-03",
+        "rate_source": "fred_dgs3mo_daily_2015_2025_v1 (point-in-time)",
+        "rate_staleness_days": 0,
+        "rate_used": 0.0552,
+        "realized_vol": 0.08347973185733104,
+        "rebalance_frequency": "daily",
+        "replication_error": -0.16402562105770357,
+        "transaction_cost": 0.5543375902606577
+      },
+      {
+        "K": 513.93603515625,
+        "S0": 513.93603515625,
+        "absolute_replication_error": 0.5907110770474446,
+        "cost_scenario": "GROSS",
+        "dividend_yield_used": 0.0,
+        "expiry_date": "2024-07-17",
+        "initial_vol_assumption": 0.09409307812008637,
+        "initiation_date": "2024-06-03",
+        "max_cash_requirement": 514.5265714688319,
+        "n_rebalances": 7,
+        "rate_as_of": "2024-06-03",
+        "rate_source": "fred_dgs3mo_daily_2015_2025_v1 (point-in-time)",
+        "rate_staleness_days": 0,
+        "rate_used": 0.0552,
+        "realized_vol": 0.08347973185733104,
+        "rebalance_frequency": "weekly",
+        "replication_error": -0.5907110770474446,
+        "transaction_cost": 0.0
+      },
+      {
+        "K": 513.93603515625,
+        "S0": 513.93603515625,
+        "absolute_replication_error": 0.6974205958611037,
+        "cost_scenario": "BASE",
+        "dividend_yield_used": 0.0,
+        "expiry_date": "2024-07-17",
+        "initial_vol_assumption": 0.09409307812008637,
+        "initiation_date": "2024-06-03",
+        "max_cash_requirement": 514.578874980952,
+        "n_rebalances": 7,
+        "rate_as_of": "2024-06-03",
+        "rate_source": "fred_dgs3mo_daily_2015_2025_v1 (point-in-time)",
+        "rate_staleness_days": 0,
+        "rate_used": 0.0552,
+        "realized_vol": 0.08347973185733104,
+        "rebalance_frequency": "weekly",
+        "replication_error": -0.6974205958611037,
+        "transaction_cost": 0.10641191992663092
+      },
+      {
+        "K": 513.93603515625,
+        "S0": 513.93603515625,
+        "absolute_replication_error": 1.1242586711163085,
+        "cost_scenario": "STRESS",
+        "dividend_yield_used": 0.0,
+        "expiry_date": "2024-07-17",
+        "initial_vol_assumption": 0.09409307812008637,
+        "initiation_date": "2024-06-03",
+        "max_cash_requirement": 514.7880890294334,
+        "n_rebalances": 7,
+        "rate_as_of": "2024-06-03",
+        "rate_source": "fred_dgs3mo_daily_2015_2025_v1 (point-in-time)",
+        "rate_staleness_days": 0,
+        "rate_used": 0.0552,
+        "realized_vol": 0.08347973185733104,
+        "rebalance_frequency": "weekly",
+        "replication_error": -1.1242586711163085,
+        "transaction_cost": 0.5320595996331545
+      },
+      {
+        "K": 532.728515625,
+        "S0": 532.728515625,
+        "absolute_replication_error": 10.205397798079582,
+        "cost_scenario": "GROSS",
+        "dividend_yield_used": 0.0,
+        "expiry_date": "2024-08-13",
+        "initial_vol_assumption": 0.06711313861527858,
+        "initiation_date": "2024-07-01",
+        "max_cash_requirement": 520.9874319616814,
+        "n_rebalances": 31,
+        "rate_as_of": "2024-07-01",
+        "rate_source": "fred_dgs3mo_daily_2015_2025_v1 (point-in-time)",
+        "rate_staleness_days": 0,
+        "rate_used": 0.0547,
+        "realized_vol": 0.18861958361580253,
+        "rebalance_frequency": "daily",
+        "replication_error": -10.205397798079582,
+        "transaction_cost": 0.0
+      },
+      {
+        "K": 532.728515625,
+        "S0": 532.728515625,
+        "absolute_replication_error": 10.4110696438603,
+        "cost_scenario": "BASE",
+        "dividend_yield_used": 0.0,
+        "expiry_date": "2024-08-13",
+        "initial_vol_assumption": 0.06711313861527858,
+        "initiation_date": "2024-07-01",
+        "max_cash_requirement": 521.0463246276665,
+        "n_rebalances": 31,
+        "rate_as_of": "2024-07-01",
+        "rate_source": "fred_dgs3mo_daily_2015_2025_v1 (point-in-time)",
+        "rate_staleness_days": 0,
+        "rate_used": 0.0547,
+        "realized_vol": 0.18861958361580253,
+        "rebalance_frequency": "daily",
+        "replication_error": -10.4110696438603,
+        "transaction_cost": 0.20495595821657783
+      },
+      {
+        "K": 532.728515625,
+        "S0": 532.728515625,
+        "absolute_replication_error": 11.233757026983893,
+        "cost_scenario": "STRESS",
+        "dividend_yield_used": 0.0,
+        "expiry_date": "2024-08-13",
+        "initial_vol_assumption": 0.06711313861527858,
+        "initiation_date": "2024-07-01",
+        "max_cash_requirement": 521.2818952916078,
+        "n_rebalances": 31,
+        "rate_as_of": "2024-07-01",
+        "rate_source": "fred_dgs3mo_daily_2015_2025_v1 (point-in-time)",
+        "rate_staleness_days": 0,
+        "rate_used": 0.0547,
+        "realized_vol": 0.18861958361580253,
+        "rebalance_frequency": "daily",
+        "replication_error": -11.233757026983893,
+        "transaction_cost": 1.0247797910828893
+      },
+      {
+        "K": 532.728515625,
+        "S0": 532.728515625,
+        "absolute_replication_error": 9.439793731887248,
+        "cost_scenario": "GROSS",
+        "dividend_yield_used": 0.0,
+        "expiry_date": "2024-08-13",
+        "initial_vol_assumption": 0.06711313861527858,
+        "initiation_date": "2024-07-01",
+        "max_cash_requirement": 522.45488487064,
+        "n_rebalances": 7,
+        "rate_as_of": "2024-07-01",
+        "rate_source": "fred_dgs3mo_daily_2015_2025_v1 (point-in-time)",
+        "rate_staleness_days": 0,
+        "rate_used": 0.0547,
+        "realized_vol": 0.18861958361580253,
+        "rebalance_frequency": "weekly",
+        "replication_error": -9.439793731887248,
+        "transaction_cost": 0.0
+      },
+      {
+        "K": 532.728515625,
+        "S0": 532.728515625,
+        "absolute_replication_error": 9.544368646779855,
+        "cost_scenario": "BASE",
+        "dividend_yield_used": 0.0,
+        "expiry_date": "2024-08-13",
+        "initial_vol_assumption": 0.06711313861527858,
+        "initiation_date": "2024-07-01",
+        "max_cash_requirement": 522.5078152706319,
+        "n_rebalances": 7,
+        "rate_as_of": "2024-07-01",
+        "rate_source": "fred_dgs3mo_daily_2015_2025_v1 (point-in-time)",
+        "rate_staleness_days": 0,
+        "rate_used": 0.0547,
+        "realized_vol": 0.18861958361580253,
+        "rebalance_frequency": "weekly",
+        "replication_error": -9.544368646779855,
+        "transaction_cost": 0.10416151854375076
+      },
+      {
+        "K": 532.728515625,
+        "S0": 532.728515625,
+        "absolute_replication_error": 9.962668306350421,
+        "cost_scenario": "STRESS",
+        "dividend_yield_used": 0.0,
+        "expiry_date": "2024-08-13",
+        "initial_vol_assumption": 0.06711313861527858,
+        "initiation_date": "2024-07-01",
+        "max_cash_requirement": 522.7195368706,
+        "n_rebalances": 7,
+        "rate_as_of": "2024-07-01",
+        "rate_source": "fred_dgs3mo_daily_2015_2025_v1 (point-in-time)",
+        "rate_staleness_days": 0,
+        "rate_used": 0.0547,
+        "realized_vol": 0.18861958361580253,
+        "rebalance_frequency": "weekly",
+        "replication_error": -9.962668306350421,
+        "transaction_cost": 0.5208075927187538
+      },
+      {
+        "K": 530.4523315429688,
+        "S0": 530.4523315429688,
+        "absolute_replication_error": 2.874451545987654,
+        "cost_scenario": "GROSS",
+        "dividend_yield_used": 0.0,
+        "expiry_date": "2024-09-13",
+        "initial_vol_assumption": 0.1493837921495504,
+        "initiation_date": "2024-08-01",
+        "max_cash_requirement": 532.8444893984584,
+        "n_rebalances": 31,
+        "rate_as_of": "2024-08-01",
+        "rate_source": "fred_dgs3mo_daily_2015_2025_v1 (point-in-time)",
+        "rate_staleness_days": 0,
+        "rate_used": 0.0537,
+        "realized_vol": 0.18442110934400746,
+        "rebalance_frequency": "daily",
+        "replication_error": -2.874451545987654,
+        "transaction_cost": 0.0
+      },
+      {
+        "K": 530.4523315429688,
+        "S0": 530.4523315429688,
+        "absolute_replication_error": 3.0883573814485317,
+        "cost_scenario": "BASE",
+        "dividend_yield_used": 0.0,
+        "expiry_date": "2024-09-13",
+        "initial_vol_assumption": 0.1493837921495504,
+        "initiation_date": "2024-08-01",
+        "max_cash_requirement": 533.0035421632396,
+        "n_rebalances": 31,
+        "rate_as_of": "2024-08-01",
+        "rate_source": "fred_dgs3mo_daily_2015_2025_v1 (point-in-time)",
+        "rate_staleness_days": 0,
+        "rate_used": 0.0537,
+        "realized_vol": 0.18442110934400746,
+        "rebalance_frequency": "daily",
+        "replication_error": -3.0883573814485317,
+        "transaction_cost": 0.21332989963367405
+      },
+      {
+        "K": 530.4523315429688,
+        "S0": 530.4523315429688,
+        "absolute_replication_error": 3.9439807232914745,
+        "cost_scenario": "STRESS",
+        "dividend_yield_used": 0.0,
+        "expiry_date": "2024-09-13",
+        "initial_vol_assumption": 0.1493837921495504,
+        "initiation_date": "2024-08-01",
+        "max_cash_requirement": 533.6397532223634,
+        "n_rebalances": 31,
+        "rate_as_of": "2024-08-01",
+        "rate_source": "fred_dgs3mo_daily_2015_2025_v1 (point-in-time)",
+        "rate_staleness_days": 0,
+        "rate_used": 0.0537,
+        "realized_vol": 0.18442110934400746,
+        "rebalance_frequency": "daily",
+        "replication_error": -3.9439807232914745,
+        "transaction_cost": 1.06664949816837
+      },
+      {
+        "K": 530.4523315429688,
+        "S0": 530.4523315429688,
+        "absolute_replication_error": 8.719366695456046,
+        "cost_scenario": "GROSS",
+        "dividend_yield_used": 0.0,
+        "expiry_date": "2024-09-13",
+        "initial_vol_assumption": 0.1493837921495504,
+        "initiation_date": "2024-08-01",
+        "max_cash_requirement": 446.02867615618885,
+        "n_rebalances": 7,
+        "rate_as_of": "2024-08-01",
+        "rate_source": "fred_dgs3mo_daily_2015_2025_v1 (point-in-time)",
+        "rate_staleness_days": 0,
+        "rate_used": 0.0537,
+        "realized_vol": 0.18442110934400746,
+        "rebalance_frequency": "weekly",
+        "replication_error": -8.719366695456046,
+        "transaction_cost": 0.0
+      },
+      {
+        "K": 530.4523315429688,
+        "S0": 530.4523315429688,
+        "absolute_replication_error": 8.831493732995739,
+        "cost_scenario": "BASE",
+        "dividend_yield_used": 0.0,
+        "expiry_date": "2024-09-13",
+        "initial_vol_assumption": 0.1493837921495504,
+        "initiation_date": "2024-08-01",
+        "max_cash_requirement": 446.095097838831,
+        "n_rebalances": 7,
+        "rate_as_of": "2024-08-01",
+        "rate_source": "fred_dgs3mo_daily_2015_2025_v1 (point-in-time)",
+        "rate_staleness_days": 0,
+        "rate_used": 0.0537,
+        "realized_vol": 0.18442110934400746,
+        "rebalance_frequency": "weekly",
+        "replication_error": -8.831493732995739,
+        "transaction_cost": 0.11175851096935682
+      },
+      {
+        "K": 530.4523315429688,
+        "S0": 530.4523315429688,
+        "absolute_replication_error": 9.280001883155052,
+        "cost_scenario": "STRESS",
+        "dividend_yield_used": 0.0,
+        "expiry_date": "2024-09-13",
+        "initial_vol_assumption": 0.1493837921495504,
+        "initiation_date": "2024-08-01",
+        "max_cash_requirement": 446.3607845694,
+        "n_rebalances": 7,
+        "rate_as_of": "2024-08-01",
+        "rate_source": "fred_dgs3mo_daily_2015_2025_v1 (point-in-time)",
+        "rate_staleness_days": 0,
+        "rate_used": 0.0537,
+        "realized_vol": 0.18442110934400746,
+        "rebalance_frequency": "weekly",
+        "replication_error": -9.280001883155052,
+        "transaction_cost": 0.558792554846784
+      },
+      {
+        "K": 539.3126220703125,
+        "S0": 539.3126220703125,
+        "absolute_replication_error": 3.216767402884784,
+        "cost_scenario": "GROSS",
+        "dividend_yield_used": 0.0,
+        "expiry_date": "2024-10-15",
+        "initial_vol_assumption": 0.17719904252214536,
+        "initiation_date": "2024-09-03",
+        "max_cash_requirement": 536.095833849448,
+        "n_rebalances": 31,
+        "rate_as_of": "2024-09-03",
+        "rate_source": "fred_dgs3mo_daily_2015_2025_v1 (point-in-time)",
+        "rate_staleness_days": 0,
+        "rate_used": 0.0519,
+        "realized_vol": 0.11252067361715776,
+        "rebalance_frequency": "daily",
+        "replication_error": 3.216767402884784,
+        "transaction_cost": 0.0
+      },
+      {
+        "K": 539.3126220703125,
+        "S0": 539.3126220703125,
+        "absolute_replication_error": 3.07614022984842,
+        "cost_scenario": "BASE",
+        "dividend_yield_used": 0.0,
+        "expiry_date": "2024-10-15",
+        "initial_vol_assumption": 0.17719904252214536,
+        "initiation_date": "2024-09-03",
+        "max_cash_requirement": 536.1796500992732,
+        "n_rebalances": 31,
+        "rate_as_of": "2024-09-03",
+        "rate_source": "fred_dgs3mo_daily_2015_2025_v1 (point-in-time)",
+        "rate_staleness_days": 0,
+        "rate_used": 0.0519,
+        "realized_vol": 0.11252067361715776,
+        "rebalance_frequency": "daily",
+        "replication_error": 3.07614022984842,
+        "transaction_cost": 0.14025256989271304
+      },
+      {
+        "K": 539.3126220703125,
+        "S0": 539.3126220703125,
+        "absolute_replication_error": 2.5136315377028495,
+        "cost_scenario": "STRESS",
+        "dividend_yield_used": 0.0,
+        "expiry_date": "2024-10-15",
+        "initial_vol_assumption": 0.17719904252214536,
+        "initiation_date": "2024-09-03",
+        "max_cash_requirement": 536.5149150985741,
+        "n_rebalances": 31,
+        "rate_as_of": "2024-09-03",
+        "rate_source": "fred_dgs3mo_daily_2015_2025_v1 (point-in-time)",
+        "rate_staleness_days": 0,
+        "rate_used": 0.0519,
+        "realized_vol": 0.11252067361715776,
+        "rebalance_frequency": "daily",
+        "replication_error": 2.5136315377028495,
+        "transaction_cost": 0.7012628494635651
+      },
+      {
+        "K": 539.3126220703125,
+        "S0": 539.3126220703125,
+        "absolute_replication_error": 3.4456483032091114,
+        "cost_scenario": "GROSS",
+        "dividend_yield_used": 0.0,
+        "expiry_date": "2024-10-15",
+        "initial_vol_assumption": 0.17719904252214536,
+        "initiation_date": "2024-09-03",
+        "max_cash_requirement": 509.37379902720335,
+        "n_rebalances": 7,
+        "rate_as_of": "2024-09-03",
+        "rate_source": "fred_dgs3mo_daily_2015_2025_v1 (point-in-time)",
+        "rate_staleness_days": 0,
+        "rate_used": 0.0519,
+        "realized_vol": 0.11252067361715776,
+        "rebalance_frequency": "weekly",
+        "replication_error": 3.4456483032091114,
+        "transaction_cost": 0.0
+      },
+      {
+        "K": 539.3126220703125,
+        "S0": 539.3126220703125,
+        "absolute_replication_error": 3.333974923326025,
+        "cost_scenario": "BASE",
+        "dividend_yield_used": 0.0,
+        "expiry_date": "2024-10-15",
+        "initial_vol_assumption": 0.17719904252214536,
+        "initiation_date": "2024-09-03",
+        "max_cash_requirement": 509.43131079926746,
+        "n_rebalances": 7,
+        "rate_as_of": "2024-09-03",
+        "rate_source": "fred_dgs3mo_daily_2015_2025_v1 (point-in-time)",
+        "rate_staleness_days": 0,
+        "rate_used": 0.0519,
+        "realized_vol": 0.11252067361715776,
+        "rebalance_frequency": "weekly",
+        "replication_error": 3.333974923326025,
+        "transaction_cost": 0.11140159016342491
+      },
+      {
+        "K": 539.3126220703125,
+        "S0": 539.3126220703125,
+        "absolute_replication_error": 2.887281403794759,
+        "cost_scenario": "STRESS",
+        "dividend_yield_used": 0.0,
+        "expiry_date": "2024-10-15",
+        "initial_vol_assumption": 0.17719904252214536,
+        "initiation_date": "2024-09-03",
+        "max_cash_requirement": 509.66135788752285,
+        "n_rebalances": 7,
+        "rate_as_of": "2024-09-03",
+        "rate_source": "fred_dgs3mo_daily_2015_2025_v1 (point-in-time)",
+        "rate_staleness_days": 0,
+        "rate_used": 0.0519,
+        "realized_vol": 0.11252067361715776,
+        "rebalance_frequency": "weekly",
+        "replication_error": 2.887281403794759,
+        "transaction_cost": 0.5570079508171246
+      },
+      {
+        "K": 557.1739501953125,
+        "S0": 557.1739501953125,
+        "absolute_replication_error": 0.18015814145246623,
+        "cost_scenario": "GROSS",
+        "dividend_yield_used": 0.0,
+        "expiry_date": "2024-11-12",
+        "initial_vol_assumption": 0.1366068893942169,
+        "initiation_date": "2024-10-01",
+        "max_cash_requirement": 557.3541078508704,
+        "n_rebalances": 31,
+        "rate_as_of": "2024-10-01",
+        "rate_source": "fred_dgs3mo_daily_2015_2025_v1 (point-in-time)",
+        "rate_staleness_days": 0,
+        "rate_used": 0.0471,
+        "realized_vol": 0.12468347693654158,
+        "rebalance_frequency": "daily",
+        "replication_error": -0.18015814145246623,
+        "transaction_cost": 0.0
+      },
+      {
+        "K": 557.1739501953125,
+        "S0": 557.1739501953125,
+        "absolute_replication_error": 0.3611658095161374,
+        "cost_scenario": "BASE",
+        "dividend_yield_used": 0.0,
+        "expiry_date": "2024-11-12",
+        "initial_vol_assumption": 0.1366068893942169,
+        "initiation_date": "2024-10-01",
+        "max_cash_requirement": 557.4766270546272,
+        "n_rebalances": 31,
+        "rate_as_of": "2024-10-01",
+        "rate_source": "fred_dgs3mo_daily_2015_2025_v1 (point-in-time)",
+        "rate_staleness_days": 0,
+        "rate_used": 0.0471,
+        "realized_vol": 0.12468347693654158,
+        "rebalance_frequency": "daily",
+        "replication_error": -0.3611658095161374,
+        "transaction_cost": 0.18060998941003373
+      },
+      {
+        "K": 557.1739501953125,
+        "S0": 557.1739501953125,
+        "absolute_replication_error": 1.0851964817715043,
+        "cost_scenario": "STRESS",
+        "dividend_yield_used": 0.0,
+        "expiry_date": "2024-11-12",
+        "initial_vol_assumption": 0.1366068893942169,
+        "initiation_date": "2024-10-01",
+        "max_cash_requirement": 557.966703869655,
+        "n_rebalances": 31,
+        "rate_as_of": "2024-10-01",
+        "rate_source": "fred_dgs3mo_daily_2015_2025_v1 (point-in-time)",
+        "rate_staleness_days": 0,
+        "rate_used": 0.0471,
+        "realized_vol": 0.12468347693654158,
+        "rebalance_frequency": "daily",
+        "replication_error": -1.0851964817715043,
+        "transaction_cost": 0.9030499470501687
+      },
+      {
+        "K": 557.1739501953125,
+        "S0": 557.1739501953125,
+        "absolute_replication_error": 1.473479699545976,
+        "cost_scenario": "GROSS",
+        "dividend_yield_used": 0.0,
+        "expiry_date": "2024-11-12",
+        "initial_vol_assumption": 0.1366068893942169,
+        "initiation_date": "2024-10-01",
+        "max_cash_requirement": 450.3848500893294,
+        "n_rebalances": 7,
+        "rate_as_of": "2024-10-01",
+        "rate_source": "fred_dgs3mo_daily_2015_2025_v1 (point-in-time)",
+        "rate_staleness_days": 0,
+        "rate_used": 0.0471,
+        "realized_vol": 0.12468347693654158,
+        "rebalance_frequency": "weekly",
+        "replication_error": 1.473479699545976,
+        "transaction_cost": 0.0
+      },
+      {
+        "K": 557.1739501953125,
+        "S0": 557.1739501953125,
+        "absolute_replication_error": 1.3791854831127353,
+        "cost_scenario": "BASE",
+        "dividend_yield_used": 0.0,
+        "expiry_date": "2024-11-12",
+        "initial_vol_assumption": 0.1366068893942169,
+        "initiation_date": "2024-10-01",
+        "max_cash_requirement": 450.4311020504763,
+        "n_rebalances": 7,
+        "rate_as_of": "2024-10-01",
+        "rate_source": "fred_dgs3mo_daily_2015_2025_v1 (point-in-time)",
+        "rate_staleness_days": 0,
+        "rate_used": 0.0471,
+        "realized_vol": 0.12468347693654158,
+        "rebalance_frequency": "weekly",
+        "replication_error": 1.3791854831127353,
+        "transaction_cost": 0.09406356920346591
+      },
+      {
+        "K": 557.1739501953125,
+        "S0": 557.1739501953125,
+        "absolute_replication_error": 1.0020086173797722,
+        "cost_scenario": "STRESS",
+        "dividend_yield_used": 0.0,
+        "expiry_date": "2024-11-12",
+        "initial_vol_assumption": 0.1366068893942169,
+        "initiation_date": "2024-10-01",
+        "max_cash_requirement": 450.61610989506397,
+        "n_rebalances": 7,
+        "rate_as_of": "2024-10-01",
+        "rate_source": "fred_dgs3mo_daily_2015_2025_v1 (point-in-time)",
+        "rate_staleness_days": 0,
+        "rate_used": 0.0471,
+        "realized_vol": 0.12468347693654158,
+        "rebalance_frequency": "weekly",
+        "replication_error": 1.0020086173797722,
+        "transaction_cost": 0.4703178460173295
+      },
+      {
+        "K": 559.545166015625,
+        "S0": 559.545166015625,
+        "absolute_replication_error": 1.0135405719856863,
+        "cost_scenario": "GROSS",
+        "dividend_yield_used": 0.0,
+        "expiry_date": "2024-12-16",
+        "initial_vol_assumption": 0.11546551410248833,
+        "initiation_date": "2024-11-01",
+        "max_cash_requirement": 560.5587065876088,
+        "n_rebalances": 31,
+        "rate_as_of": "2024-11-01",
+        "rate_source": "fred_dgs3mo_daily_2015_2025_v1 (point-in-time)",
+        "rate_staleness_days": 0,
+        "rate_used": 0.0461,
+        "realized_vol": 0.10501898113853836,
+        "rebalance_frequency": "daily",
+        "replication_error": -1.0135405719856863,
+        "transaction_cost": 0.0
+      },
+      {
+        "K": 559.545166015625,
+        "S0": 559.545166015625,
+        "absolute_replication_error": 1.1464224190409595,
+        "cost_scenario": "BASE",
+        "dividend_yield_used": 0.0,
+        "expiry_date": "2024-12-16",
+        "initial_vol_assumption": 0.11546551410248833,
+        "initiation_date": "2024-11-01",
+        "max_cash_requirement": 560.6321308846152,
+        "n_rebalances": 31,
+        "rate_as_of": "2024-11-01",
+        "rate_source": "fred_dgs3mo_daily_2015_2025_v1 (point-in-time)",
+        "rate_staleness_days": 0,
+        "rate_used": 0.0461,
+        "realized_vol": 0.10501898113853836,
+        "rebalance_frequency": "daily",
+        "replication_error": -1.1464224190409595,
+        "transaction_cost": 0.13253327366205633
+      },
+      {
+        "K": 559.545166015625,
+        "S0": 559.545166015625,
+        "absolute_replication_error": 1.6779498072600063,
+        "cost_scenario": "STRESS",
+        "dividend_yield_used": 0.0,
+        "expiry_date": "2024-12-16",
+        "initial_vol_assumption": 0.11546551410248833,
+        "initiation_date": "2024-11-01",
+        "max_cash_requirement": 560.925828072639,
+        "n_rebalances": 31,
+        "rate_as_of": "2024-11-01",
+        "rate_source": "fred_dgs3mo_daily_2015_2025_v1 (point-in-time)",
+        "rate_staleness_days": 0,
+        "rate_used": 0.0461,
+        "realized_vol": 0.10501898113853836,
+        "rebalance_frequency": "daily",
+        "replication_error": -1.6779498072600063,
+        "transaction_cost": 0.6626663683102816
+      },
+      {
+        "K": 559.545166015625,
+        "S0": 559.545166015625,
+        "absolute_replication_error": 5.062641669300092,
+        "cost_scenario": "GROSS",
+        "dividend_yield_used": 0.0,
+        "expiry_date": "2024-12-16",
+        "initial_vol_assumption": 0.11546551410248833,
+        "initiation_date": "2024-11-01",
+        "max_cash_requirement": 564.5071093264728,
+        "n_rebalances": 7,
+        "rate_as_of": "2024-11-01",
+        "rate_source": "fred_dgs3mo_daily_2015_2025_v1 (point-in-time)",
+        "rate_staleness_days": 0,
+        "rate_used": 0.0461,
+        "realized_vol": 0.10501898113853836,
+        "rebalance_frequency": "weekly",
+        "replication_error": -5.062641669300092,
+        "transaction_cost": 0.0
+      },
+      {
+        "K": 559.545166015625,
+        "S0": 559.545166015625,
+        "absolute_replication_error": 5.191530603832234,
+        "cost_scenario": "BASE",
+        "dividend_yield_used": 0.0,
+        "expiry_date": "2024-12-16",
+        "initial_vol_assumption": 0.11546551410248833,
+        "initiation_date": "2024-11-01",
+        "max_cash_requirement": 564.576550780792,
+        "n_rebalances": 7,
+        "rate_as_of": "2024-11-01",
+        "rate_source": "fred_dgs3mo_daily_2015_2025_v1 (point-in-time)",
+        "rate_staleness_days": 0,
+        "rate_used": 0.0461,
+        "realized_vol": 0.10501898113853836,
+        "rebalance_frequency": "weekly",
+        "replication_error": -5.191530603832234,
+        "transaction_cost": 0.1285713605677028
+      },
+      {
+        "K": 559.545166015625,
+        "S0": 559.545166015625,
+        "absolute_replication_error": 5.707086341961826,
+        "cost_scenario": "STRESS",
+        "dividend_yield_used": 0.0,
+        "expiry_date": "2024-12-16",
+        "initial_vol_assumption": 0.11546551410248833,
+        "initiation_date": "2024-11-01",
+        "max_cash_requirement": 564.8543165980697,
+        "n_rebalances": 7,
+        "rate_as_of": "2024-11-01",
+        "rate_source": "fred_dgs3mo_daily_2015_2025_v1 (point-in-time)",
+        "rate_staleness_days": 0,
+        "rate_used": 0.0461,
+        "realized_vol": 0.10501898113853836,
+        "rebalance_frequency": "weekly",
+        "replication_error": -5.707086341961826,
+        "transaction_cost": 0.642856802838514
+      },
+      {
+        "K": 591.4791870117188,
+        "S0": 591.4791870117188,
+        "absolute_replication_error": 2.9981430079859486,
+        "cost_scenario": "GROSS",
+        "dividend_yield_used": 0.0,
+        "expiry_date": "2025-01-16",
+        "initial_vol_assumption": 0.11820788726755421,
+        "initiation_date": "2024-12-02",
+        "max_cash_requirement": 360.0251552070874,
+        "n_rebalances": 31,
+        "rate_as_of": "2024-12-02",
+        "rate_source": "fred_dgs3mo_daily_2015_2025_v1 (point-in-time)",
+        "rate_staleness_days": 0,
+        "rate_used": 0.0451,
+        "realized_vol": 0.14916463496099905,
+        "rebalance_frequency": "daily",
+        "replication_error": -2.9981430079859486,
+        "transaction_cost": 0.0
+      },
+      {
+        "K": 591.4791870117188,
+        "S0": 591.4791870117188,
+        "absolute_replication_error": 3.1555240655340278,
+        "cost_scenario": "BASE",
+        "dividend_yield_used": 0.0,
+        "expiry_date": "2025-01-16",
+        "initial_vol_assumption": 0.11820788726755421,
+        "initiation_date": "2024-12-02",
+        "max_cash_requirement": 360.06419793815104,
+        "n_rebalances": 31,
+        "rate_as_of": "2024-12-02",
+        "rate_source": "fred_dgs3mo_daily_2015_2025_v1 (point-in-time)",
+        "rate_staleness_days": 0,
+        "rate_used": 0.0451,
+        "realized_vol": 0.14916463496099905,
+        "rebalance_frequency": "daily",
+        "replication_error": -3.1555240655340278,
+        "transaction_cost": 0.15689420698656456
+      },
+      {
+        "K": 591.4791870117188,
+        "S0": 591.4791870117188,
+        "absolute_replication_error": 3.785048295725966,
+        "cost_scenario": "STRESS",
+        "dividend_yield_used": 0.0,
+        "expiry_date": "2025-01-16",
+        "initial_vol_assumption": 0.11820788726755421,
+        "initiation_date": "2024-12-02",
+        "max_cash_requirement": 360.2203688624055,
+        "n_rebalances": 31,
+        "rate_as_of": "2024-12-02",
+        "rate_source": "fred_dgs3mo_daily_2015_2025_v1 (point-in-time)",
+        "rate_staleness_days": 0,
+        "rate_used": 0.0451,
+        "realized_vol": 0.14916463496099905,
+        "rebalance_frequency": "daily",
+        "replication_error": -3.785048295725966,
+        "transaction_cost": 0.7844710349328231
+      },
+      {
+        "K": 591.4791870117188,
+        "S0": 591.4791870117188,
+        "absolute_replication_error": 3.2745588988744885,
+        "cost_scenario": "GROSS",
+        "dividend_yield_used": 0.0,
+        "expiry_date": "2025-01-16",
+        "initial_vol_assumption": 0.11820788726755421,
+        "initiation_date": "2024-12-02",
+        "max_cash_requirement": 350.9244562854305,
+        "n_rebalances": 7,
+        "rate_as_of": "2024-12-02",
+        "rate_source": "fred_dgs3mo_daily_2015_2025_v1 (point-in-time)",
+        "rate_staleness_days": 0,
+        "rate_used": 0.0451,
+        "realized_vol": 0.14916463496099905,
+        "rebalance_frequency": "weekly",
+        "replication_error": 3.2745588988744885,
+        "transaction_cost": 0.0
+      },
+      {
+        "K": 591.4791870117188,
+        "S0": 591.4791870117188,
+        "absolute_replication_error": 3.202725401790758,
+        "cost_scenario": "BASE",
+        "dividend_yield_used": 0.0,
+        "expiry_date": "2025-01-16",
+        "initial_vol_assumption": 0.11820788726755421,
+        "initiation_date": "2024-12-02",
+        "max_cash_requirement": 350.96067817875536,
+        "n_rebalances": 7,
+        "rate_as_of": "2024-12-02",
+        "rate_source": "fred_dgs3mo_daily_2015_2025_v1 (point-in-time)",
+        "rate_staleness_days": 0,
+        "rate_used": 0.0451,
+        "realized_vol": 0.14916463496099905,
+        "rebalance_frequency": "weekly",
+        "replication_error": 3.202725401790758,
+        "transaction_cost": 0.07158268968753423
+      },
+      {
+        "K": 591.4791870117188,
+        "S0": 591.4791870117188,
+        "absolute_replication_error": 2.915391413456092,
+        "cost_scenario": "STRESS",
+        "dividend_yield_used": 0.0,
+        "expiry_date": "2025-01-16",
+        "initial_vol_assumption": 0.11820788726755421,
+        "initiation_date": "2024-12-02",
+        "max_cash_requirement": 351.1055657520549,
+        "n_rebalances": 7,
+        "rate_as_of": "2024-12-02",
+        "rate_source": "fred_dgs3mo_daily_2015_2025_v1 (point-in-time)",
+        "rate_staleness_days": 0,
+        "rate_used": 0.0451,
+        "realized_vol": 0.14916463496099905,
+        "rebalance_frequency": "weekly",
+        "replication_error": 2.915391413456092,
+        "transaction_cost": 0.35791344843767114
+      }
+    ],
+    "label": "Historical underlying-path hypothetical option hedging experiment",
+    "n_episodes_initiated": 12,
+    "n_episodes_skipped_insufficient_data": 0,
+    "note_on_episode_overlap": "Episodes initiate on the first eligible session of each calendar month, but each spans OPTION_MATURITY_SESSIONS (=30) trading sessions -- roughly 1.4 calendar months -- so consecutive episodes' underlying-path windows overlap. Reported cross-episode statistics are means over overlapping, serially dependent samples, not independent draws; no independence claim is made.",
+    "primary_rebalance_frequency": "daily",
+    "secondary_rebalance_frequency": "weekly",
+    "standardized_option": {
+      "maturity_sessions": 30,
+      "moneyness": "ATM at initiation (K = S0)",
+      "position": "short one option",
+      "type": "European call"
+    },
+    "summary_by_frequency_and_cost_scenario": {
+      "daily_BASE": {
+        "mean_absolute_replication_error": 2.1101709190826994,
+        "mean_initial_vol_assumption": 0.11840512888849897,
+        "mean_max_cash_requirement": 477.99056262607246,
+        "mean_n_rebalances": 31.0,
+        "mean_realized_minus_assumed_vol": 0.007255241365637877,
+        "mean_realized_vol": 0.12566037025413684,
+        "mean_replication_error": -1.4670165037263219,
+        "mean_transaction_cost": 0.15078336587554855,
+        "n_episodes": 12
+      },
+      "daily_GROSS": {
+        "mean_absolute_replication_error": 2.018761762339308,
+        "mean_initial_vol_assumption": 0.11840512888849897,
+        "mean_max_cash_requirement": 477.9104491657965,
+        "mean_n_rebalances": 31.0,
+        "mean_realized_minus_assumed_vol": 0.007255241365637877,
+        "mean_realized_vol": 0.12566037025413684,
+        "mean_replication_error": -1.3157914440295273,
+        "mean_transaction_cost": 0.0,
+        "n_episodes": 12
+      },
+      "daily_STRESS": {
+        "mean_absolute_replication_error": 2.5031451495657993,
+        "mean_initial_vol_assumption": 0.11840512888849897,
+        "mean_max_cash_requirement": 478.31101646717684,
+        "mean_n_rebalances": 31.0,
+        "mean_realized_minus_assumed_vol": 0.007255241365637877,
+        "mean_realized_vol": 0.12566037025413684,
+        "mean_replication_error": -2.0719167425133693,
+        "mean_transaction_cost": 0.7539168293777427,
+        "n_episodes": 12
+      },
+      "weekly_BASE": {
+        "mean_absolute_replication_error": 3.0881847035524324,
+        "mean_initial_vol_assumption": 0.11840512888849897,
+        "mean_max_cash_requirement": 456.70036988006683,
+        "mean_n_rebalances": 7.0,
+        "mean_realized_minus_assumed_vol": 0.007255241365637877,
+        "mean_realized_vol": 0.12566037025413684,
+        "mean_replication_error": -1.6188712425465026,
+        "mean_transaction_cost": 0.09963253113895461,
+        "n_episodes": 12
+      },
+      "weekly_GROSS": {
+        "mean_absolute_replication_error": 3.0639742666678713,
+        "mean_initial_vol_assumption": 0.11840512888849897,
+        "mean_max_cash_requirement": 456.64960217381525,
+        "mean_n_rebalances": 7.0,
+        "mean_realized_minus_assumed_vol": 0.007255241365637877,
+        "mean_realized_vol": 0.12566037025413684,
+        "mean_replication_error": -1.5189457267402549,
+        "mean_transaction_cost": 0.0,
+        "n_episodes": 12
+      },
+      "weekly_STRESS": {
+        "mean_absolute_replication_error": 3.188539234756709,
+        "mean_initial_vol_assumption": 0.11840512888849897,
+        "mean_max_cash_requirement": 456.9034407050731,
+        "mean_n_rebalances": 7.0,
+        "mean_realized_minus_assumed_vol": 0.007255241365637877,
+        "mean_realized_vol": 0.12566037025413684,
+        "mean_replication_error": -2.0185733057716093,
+        "mean_transaction_cost": 0.4981626556947731,
+        "n_episodes": 12
+      }
+    }
+  },
+  "nonlinear_portfolio_study": {
+    "confidence_levels": {
+      "primary": 0.95,
+      "secondary": 0.99
+    },
+    "hs_lookbacks": {
+      "primary": 252,
+      "sensitivity": 504
+    },
+    "kupiec_christoffersen_backtest": {
+      "christoffersen": {
+        "conclusion": "Fail to reject H0: no statistically significant clustering detected (pi01=0.0000, pi11=0.0000) at the 5% level.",
+        "n_breaches": 0,
+        "n_obs": 12,
+        "p_value": 1.0,
+        "reject_null": false,
+        "sample_size_caveat": "n_obs=12 is below the ~250-observation (roughly one trading year) rule of thumb for reasonable test power; failing to reject the null here is weak evidence, not proof of a correct model.",
+        "test_name": "Christoffersen independence"
+      },
+      "confidence_level": 0.95,
+      "kupiec": {
+        "breach_rate": 0.0,
+        "conclusion": "Fail to reject H0: observed breach rate 0.0000 is not statistically distinguishable from the expected 0.0500 at the 5% level.",
+        "expected_breach_rate": 0.050000000000000044,
+        "n_breaches": 0,
+        "n_obs": 12,
+        "p_value": 0.26720505975226316,
+        "reject_null": false,
+        "sample_size_caveat": "n_obs=12 is below the ~250-observation (roughly one trading year) rule of thumb for reasonable test power; failing to reject the null here is weak evidence, not proof of a correct model.",
+        "test_name": "Kupiec POF"
+      },
+      "n_forecasts": 12,
+      "note": "One forecast per monthly roll date's own next trading session (HS-primary VaR vs realized full-revaluation P&L) -- a small, monthly-cadence sample, not a daily rolling backtest; interpret accordingly (see sample_size_caveat on each test result)."
+    },
+    "label": "Hypothetical nonlinear portfolio evaluated on historical risk-factor paths",
+    "monte_carlo_n_sims": 50000,
+    "monte_carlo_note": "Monte Carlo VaR/ES uses full_revaluation_mc_var_es, a vectorized reimplementation of options_risk.risk.var.monte_carlo_var's identical methodology (same rng draws, same closed-form BSM full revaluation, same compute_var_es) -- validated to match the reference scalar implementation to floating-point tolerance. Every eligible monthly roll gets the full three-method, two-confidence-level VaR/ES snapshot; no cadence reduction was needed.",
+    "monte_carlo_seed": 0,
+    "n_roll_snapshots": 12,
+    "snapshots": [
+      {
+        "S0": 458.8092651367188,
+        "hs_var_95_primary_every_roll": 254.67820698301549,
+        "portfolio_greeks": {
+          "delta": -24.481358179337704,
+          "gamma": -4.112171054529378,
+          "rho": -6624.329549803185,
+          "theta": 6926.55547624063,
+          "vega": -9767.590299441139
+        },
+        "portfolio_market_value": 44412.09426253601,
+        "rate_as_of": "2024-01-02",
+        "rate_used": 0.0546,
+        "realized_vol_20d": 0.09478316146305306,
+        "realized_vol_60d_sensitivity": 0.11904337042249723,
+        "roll_date": "2024-01-02",
+        "var_es": {
+          "primary": {
+            "confidence_level": 0.95,
+            "delta_normal": {
+              "es": 2196.0268354980412,
+              "factor_vol": 0.09478316146305306,
+              "portfolio_dollar_delta": -11232.273955810731,
+              "var": 1751.1612339366895
+            },
+            "historical_simulation_primary": {
+              "es": 337.8431555153198,
+              "lookback": 252,
+              "n_obs": 252,
+              "var": 254.67820698301549
+            },
+            "historical_simulation_sensitivity": {
+              "es": 590.4992749151559,
+              "lookback": 504,
+              "n_obs": 504,
+              "var": 391.48225398483606
+            },
+            "monte_carlo": {
+              "antithetic_sampling": "not included in this release",
+              "es": 9072.877104329213,
+              "n_obs": 50000,
+              "n_sims": 50000,
+              "seed": 0,
+              "var": 6826.851733285002
+            }
+          },
+          "secondary": {
+            "confidence_level": 0.99,
+            "delta_normal": {
+              "es": 2837.468177309171,
+              "factor_vol": 0.09478316146305306,
+              "portfolio_dollar_delta": -11232.273955810731,
+              "var": 2476.700751313443
+            },
+            "historical_simulation_primary": {
+              "es": 416.778829145255,
+              "lookback": 252,
+              "n_obs": 252,
+              "var": 375.20164507661787
+            },
+            "historical_simulation_sensitivity": {
+              "es": 880.0951381110644,
+              "lookback": 504,
+              "n_obs": 504,
+              "var": 606.4615009852595
+            },
+            "monte_carlo": {
+              "antithetic_sampling": "not included in this release",
+              "es": 12415.575541496019,
+              "n_obs": 50000,
+              "n_sims": 50000,
+              "seed": 0,
+              "var": 10521.405502161222
+            }
+          }
+        },
+        "vixcls_context": 0.132
+      },
+      {
+        "S0": 474.8745727539063,
+        "hs_var_95_primary_every_roll": 258.53357198910777,
+        "portfolio_greeks": {
+          "delta": -27.81326123276532,
+          "gamma": -2.8850951990064377,
+          "rho": -7025.613255917649,
+          "theta": 7286.4386163349955,
+          "vega": -8682.413120582029
+        },
+        "portfolio_market_value": 45807.34080490605,
+        "rate_as_of": "2024-02-01",
+        "rate_used": 0.0542,
+        "realized_vol_20d": 0.11209900367144707,
+        "realized_vol_60d_sensitivity": 0.1016631316831287,
+        "roll_date": "2024-02-01",
+        "var_es": {
+          "primary": {
+            "confidence_level": 0.95,
+            "delta_normal": {
+              "es": 3054.0162847298884,
+              "factor_vol": 0.11209900367144707,
+              "portfolio_dollar_delta": -13207.810544802218,
+              "var": 2435.3413351697204
+            },
+            "historical_simulation_primary": {
+              "es": 312.0158617275559,
+              "lookback": 252,
+              "n_obs": 252,
+              "var": 258.53357198910777
+            },
+            "historical_simulation_sensitivity": {
+              "es": 583.9301831689671,
+              "lookback": 504,
+              "n_obs": 504,
+              "var": 394.46519519832924
+            },
+            "monte_carlo": {
+              "antithetic_sampling": "not included in this release",
+              "es": 11344.025524783074,
+              "n_obs": 50000,
+              "n_sims": 50000,
+              "seed": 0,
+              "var": 8496.120263546722
+            }
+          },
+          "secondary": {
+            "confidence_level": 0.99,
+            "delta_normal": {
+              "es": 3946.0692742125525,
+              "factor_vol": 0.11209900367144707,
+              "portfolio_dollar_delta": -13207.810544802218,
+              "var": 3444.349724988027
+            },
+            "historical_simulation_primary": {
+              "es": 384.443459408302,
+              "lookback": 252,
+              "n_obs": 252,
+              "var": 367.33764730944677
+            },
+            "historical_simulation_sensitivity": {
+              "es": 860.1627501342991,
+              "lookback": 504,
+              "n_obs": 504,
+              "var": 598.5851294867748
+            },
+            "monte_carlo": {
+              "antithetic_sampling": "not included in this release",
+              "es": 15606.101513948064,
+              "n_obs": 50000,
+              "n_sims": 50000,
+              "seed": 0,
+              "var": 13177.43093764052
+            }
+          }
+        },
+        "vixcls_context": 0.1388
+      },
+      {
+        "S0": 497.83197021484375,
+        "hs_var_95_primary_every_roll": 272.1529712470168,
+        "portfolio_greeks": {
+          "delta": -29.943710067005227,
+          "gamma": -2.349751369153756,
+          "rho": -7482.3145493531065,
+          "theta": 7666.112556645542,
+          "vega": -8385.173328761268
+        },
+        "portfolio_market_value": 47944.50603636682,
+        "rate_as_of": "2024-03-01",
+        "rate_used": 0.0542,
+        "realized_vol_20d": 0.12094943748042501,
+        "realized_vol_60d_sensitivity": 0.10918723008258205,
+        "roll_date": "2024-03-01",
+        "var_es": {
+          "primary": {
+            "confidence_level": 0.95,
+            "delta_normal": {
+              "es": 3719.0413760612796,
+              "factor_vol": 0.12094943748042501,
+              "portfolio_dollar_delta": -14906.936178199263,
+              "var": 2965.6473135438982
+            },
+            "historical_simulation_primary": {
+              "es": 342.9097771158704,
+              "lookback": 252,
+              "n_obs": 252,
+              "var": 272.1529712470168
+            },
+            "historical_simulation_sensitivity": {
+              "es": 602.0003928530241,
+              "lookback": 504,
+              "n_obs": 504,
+              "var": 409.92672312118896
+            },
+            "monte_carlo": {
+              "antithetic_sampling": "not included in this release",
+              "es": 12982.25527011248,
+              "n_obs": 50000,
+              "n_sims": 50000,
+              "seed": 0,
+              "var": 9702.397145841194
+            }
+          },
+          "secondary": {
+            "confidence_level": 0.99,
+            "delta_normal": {
+              "es": 4805.342714437609,
+              "factor_vol": 0.12094943748042501,
+              "portfolio_dollar_delta": -14906.936178199263,
+              "var": 4194.371590257813
+            },
+            "historical_simulation_primary": {
+              "es": 419.90041063919244,
+              "lookback": 252,
+              "n_obs": 252,
+              "var": 400.4232490561495
+            },
+            "historical_simulation_sensitivity": {
+              "es": 889.3515439425925,
+              "lookback": 504,
+              "n_obs": 504,
+              "var": 624.2126967046889
+            },
+            "monte_carlo": {
+              "antithetic_sampling": "not included in this release",
+              "es": 17904.74756941042,
+              "n_obs": 50000,
+              "n_sims": 50000,
+              "seed": 0,
+              "var": 15091.745129786428
+            }
+          }
+        },
+        "vixcls_context": 0.1311
+      },
+      {
+        "S0": 508.4442443847656,
+        "hs_var_95_primary_every_roll": 246.18975545721764,
+        "portfolio_greeks": {
+          "delta": -24.820092981021112,
+          "gamma": -3.54672669706682,
+          "rho": -7358.567358274923,
+          "theta": 7693.255953898453,
+          "vega": -10608.92081316961
+        },
+        "portfolio_market_value": 49192.332388214454,
+        "rate_as_of": "2024-04-01",
+        "rate_used": 0.054400000000000004,
+        "realized_vol_20d": 0.09719324874314748,
+        "realized_vol_60d_sensitivity": 0.10906279984028076,
+        "roll_date": "2024-04-01",
+        "var_es": {
+          "primary": {
+            "confidence_level": 0.95,
+            "delta_normal": {
+              "es": 2530.0063060565017,
+              "factor_vol": 0.09719324874314748,
+              "portfolio_dollar_delta": -12619.633421294904,
+              "var": 2017.4839820555833
+            },
+            "historical_simulation_primary": {
+              "es": 330.8612020895889,
+              "lookback": 252,
+              "n_obs": 252,
+              "var": 246.18975545721764
+            },
+            "historical_simulation_sensitivity": {
+              "es": 623.5032783060652,
+              "lookback": 504,
+              "n_obs": 504,
+              "var": 407.0169571433274
+            },
+            "monte_carlo": {
+              "antithetic_sampling": "not included in this release",
+              "es": 10338.198374563006,
+              "n_obs": 50000,
+              "n_sims": 50000,
+              "seed": 0,
+              "var": 7773.370032811806
+            }
+          },
+          "secondary": {
+            "confidence_level": 0.99,
+            "delta_normal": {
+              "es": 3269.000298987127,
+              "factor_vol": 0.09719324874314748,
+              "portfolio_dollar_delta": -12619.633421294904,
+              "var": 2853.3660963285965
+            },
+            "historical_simulation_primary": {
+              "es": 434.2617230062072,
+              "lookback": 252,
+              "n_obs": 252,
+              "var": 412.4926363056295
+            },
+            "historical_simulation_sensitivity": {
+              "es": 964.6391635013133,
+              "lookback": 504,
+              "n_obs": 504,
+              "var": 664.6136226196419
+            },
+            "monte_carlo": {
+              "antithetic_sampling": "not included in this release",
+              "es": 14158.314476114829,
+              "n_obs": 50000,
+              "n_sims": 50000,
+              "seed": 0,
+              "var": 11991.926313629736
+            }
+          }
+        },
+        "vixcls_context": 0.1365
+      },
+      {
+        "S0": 487.2071228027344,
+        "hs_var_95_primary_every_roll": 238.3764088790463,
+        "portfolio_greeks": {
+          "delta": -34.26477411548153,
+          "gamma": -1.8032288410440507,
+          "rho": -7557.686555911215,
+          "theta": 7528.265004707452,
+          "vega": -7020.129623188241
+        },
+        "portfolio_market_value": 46790.525059364845,
+        "rate_as_of": "2024-05-01",
+        "rate_used": 0.0546,
+        "realized_vol_20d": 0.13776735313259494,
+        "realized_vol_60d_sensitivity": 0.11766063375342099,
+        "roll_date": "2024-05-01",
+        "var_es": {
+          "primary": {
+            "confidence_level": 0.95,
+            "delta_normal": {
+              "es": 4744.020770191846,
+              "factor_vol": 0.13776735313259494,
+              "portfolio_dollar_delta": -16694.042010289362,
+              "var": 3782.9889559916755
+            },
+            "historical_simulation_primary": {
+              "es": 314.7155482596259,
+              "lookback": 252,
+              "n_obs": 252,
+              "var": 238.3764088790463
+            },
+            "historical_simulation_sensitivity": {
+              "es": 583.7321776887264,
+              "lookback": 504,
+              "n_obs": 504,
+              "var": 402.15093924914976
+            },
+            "monte_carlo": {
+              "antithetic_sampling": "not included in this release",
+              "es": 14810.621103736123,
+              "n_obs": 50000,
+              "n_sims": 50000,
+              "seed": 0,
+              "var": 11027.000129664604
+            }
+          },
+          "secondary": {
+            "confidence_level": 0.99,
+            "delta_normal": {
+              "es": 6129.7101430275825,
+              "factor_vol": 0.13776735313259494,
+              "portfolio_dollar_delta": -16694.042010289362,
+              "var": 5350.353472850903
+            },
+            "historical_simulation_primary": {
+              "es": 419.1832039842314,
+              "lookback": 252,
+              "n_obs": 252,
+              "var": 395.4440100763689
+            },
+            "historical_simulation_sensitivity": {
+              "es": 866.5156715813513,
+              "lookback": 504,
+              "n_obs": 504,
+              "var": 619.0744494660584
+            },
+            "monte_carlo": {
+              "antithetic_sampling": "not included in this release",
+              "es": 20519.947926872013,
+              "n_obs": 50000,
+              "n_sims": 50000,
+              "seed": 0,
+              "var": 17239.61626600551
+            }
+          }
+        },
+        "vixcls_context": 0.1539
+      },
+      {
+        "S0": 513.93603515625,
+        "hs_var_95_primary_every_roll": 225.54942340585902,
+        "portfolio_greeks": {
+          "delta": -24.515796647650177,
+          "gamma": -3.720330629469463,
+          "rho": -7422.733332913255,
+          "theta": 7791.730691901337,
+          "vega": -11007.23065927104
+        },
+        "portfolio_market_value": 49751.40866868113,
+        "rate_as_of": "2024-06-03",
+        "rate_used": 0.0552,
+        "realized_vol_20d": 0.09409307812008637,
+        "realized_vol_60d_sensitivity": 0.11156169407397516,
+        "roll_date": "2024-06-03",
+        "var_es": {
+          "primary": {
+            "confidence_level": 0.95,
+            "delta_normal": {
+              "es": 2445.4090849928616,
+              "factor_vol": 0.09409307812008637,
+              "portfolio_dollar_delta": -12599.551327790217,
+              "var": 1950.0242535901878
+            },
+            "historical_simulation_primary": {
+              "es": 301.49516450228,
+              "lookback": 252,
+              "n_obs": 252,
+              "var": 225.54942340585902
+            },
+            "historical_simulation_sensitivity": {
+              "es": 595.5828701948753,
+              "lookback": 504,
+              "n_obs": 504,
+              "var": 367.85186228700417
+            },
+            "monte_carlo": {
+              "antithetic_sampling": "not included in this release",
+              "es": 10083.829583644107,
+              "n_obs": 50000,
+              "n_sims": 50000,
+              "seed": 0,
+              "var": 7589.75806610887
+            }
+          },
+          "secondary": {
+            "confidence_level": 0.99,
+            "delta_normal": {
+              "es": 3159.6929267926384,
+              "factor_vol": 0.09409307812008637,
+              "portfolio_dollar_delta": -12599.551327790217,
+              "var": 2757.9565149972145
+            },
+            "historical_simulation_primary": {
+              "es": 437.3349952234639,
+              "lookback": 252,
+              "n_obs": 252,
+              "var": 366.1620845852376
+            },
+            "historical_simulation_sensitivity": {
+              "es": 965.6475083116202,
+              "lookback": 504,
+              "n_obs": 504,
+              "var": 660.8773812522996
+            },
+            "monte_carlo": {
+              "antithetic_sampling": "not included in this release",
+              "es": 13794.866933677207,
+              "n_obs": 50000,
+              "n_sims": 50000,
+              "seed": 0,
+              "var": 11692.442935097779
+            }
+          }
+        },
+        "vixcls_context": 0.1311
+      },
+      {
+        "S0": 532.728515625,
+        "hs_var_95_primary_every_roll": 264.95168351022403,
+        "portfolio_greeks": {
+          "delta": -24.24659444792285,
+          "gamma": -5.917936219779387,
+          "rho": -7717.760985590666,
+          "theta": 7328.555223756522,
+          "vega": -13418.699641410787
+        },
+        "portfolio_market_value": 51912.34000975828,
+        "rate_as_of": "2024-07-01",
+        "rate_used": 0.0547,
+        "realized_vol_20d": 0.06711313861527858,
+        "realized_vol_60d_sensitivity": 0.10647781644976237,
+        "roll_date": "2024-07-01",
+        "var_es": {
+          "primary": {
+            "confidence_level": 0.95,
+            "delta_normal": {
+              "es": 1788.1461304890802,
+              "factor_vol": 0.06711313861527858,
+              "portfolio_dollar_delta": -12916.852269203306,
+              "var": 1425.9079778577538
+            },
+            "historical_simulation_primary": {
+              "es": 363.317795712634,
+              "lookback": 252,
+              "n_obs": 252,
+              "var": 264.95168351022403
+            },
+            "historical_simulation_sensitivity": {
+              "es": 704.2486104274797,
+              "lookback": 504,
+              "n_obs": 504,
+              "var": 419.3684936406245
+            },
+            "monte_carlo": {
+              "antithetic_sampling": "not included in this release",
+              "es": 7263.336365067059,
+              "n_obs": 50000,
+              "n_sims": 50000,
+              "seed": 0,
+              "var": 5517.666802566291
+            }
+          },
+          "secondary": {
+            "confidence_level": 0.99,
+            "delta_normal": {
+              "es": 2310.4488795969555,
+              "factor_vol": 0.06711313861527858,
+              "portfolio_dollar_delta": -12916.852269203306,
+              "var": 2016.6888642943823
+            },
+            "historical_simulation_primary": {
+              "es": 545.159997069209,
+              "lookback": 252,
+              "n_obs": 252,
+              "var": 453.92285370939663
+            },
+            "historical_simulation_sensitivity": {
+              "es": 1146.1052415464194,
+              "lookback": 504,
+              "n_obs": 504,
+              "var": 826.4407553708235
+            },
+            "monte_carlo": {
+              "antithetic_sampling": "not included in this release",
+              "es": 9838.434063833338,
+              "n_obs": 50000,
+              "n_sims": 50000,
+              "seed": 0,
+              "var": 8392.235952847657
+            }
+          }
+        },
+        "vixcls_context": 0.1222
+      },
+      {
+        "S0": 530.4523315429688,
+        "hs_var_95_primary_every_roll": 263.68120603116876,
+        "portfolio_greeks": {
+          "delta": -37.13005731627402,
+          "gamma": -1.3705773492194484,
+          "rho": -8400.33297924398,
+          "theta": 8092.240962080665,
+          "vega": -6858.363025047325
+        },
+        "portfolio_market_value": 50867.071551907815,
+        "rate_as_of": "2024-08-01",
+        "rate_used": 0.0537,
+        "realized_vol_20d": 0.1493837921495504,
+        "realized_vol_60d_sensitivity": 0.10526314688410347,
+        "roll_date": "2024-08-01",
+        "var_es": {
+          "primary": {
+            "confidence_level": 0.95,
+            "delta_normal": {
+              "es": 6068.959332797546,
+              "factor_vol": 0.1493837921495504,
+              "portfolio_dollar_delta": -19695.72547374162,
+              "var": 4839.5247918375535
+            },
+            "historical_simulation_primary": {
+              "es": 345.5109644604885,
+              "lookback": 252,
+              "n_obs": 252,
+              "var": 263.68120603116876
+            },
+            "historical_simulation_sensitivity": {
+              "es": 551.4687299653552,
+              "lookback": 504,
+              "n_obs": 504,
+              "var": 358.8707293645024
+            },
+            "monte_carlo": {
+              "antithetic_sampling": "not included in this release",
+              "es": 17767.757202349367,
+              "n_obs": 50000,
+              "n_sims": 50000,
+              "seed": 0,
+              "var": 13193.878350517653
+            }
+          },
+          "secondary": {
+            "confidence_level": 0.99,
+            "delta_normal": {
+              "es": 7841.65234132536,
+              "factor_vol": 0.1493837921495504,
+              "portfolio_dollar_delta": -19695.72547374162,
+              "var": 6844.632267811748
+            },
+            "historical_simulation_primary": {
+              "es": 470.7122609477471,
+              "lookback": 252,
+              "n_obs": 252,
+              "var": 413.67613655805326
+            },
+            "historical_simulation_sensitivity": {
+              "es": 891.6557430717452,
+              "lookback": 504,
+              "n_obs": 504,
+              "var": 644.5626544242175
+            },
+            "monte_carlo": {
+              "antithetic_sampling": "not included in this release",
+              "es": 24695.385737286273,
+              "n_obs": 50000,
+              "n_sims": 50000,
+              "seed": 0,
+              "var": 20700.20874024016
+            }
+          }
+        },
+        "vixcls_context": 0.1859
+      },
+      {
+        "S0": 539.3126220703125,
+        "hs_var_95_primary_every_roll": 312.90646833876565,
+        "portfolio_greeks": {
+          "delta": -43.6476873148439,
+          "gamma": -0.8880782926421704,
+          "rho": -8940.54747593957,
+          "theta": 7953.041456474692,
+          "vega": -5448.97115365307
+        },
+        "portfolio_market_value": 51560.850104818805,
+        "rate_as_of": "2024-09-03",
+        "rate_used": 0.0519,
+        "realized_vol_20d": 0.17719904252214536,
+        "realized_vol_60d_sensitivity": 0.14574340675632744,
+        "roll_date": "2024-09-03",
+        "var_es": {
+          "primary": {
+            "confidence_level": 0.95,
+            "delta_normal": {
+              "es": 8604.030834479614,
+              "factor_vol": 0.17719904252214536,
+              "portfolio_dollar_delta": -23539.74869307358,
+              "var": 6861.047874908851
+            },
+            "historical_simulation_primary": {
+              "es": 427.0814616119594,
+              "lookback": 252,
+              "n_obs": 252,
+              "var": 312.90646833876565
+            },
+            "historical_simulation_sensitivity": {
+              "es": 604.6357071785359,
+              "lookback": 504,
+              "n_obs": 504,
+              "var": 410.29767195626084
+            },
+            "monte_carlo": {
+              "antithetic_sampling": "not included in this release",
+              "es": 22282.55774896136,
+              "n_obs": 50000,
+              "n_sims": 50000,
+              "seed": 0,
+              "var": 16444.0504534609
+            }
+          },
+          "secondary": {
+            "confidence_level": 0.99,
+            "delta_normal": {
+              "es": 11117.19733783943,
+              "factor_vol": 0.17719904252214536,
+              "portfolio_dollar_delta": -23539.74869307358,
+              "var": 9703.710941786758
+            },
+            "historical_simulation_primary": {
+              "es": 560.2624261453966,
+              "lookback": 252,
+              "n_obs": 252,
+              "var": 506.9655277574169
+            },
+            "historical_simulation_sensitivity": {
+              "es": 944.0934718206239,
+              "lookback": 504,
+              "n_obs": 504,
+              "var": 700.0666483110116
+            },
+            "monte_carlo": {
+              "antithetic_sampling": "not included in this release",
+              "es": 31205.16031102693,
+              "n_obs": 50000,
+              "n_sims": 50000,
+              "seed": 0,
+              "var": 26013.47457080084
+            }
+          }
+        },
+        "vixcls_context": 0.2072
+      },
+      {
+        "S0": 557.1739501953125,
+        "hs_var_95_primary_every_roll": 269.74892415344436,
+        "portfolio_greeks": {
+          "delta": -33.17443500110137,
+          "gamma": -1.5829405455492447,
+          "rho": -8579.503533990275,
+          "theta": 7979.627882423914,
+          "vega": -7991.706512874125
+        },
+        "portfolio_market_value": 53583.898690457034,
+        "rate_as_of": "2024-10-01",
+        "rate_used": 0.0471,
+        "realized_vol_20d": 0.1366068893942169,
+        "realized_vol_60d_sensitivity": 0.1616474481413712,
+        "roll_date": "2024-10-01",
+        "var_es": {
+          "primary": {
+            "confidence_level": 0.95,
+            "delta_normal": {
+              "es": 5208.416499672195,
+              "factor_vol": 0.1366068893942169,
+              "portfolio_dollar_delta": -18483.930995061288,
+              "var": 4153.308564807978
+            },
+            "historical_simulation_primary": {
+              "es": 387.34795926902564,
+              "lookback": 252,
+              "n_obs": 252,
+              "var": 269.74892415344436
+            },
+            "historical_simulation_sensitivity": {
+              "es": 556.8545585405692,
+              "lookback": 504,
+              "n_obs": 504,
+              "var": 360.4806571178131
+            },
+            "monte_carlo": {
+              "antithetic_sampling": "not included in this release",
+              "es": 16733.444964247527,
+              "n_obs": 50000,
+              "n_sims": 50000,
+              "seed": 0,
+              "var": 12453.04992170354
+            }
+          },
+          "secondary": {
+            "confidence_level": 0.99,
+            "delta_normal": {
+              "es": 6729.7520381348995,
+              "factor_vol": 0.1366068893942169,
+              "portfolio_dollar_delta": -18483.930995061288,
+              "var": 5874.103562566855
+            },
+            "historical_simulation_primary": {
+              "es": 507.70597853293776,
+              "lookback": 252,
+              "n_obs": 252,
+              "var": 454.48583250960274
+            },
+            "historical_simulation_sensitivity": {
+              "es": 913.3530799663567,
+              "lookback": 504,
+              "n_obs": 504,
+              "var": 649.6244008468395
+            },
+            "monte_carlo": {
+              "antithetic_sampling": "not included in this release",
+              "es": 23189.973824521592,
+              "n_obs": 50000,
+              "n_sims": 50000,
+              "seed": 0,
+              "var": 19481.714336709334
+            }
+          }
+        },
+        "vixcls_context": 0.19260000000000002
+      },
+      {
+        "S0": 559.545166015625,
+        "hs_var_95_primary_every_roll": 247.32307435742038,
+        "portfolio_greeks": {
+          "delta": -27.369535356126956,
+          "gamma": -2.275320062218265,
+          "rho": -8252.685620754517,
+          "theta": 7944.608301976878,
+          "vega": -9792.324572299785
+        },
+        "portfolio_market_value": 54008.06800972335,
+        "rate_as_of": "2024-11-01",
+        "rate_used": 0.0461,
+        "realized_vol_20d": 0.11546551410248833,
+        "realized_vol_60d_sensitivity": 0.12890110734138457,
+        "roll_date": "2024-11-01",
+        "var_es": {
+          "primary": {
+            "confidence_level": 0.95,
+            "delta_normal": {
+              "es": 3647.4859819067065,
+              "factor_vol": 0.11546551410248833,
+              "portfolio_dollar_delta": -15314.491204614576,
+              "var": 2908.587431443628
+            },
+            "historical_simulation_primary": {
+              "es": 365.52679726505335,
+              "lookback": 252,
+              "n_obs": 252,
+              "var": 247.32307435742038
+            },
+            "historical_simulation_sensitivity": {
+              "es": 453.8804338018132,
+              "lookback": 504,
+              "n_obs": 504,
+              "var": 297.6281015440712
+            },
+            "monte_carlo": {
+              "antithetic_sampling": "not included in this release",
+              "es": 13788.692413659715,
+              "n_obs": 50000,
+              "n_sims": 50000,
+              "seed": 0,
+              "var": 10308.464602500288
+            }
+          },
+          "secondary": {
+            "confidence_level": 0.99,
+            "delta_normal": {
+              "es": 4712.886579318309,
+              "factor_vol": 0.11546551410248833,
+              "portfolio_dollar_delta": -15314.491204614576,
+              "var": 4113.670710105332
+            },
+            "historical_simulation_primary": {
+              "es": 488.4308196793427,
+              "lookback": 252,
+              "n_obs": 252,
+              "var": 433.3063432451454
+            },
+            "historical_simulation_sensitivity": {
+              "es": 791.9026032802418,
+              "lookback": 504,
+              "n_obs": 504,
+              "var": 451.6146661420912
+            },
+            "monte_carlo": {
+              "antithetic_sampling": "not included in this release",
+              "es": 19002.713324520635,
+              "n_obs": 50000,
+              "n_sims": 50000,
+              "seed": 0,
+              "var": 16028.369739481503
+            }
+          }
+        },
+        "vixcls_context": 0.2188
+      },
+      {
+        "S0": 591.4791870117188,
+        "hs_var_95_primary_every_roll": 257.6175009583846,
+        "portfolio_greeks": {
+          "delta": -27.947782823708494,
+          "gamma": -2.044867537320571,
+          "rho": -8762.10260498335,
+          "theta": 8317.558989569778,
+          "vega": -10067.259981812957
+        },
+        "portfolio_market_value": 57071.130018512995,
+        "rate_as_of": "2024-12-02",
+        "rate_used": 0.0451,
+        "realized_vol_20d": 0.11820788726755421,
+        "realized_vol_60d_sensitivity": 0.11593203071727694,
+        "roll_date": "2024-12-02",
+        "var_es": {
+          "primary": {
+            "confidence_level": 0.95,
+            "delta_normal": {
+              "es": 4030.621781108026,
+              "factor_vol": 0.11820788726755421,
+              "portfolio_dollar_delta": -16530.531863347176,
+              "var": 3214.108542592773
+            },
+            "historical_simulation_primary": {
+              "es": 379.421606104657,
+              "lookback": 252,
+              "n_obs": 252,
+              "var": 257.6175009583846
+            },
+            "historical_simulation_sensitivity": {
+              "es": 428.512104033917,
+              "lookback": 504,
+              "n_obs": 504,
+              "var": 315.3272353003946
+            },
+            "monte_carlo": {
+              "antithetic_sampling": "not included in this release",
+              "es": 14972.340653079105,
+              "n_obs": 50000,
+              "n_sims": 50000,
+              "seed": 0,
+              "var": 11185.03471039131
+            }
+          },
+          "secondary": {
+            "confidence_level": 0.99,
+            "delta_normal": {
+              "es": 5207.933188152261,
+              "factor_vol": 0.11820788726755421,
+              "portfolio_dollar_delta": -16530.531863347176,
+              "var": 4545.775047993252
+            },
+            "historical_simulation_primary": {
+              "es": 576.2165976329876,
+              "lookback": 252,
+              "n_obs": 252,
+              "var": 447.0024001894904
+            },
+            "historical_simulation_sensitivity": {
+              "es": 612.3097264656135,
+              "lookback": 504,
+              "n_obs": 504,
+              "var": 477.3089450783961
+            },
+            "monte_carlo": {
+              "antithetic_sampling": "not included in this release",
+              "es": 20651.420318250304,
+              "n_obs": 50000,
+              "n_sims": 50000,
+              "seed": 0,
+              "var": 17408.92166891053
+            }
+          }
+        },
+        "vixcls_context": 0.1334
+      }
+    ],
+    "standardized_portfolio": {
+      "calls": {
+        "maturity_sessions": 30,
+        "moneyness": "ATM",
+        "quantity": -2.0
+      },
+      "equity_shares": 100.0,
+      "puts": {
+        "maturity_sessions": 30,
+        "moneyness": "95%",
+        "quantity": 2.0
+      },
+      "roll_frequency": "monthly (first eligible session of each month)"
+    }
+  },
+  "period_label": "PRE-SPECIFIED VALIDATION CHARACTERIZATION"
+}
