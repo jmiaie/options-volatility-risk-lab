@@ -46,19 +46,92 @@ before being sent back. All three are addressed in this round's commit(s):
    never fetches data. A final step confirms the job itself touched nothing
    outside `publication/options-risk-study/`.
 
+## 0b. Follow-up remediation (round 3)
+
+The coordinator gave the program's authoritative 14-field SOURCE-GATE
+MATRIX schema (Repository / Source PR-branch / Accepted HEAD / Experiment
+ID / Dataset IDs / Dataset SHA / 2025-holdout status / Final config SHA /
+Primary artifact path / Result artifact SHA / Independent review status /
+Primary finding / Primary null-negative finding / Primary limitation),
+which is simpler and more specific than the improvised 14-field structure
+`SOURCE-GATE.md` used through round 2. Round 3 rebuilds `SOURCE-GATE.md`
+around the authoritative schema and repairs everything the renumbering
+touched:
+
+1. **`SOURCE-GATE.md` rebuilt to the canonical 14-field schema, in exact
+   order, with the canonical field values.** Nothing was deleted: every
+   piece of content the old, improvised schema carried that doesn't belong
+   in one of the 14 canonical fields — program background, branch/PR
+   provenance detail, the full artifact inventory (DEV/VAL 2024 hashes and
+   both superseded sets), the full methodology summary, the full
+   volatility-units provenance walkthrough, the full limitations list, the
+   full period classification table, the required-language statement, and
+   the standing prohibitions — was relocated, not removed, into ten
+   clearly named **unnumbered** sections after field 14: "Program
+   background," "Branch and PR provenance," "Additional dataset
+   provenance," "Additional artifact inventory," "Methodology summary,"
+   "Volatility-units provenance," "Known limitations and caveats (full
+   list)," "Period classification table," "Required-language statement,"
+   "Standing prohibitions," and "Reviewer instructions." Every field value
+   was checked against the canonical values the coordinator supplied,
+   which were themselves cross-checked against the real artifacts already
+   verified in rounds 1–2 (see field 12's hedging-error figures,
+   independently re-confirmed this round directly from the 2025 artifact's
+   `hedging_experiment.summary_by_frequency_and_cost_scenario.{daily_BASE,weekly_BASE}.mean_absolute_replication_error`:
+   6.645850770746378 and 7.454970530990272, matching the coordinator's
+   6.6459/7.4550 exactly).
+2. **The workflow-prohibition contradiction is fixed.** The old
+   "Standing prohibitions" field 14 said "No modification of any
+   `.github/workflows/*` file" — false as of round 2, which added
+   `.github/workflows/publication-pack.yml`. The relocated "Standing
+   prohibitions" section now reads: "No existing workflow file was
+   modified. One new, explicitly authorized, publication-only verification
+   workflow was added: `.github/workflows/publication-pack.yml`... It does
+   not run the empirical study or publish externally," matching
+   `D10-STATUS.md`'s own (already-correct, from round 2) exception logic.
+3. **Every stale cross-reference to the old field numbering was found and
+   repaired** — 12 citation locations across 5 files, all repaired to
+   either the new canonical field number (where the field's meaning is
+   unchanged — 2 locations: field 11 "Independent review status," and one
+   citation corrected from old-field-12 to new-field-7 for "2025 / holdout
+   status") or to a **stable named-section reference** (10 locations,
+   preferred per the coordinator's instruction, so a future renumbering
+   cannot silently break these again):
+
+   | File | Old citation | New citation |
+   |---|---|---|
+   | `CLAIM-REGISTER.md` (C15) | `SOURCE-GATE.md field 4` | `SOURCE-GATE.md`'s "Additional dataset provenance" section |
+   | `CLAIM-REGISTER.md` (C16) | `SOURCE-GATE.md field 12` | `SOURCE-GATE.md field 7` |
+   | `CLAIM-REGISTER.md` (C17) | `SOURCE-GATE.md field 13` | `SOURCE-GATE.md`'s "Required-language statement" section |
+   | `CLAIM-REGISTER.md` (C20) | `SOURCE-GATE.md field 10` | `SOURCE-GATE.md`'s "Known limitations and caveats (full list)" section |
+   | `CITATION-REDTEAM.md` | `SOURCE-GATE.md` field 4 | `SOURCE-GATE.md`'s "Additional dataset provenance" section |
+   | `CLAIM-REDTEAM.md` (×3: deployed-trading check, methodology/required-language check, verdict) | `SOURCE-GATE.md` field 13 (×2), field 8/13 (×1) | "Required-language statement" section (×2), "Methodology summary" / "Required-language statement" sections (×1) |
+   | `TECHNICAL-PAPER.md` (×3: §1.1 intro, §5 limitations header, §5 bullet) | `SOURCE-GATE.md` field 4 (×2), field 10 (×1) | "Additional dataset provenance" section (×2), "Known limitations and caveats (full list)" section (×1) |
+   | `reproducibility.json` | `SOURCE-GATE.md field 4` | `SOURCE-GATE.md`'s "Additional dataset provenance" section |
+
+   `CLAIM-REGISTER.md`'s C18 (field 11, the Grokbot sign-off citation) was
+   checked and required **no change** — field 11 is "Independent review
+   status" under both the old and new schema, with identical content.
+   `scripts/verify_pack.py` was checked for hardcoded SOURCE-GATE field-number
+   assumptions and has none — its hash check works by substring match
+   against the file's raw text, independent of field numbering, so it
+   required no code change; re-run and confirmed still passing (below).
+   Recorded as `CITATION-REDTEAM.md` finding **CIT-2** (P1, this round's
+   central fix).
+
 ## 1. Deliverables checklist
 
 | # | Deliverable | Path | Status |
 |---|---|---|---|
-| 1 | Source gate (14 numbered fields) | `SOURCE-GATE.md` | Complete |
+| 1 | Source gate (canonical 14-field SOURCE-GATE MATRIX schema, round 3) | `SOURCE-GATE.md` | Complete — rebuilt to the authoritative field order/values, see §0b above |
 | 2 | Technical paper | `TECHNICAL-PAPER.md` | Complete |
 | 3 | Result-source map | `RESULT-SOURCE-MAP.md` | Complete |
 | 4 | Reproducibility manifest | `reproducibility.json` | Complete |
 | 5 | Case study | `CASE-STUDY.md` | Complete |
-| 6 | Claim register | `CLAIM-REGISTER.md` | Complete (20 claims enumerated) |
+| 6 | Claim register | `CLAIM-REGISTER.md` | Complete (21 claims enumerated) |
 | 7a | Quant red-team | `QUANT-REDTEAM.md` | Complete (0 P0, 1 P1, 2 P2 — all fixed) |
 | 7b | Claim red-team | `CLAIM-REDTEAM.md` | Complete (0 P0, 1 P1, 3 P2 — all addressed, incl. round-2 CL-4) |
-| 7c | Citation red-team | `CITATION-REDTEAM.md` | Complete (0 P0, 0 P1, 1 P2 — addressed) |
+| 7c | Citation red-team | `CITATION-REDTEAM.md` | Complete (0 P0, 1 P1, 1 P2 — all fixed, incl. round-3 CIT-2) |
 | 8 | This status document | `D10-STATUS.md` | Complete |
 | 9a | Tables (script-generated) | `tables/*.csv`, `tables/*.json` | Complete — 5 files, all script-generated from committed artifacts, no manual edits |
 | 9b | Scripts | `scripts/build_tables.py`, `scripts/build_figures.py`, `scripts/verify_pack.py` | Complete — deterministic, offline, no network calls, reads only committed artifacts |
@@ -71,14 +144,21 @@ before being sent back. All three are addressed in this round's commit(s):
 |---|---:|---:|---:|---|
 | `QUANT-REDTEAM.md` | 0 | 1 (QT-1) | 2 (QT-2, QT-3) | Yes — all 3 fixed before finalizing |
 | `CLAIM-REDTEAM.md` | 0 | 1 (CL-1, = QT-1) | 3 (CL-2, CL-3, CL-4) | Yes — CL-1 fixed (cross-ref to QT-1); CL-2 addressed within this pack's scope (cannot edit the cited protected source document); CL-3 required no change (already adequate); CL-4 (round-2, externally identified) fixed throughout |
-| `CITATION-REDTEAM.md` | 0 | 0 | 1 (CIT-1) | Yes — addressed within this pack's own text |
-| **Total distinct findings** | **0** | **1** (QT-1/CL-1 are the same finding, cross-referenced) | **5** distinct P2s (QT-2, QT-3, CL-2/CIT-1 same finding cross-referenced, CL-3, CL-4) | **All resolved or explicitly addressed with rationale** |
+| `CITATION-REDTEAM.md` | 0 | 1 (CIT-2, round-3) | 1 (CIT-1) | Yes — CIT-2 fixed (all 12 stale cross-reference locations repaired); CIT-1 addressed within this pack's own text |
+| **Total distinct findings** | **0** | **2** distinct P1s (QT-1/CL-1 cross-referenced as one; CIT-2 round-3) | **5** distinct P2s (QT-2, QT-3, CL-2/CIT-1 same finding cross-referenced, CL-3, CL-4) | **All resolved or explicitly addressed with rationale** |
 
 **Round-2 addition**: `CLAIM-REDTEAM.md` finding **CL-4** (unproven causal
 attribution to convexity) was identified by the orchestrating session, not
 by this pack's own first-pass red-team — see `CLAIM-REDTEAM.md`'s
 "Provenance note on CL-4" for why it is nonetheless recorded in full in
 that document rather than only summarized here.
+
+**Round-3 addition**: `CITATION-REDTEAM.md` finding **CIT-2** (SOURCE-GATE.md
+field-renumbering broke every existing cross-reference to it) was
+identified by the orchestrating session as part of instructing the
+schema rebuild itself, then found in full and repaired by this session —
+see `CITATION-REDTEAM.md`'s CIT-2 entry and §0b above for the complete
+before/after list of all 12 repaired citation locations.
 
 **Both mandatory CLAIM-REDTEAM checks came back clean**: (a) no sentence
 anywhere in this pack implies the withdrawn "order of magnitude, explained
@@ -201,6 +281,17 @@ current status.
   account controls; no *existing* `.github/workflows/*` file was touched
   (round 2 added one new, explicitly-requested workflow file, described in
   §0/§6); no artifact, webpage, or external channel was used.
+- **SOURCE-GATE.md now matches reality on the workflow point**: round 2's
+  addition of `.github/workflows/publication-pack.yml` had made the old
+  "No modification of any `.github/workflows/*` file" prohibition text
+  literally false. Round 3's relocated "Standing prohibitions" section
+  (in `SOURCE-GATE.md`, after field 14) now states the accurate exception
+  exactly as this section's own bullet below already did from round 2 —
+  the two documents no longer disagree.
+- **`SOURCE-GATE.md` now uses the program's authoritative 14-field
+  SOURCE-GATE MATRIX schema**, in exact canonical order, with all 14 field
+  values independently checked against real committed artifacts (not
+  merely copied from the coordinator's supplied values) — see §0b above.
 
 ## 6. Standing scope reminders
 

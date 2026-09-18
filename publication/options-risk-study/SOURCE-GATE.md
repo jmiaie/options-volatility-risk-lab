@@ -1,71 +1,206 @@
 # SOURCE-GATE — D10-C Publication Pack
 
-**Status**: source-of-truth gate for every fact used in this publication pack.
-Nothing in `TECHNICAL-PAPER.md`, `CASE-STUDY.md`, or any other document in
-`publication/options-risk-study/` may cite a number that is not traceable to
-one of the 14 fields below (or to `RESULT-SOURCE-MAP.md`, which expands each
-paper-level number to an exact JSON key path). This document does not
+**Status**: source-of-truth gate for every fact used in this publication
+pack, using the program's authoritative 14-field SOURCE-GATE MATRIX schema
+(Phase 0). Nothing in `TECHNICAL-PAPER.md`, `CASE-STUDY.md`, or any other
+document in `publication/options-risk-study/` may cite a number that is not
+traceable to one of the 14 fields below, to one of the unnumbered sections
+that follow them, or to `RESULT-SOURCE-MAP.md`, which expands each
+paper-level number to an exact JSON key path. This document does not
 re-derive or re-verify the Grokbot audit claim in field 11; that claim is
 reproduced verbatim as an external citation.
 
+**Note on structure**: fields 1–14 below are the authoritative schema and
+contain only what each field name says, kept concise. Everything else this
+pack needs from a source gate — full methodology, volatility-units
+provenance detail, the complete limitations list, the required-language
+statement, the standing prohibitions, and the rest of the artifact
+inventory — is preserved in full, in the clearly named unnumbered sections
+that follow field 14. Nothing was deleted; content that doesn't belong in
+one of the 14 fields was relocated, not removed.
+
 ---
 
-## 1. Program / directive citation and this study's place in it
+## 1. Repository
+
+`jmiaie/options-volatility-risk-lab`
+
+## 2. Source PR / branch
+
+**PR #3**, branch `research/historical-risk-validation` — the D9-C
+remediation PR whose accepted HEAD (field 3) this publication pack's
+evidence is built from.
+
+**Not to be conflated with**: this publication pack's own branch is
+`publication/options-risk-study`, a separate branch created from field 3's
+commit. PR #3 / `research/historical-risk-validation` remains open,
+unmerged, and untouched by this pack; it is used only as this pack's own
+PR's base (read-only reference) — see "Branch and PR provenance" below for
+the full detail.
+
+## 3. Accepted HEAD
+
+`db9cf44a04f1282f81ed11c7d145b5afe2db8d95`
+
+## 4. Experiment ID
+
+`options_hist_risk_v2`
+
+## 5. Dataset IDs
+
+`yf_spy_daily_2015_2025_v1`, `fred_dgs3mo_daily_2015_2025_v1`,
+`fred_vixcls_daily_2015_2025_v1`
+
+## 6. Dataset SHA / frozen identity
+
+| Dataset ID | `dataset_canonical` sha256 |
+|---|---|
+| `yf_spy_daily_2015_2025_v1` | `0c83ab20bf76ec39b97855ac393b7bc74363bd4ff373381f0a92842a2c7c6a63` |
+| `fred_dgs3mo_daily_2015_2025_v1` | `31ad77f46517b4a51a2313ad86524d3f0f07634e4ca450ba2c387adbddf42a9f` |
+| `fred_vixcls_daily_2015_2025_v1` | `b727ab1751d4c9c180159cc1eb3358a2fef6ebf1abe15c74adb46f93019753b1` |
+
+The SPY dataset carries a disclosed reuse-provenance limitation (its bytes
+were not freshly acquired in this repository) — preserved in full under
+"Additional dataset provenance" below.
+
+## 7. 2025 / holdout status
+
+**HISTORICAL EVALUATION.** Never "untouched holdout," "clean holdout," or
+"pristine holdout." SPY's 2025 price history was already inspected once
+under this repository's own superseded v1 study
+(`options_hist_risk_v1_holdout_2025`), per Directive #9 Addendum 13. See
+`research/holdout-audit.md`.
+
+## 8. Final config SHA
+
+`configs/experiments/options_historical_risk_study_v2.yaml`
+sha256 = `4bd18561466b5f85b09031868322929c8ad28bd9c2da9358ac3a106fdb725181`
+
+## 9. Primary artifact path
+
+`results/historical_risk/options_hist_risk_v2_historical_evaluation_2025.json`
+
+(The 2025 HISTORICAL EVALUATION artifact is the primary artifact per this
+schema's convention. DEV and VAL 2024 artifact paths and hashes, and both
+superseded pre-fix artifact sets, are preserved in full under "Additional
+artifact inventory" below.)
+
+## 10. Result artifact SHA
+
+`b2c3594445b7f1a726be135cb5cb17f43f69d6a3a938657b3e4faca3dcb62799`
+
+(sha256 of the field 9 artifact, independently computed and confirmed to
+match the value supplied for this task.)
+
+## 11. Independent review status
+
+> "Directive #9 Final Four-Stream Independent Program Audit — SIGN-OFF YES;
+> P0=0; P1=0; HISTORICAL EMPIRICAL VALIDATION COMPLETE / ACCEPTED."
+
+This is an **external citation**, reproduced exactly as supplied to this
+publication task. This document, and this publication pack as a whole,
+**does not independently re-verify** the "Grokbot four-stream independent
+audit" itself — this repository's local evidence (test suite, artifact
+hashes, code review commits) supports the *specific defect fixes and
+artifacts* cited elsewhere in this gate, but the program-level sign-off
+claim above is reproduced as a citation to that external audit process, not
+re-derived here.
+
+## 12. Primary finding
+
+**2025 HISTORICAL EVALUATION, 95% confidence, mean across the period's 12
+monthly roll snapshots** (Study 2, "Hypothetical nonlinear portfolio
+evaluated on historical risk-factor paths"):
+
+- Historical Simulation VaR ≈ **408.6**, ES ≈ **814.3**
+- Delta-Normal VaR ≈ **455.2**
+- Monte Carlo (50k) VaR ≈ **513.0**
+
+**Study 1 ("Historical underlying-path hypothetical option hedging
+experiment"), 2025 HISTORICAL EVALUATION, mean absolute replication error,
+BASE (1bp) cost scenario**:
+
+- Daily rebalancing ≈ **6.65** (exact: 6.6459)
+- Weekly rebalancing ≈ **7.46** (exact: 7.4550)
+
+Full tables for all three periods, both confidence levels, and all methods
+are in `TECHNICAL-PAPER.md` §2 and `RESULT-SOURCE-MAP.md`.
+
+## 13. Primary null / negative finding
+
+**The previously reported order-of-magnitude divergence between Historical
+Simulation and Delta-Normal/Monte Carlo VaR/ES is WITHDRAWN as a genuine
+finding.** Most of the apparent divergence was a volatility-units defect,
+not a real methodological or vol-regime effect:
+
+- Black-Scholes-Merton option pricing correctly uses **annualized**
+  volatility (paired with maturity `T` in years).
+- The one-day Delta-Normal and Monte Carlo VaR/ES legs were incorrectly fed
+  that same annualized figure directly, instead of the annualized figure
+  divided by `sqrt(252)` (the correct daily/per-period conversion).
+- Historical Simulation consumes no volatility parameter at all and was
+  completely unaffected, as was the Kupiec/Christoffersen backtest.
+
+With the defect corrected, all three methods sit within the same order of
+magnitude. The remaining, much smaller Monte-Carlo-vs-Delta-Normal ES
+differences are consistent with nonlinear full revaluation / convexity —
+**not a proven causal decomposition** (no separate gamma/attribution
+analysis was run to isolate convexity as the sole cause). See
+`TECHNICAL-PAPER.md` §3 for the full withdrawal statement and
+`CLAIM-REDTEAM.md` finding CL-4 for the causal-language precision fix this
+framing reflects.
+
+## 14. Primary limitation
+
+At minimum: these are **hypothetical option constructs, not historical
+options-tape P&L**; no paid options tape was used; 2025 is **HISTORICAL
+EVALUATION**, not an untouched holdout; Kupiec/Christoffersen samples are
+small (12–95 observations) with correspondingly weak test power; DGS3MO is
+FRED's standard series, not an ALFRED real-time vintage; `q=0` (no discrete
+dividend modeling); hedging episodes overlap month-to-month (serially
+dependent, not independent, samples). Full list, with detail on each item,
+is in "Known limitations and caveats (full list)" below.
+
+---
+
+## Program background
 
 This is **Directive #9 / #10, study D9-C / D10-C** of the multi-repo
 quantitative-research remediation program tracked in
 `jmiaie/quant-research-portfolio` Issue #3. D9-C was the defect-remediation
 phase for this repository's historical volatility / hedging / nonlinear
 portfolio VaR study; it produced the AUTHORITATIVE (v2) study documented in
-`research/historical-volatility-and-tail-risk.md` and `research/holdout-audit.md`.
-D9 (all repos, all streams) has been declared closed by an external
-four-stream independent audit (field 11). **D10-C is a
-PUBLICATION/COMMUNICATION phase**: this pack writes up already-accepted,
-already-computed D9-C evidence for external readers. D10-C performs **no new
-empirical work** — no retraining, no retuning, no re-acquiring data, no
-rerunning any evaluation period (including 2025), and no alteration of any
-existing result artifact, config, or source file. Every file under
-`publication/options-risk-study/` is new; nothing outside that directory was
-modified to produce it.
+`research/historical-volatility-and-tail-risk.md` and
+`research/holdout-audit.md`. D9 (all repos, all streams) has been declared
+closed by an external four-stream independent audit (field 11 above).
+**D10-C is a PUBLICATION/COMMUNICATION phase**: this pack writes up
+already-accepted, already-computed D9-C evidence for external readers.
+D10-C performs **no new empirical work** — no retraining, no retuning, no
+re-acquiring data, no rerunning any evaluation period (including 2025), and
+no alteration of any existing result artifact, config, or source file.
+Every file under `publication/options-risk-study/` is new; nothing outside
+that directory was modified to produce it.
 
-## 2. Repository and accepted HEAD
+## Branch and PR provenance
 
-- **Repository**: `jmiaie/options-volatility-risk-lab`
-- **This publication pack's branch**: `publication/options-risk-study`
-- **Branch point / accepted HEAD SHA**: `db9cf44a04f1282f81ed11c7d145b5afe2db8d95`
-  — commit message: *"D9-C P1: fix volatility-units mismatch in
-  Delta-Normal/Monte Carlo VaR"* — this is the commit that fixed the defect
-  described in field 9 below.
-- **Immediate parent SHA** (verified via `git rev-parse
+- **This publication pack's branch**: `publication/options-risk-study`,
+  created from field 3's commit (`db9cf44a04f1282f81ed11c7d145b5afe2db8d95`),
+  **not** from `main`.
+- **Immediate parent SHA** of field 3 (verified via `git rev-parse
   db9cf44a04f1282f81ed11c7d145b5afe2db8d95^` in this session):
-  `53277193f29a613d39d7e67983298eb832cf03d8` — commit message: *"D9-C P1: fix
-  off-by-one in Kupiec/Christoffersen next-session return"*.
-- This branch was created from `db9cf44...`, **not** from `main`. `main`'s
-  tip at the time of writing is the still-open, unmerged D9-C remediation PR
-  #3 on branch `research/historical-risk-validation`; this publication pack
-  does not depend on, alter, or merge that PR. This pack's own PR targets
-  `research/historical-risk-validation` as its base (not `main`) specifically
-  so its diff is isolated to the new publication content only.
+  `53277193f29a613d39d7e67983298eb832cf03d8` — commit message: *"D9-C P1:
+  fix off-by-one in Kupiec/Christoffersen next-session return"*. Field 3's
+  own commit message: *"D9-C P1: fix volatility-units mismatch in
+  Delta-Normal/Monte Carlo VaR"* — the commit that fixed the defect
+  described in field 13 above.
+- `main`'s tip at the time of writing is the still-open, unmerged D9-C
+  remediation PR #3 (field 2) on branch `research/historical-risk-validation`;
+  this publication pack does not depend on, alter, or merge that PR. This
+  pack's own PR targets `research/historical-risk-validation` as its base
+  (not `main`) specifically so its diff is isolated to the new publication
+  content only.
 
-## 3. Experiment ID
-
-`options_hist_risk_v2` — three periods: `dev_formation` (DEV, 2015-01-01 to
-2023-12-31), `val_2024` (VAL 2024, 2024-01-01 to 2024-12-31), and
-`historical_evaluation_2025` (2025-01-01 to 2025-12-31, classified
-**HISTORICAL EVALUATION**, see field 12). Two studies per period: the
-hedging experiment and the standardized nonlinear-portfolio VaR/ES study.
-
-## 4. Dataset IDs and `dataset_canonical` sha256
-
-All three verified independently in this session by reading
-`data/manifests/*.json`'s own `sha256.dataset_canonical` field (not copied
-from the task brief without checking):
-
-| Dataset ID | Role | `dataset_canonical` sha256 |
-|---|---|---|
-| `yf_spy_daily_2015_2025_v1` | Underlying (SPY daily OHLCV) | `0c83ab20bf76ec39b97855ac393b7bc74363bd4ff373381f0a92842a2c7c6a63` |
-| `fred_dgs3mo_daily_2015_2025_v1` | Short-rate proxy (3-Month T-Bill) | `31ad77f46517b4a51a2313ad86524d3f0f07634e4ca450ba2c387adbddf42a9f` |
-| `fred_vixcls_daily_2015_2025_v1` | Vol context only (CBOE VIX Close) | `b727ab1751d4c9c180159cc1eb3358a2fef6ebf1abe15c74adb46f93019753b1` |
+## Additional dataset provenance
 
 **SPY reuse-provenance disclosure (reproduced from
 `data/manifests/yf_spy_daily_2015_2025_v1.json`'s own `acquisition_provenance`
@@ -86,45 +221,42 @@ dataset IDs; the underlying bytes are unchanged from that prior acquisition —
 only documentation was corrected (see
 `research/historical-volatility-and-tail-risk.md` §2).
 
-## 5. Config path and sha256
+## Additional artifact inventory
 
-`configs/experiments/options_historical_risk_study_v2.yaml`
-sha256 = `4bd18561466b5f85b09031868322929c8ad28bd9c2da9358ac3a106fdb725181`
-(computed independently in this session via `sha256sum`, matches the value
-supplied for this task).
+**Current / authoritative artifact paths and sha256, all three periods**
+(all hashed independently this session; field 9/10 above give the primary
+2025 artifact only):
 
-## 6. Current / authoritative artifact paths and sha256 (all three, hashed independently)
-
-| Period | Path | sha256 (computed this session) |
+| Period | Path | sha256 |
 |---|---|---|
 | DEV | `results/historical_risk/options_hist_risk_v2_dev_formation.json` | `6e840d4934ead483233aa83bebd232abd94b1652ed410f85408a5a898f5e5f26` |
 | VAL 2024 | `results/historical_risk/options_hist_risk_v2_val_2024.json` | `4df81b2d7d6078f9f5bf2cb8526838291d2de249e96fe4cbdd7ed4b2a76ef0b8` |
-| 2025 HISTORICAL EVALUATION | `results/historical_risk/options_hist_risk_v2_historical_evaluation_2025.json` | `b2c3594445b7f1a726be135cb5cb17f43f69d6a3a938657b3e4faca3dcb62799` |
+| 2025 HISTORICAL EVALUATION | `results/historical_risk/options_hist_risk_v2_historical_evaluation_2025.json` | `b2c3594445b7f1a726be135cb5cb17f43f69d6a3a938657b3e4faca3dcb62799` (= field 10) |
 
 The 2025 hash matches the value supplied for this task exactly; the DEV and
-VAL 2024 hashes were computed fresh in this session (not supplied) and are
-recorded here and in `publication/options-risk-study/tables/dataset_and_artifact_hashes.json`.
+VAL 2024 hashes were computed fresh in this session and are recorded here
+and in `publication/options-risk-study/tables/dataset_and_artifact_hashes.json`.
 
-## 7. Superseded artifact paths (PRE-FIX, never primary evidence)
-
-Two superseded sets, both preserved unmodified in the repository for audit
-trail. **Neither is used as current evidence anywhere in this pack except
+**Superseded artifact paths (PRE-FIX, never primary evidence)**. Two
+superseded sets, both preserved unmodified in the repository for audit
+trail. Neither is used as current evidence anywhere in this pack except
 inside explicitly labeled PRE-FIX/SUPERSEDED-vs-CORRECTED comparison
-sections.**
+sections.
 
-**Set A — `superseded_volatility_units_fix/`** (pre the fix at commit
-`db9cf44`, the volatility-units defect — central to this pack):
+Set A — `superseded_volatility_units_fix/` (pre the fix at commit
+`db9cf44`, the volatility-units defect — central to this pack, see field
+13):
 
-| Period | Path | sha256 (computed this session) |
+| Period | Path | sha256 |
 |---|---|---|
 | DEV | `results/historical_risk/superseded_volatility_units_fix/options_hist_risk_v2_dev_formation.json` | `7bd4ea0c3a278c86c31e71fc265fda967d8d8a8ffb3481662f995e95576f459a` |
 | VAL 2024 | `results/historical_risk/superseded_volatility_units_fix/options_hist_risk_v2_val_2024.json` | `3a8b75fdd52d17727409b99844426b75fc307a8d38df41f9dabeffd2d89e7918` |
 | 2025 | `results/historical_risk/superseded_volatility_units_fix/options_hist_risk_v2_historical_evaluation_2025.json` | `8449bf6e20d2095ed564b693ff9567f46490b719de384d593078504710909a2f` |
 
-**Set B — `superseded_next_session_backtest_fix/`** (pre the earlier
+Set B — `superseded_next_session_backtest_fix/` (pre the earlier
 Kupiec/Christoffersen off-by-one fix at commit `5327719`):
 
-| Period | Path | sha256 (computed this session) |
+| Period | Path | sha256 |
 |---|---|---|
 | DEV | `results/historical_risk/superseded_next_session_backtest_fix/options_hist_risk_v2_dev_formation.json` | `977b65a5c5ca2c9530e2f5f5759e44189740b9f09c7d2b8a10a33a7acdc64895` |
 | VAL 2024 | `results/historical_risk/superseded_next_session_backtest_fix/options_hist_risk_v2_val_2024.json` | `3a8b75fdd52d17727409b99844426b75fc307a8d38df41f9dabeffd2d89e7918` |
@@ -138,7 +270,7 @@ to change between the two fixes; see
 `research/historical-volatility-and-tail-risk.md` §6.3 for the documented
 explanation of why VAL 2024 is unaffected while DEV and 2025 are not.)
 
-## 8. Methodology summary
+## Methodology summary
 
 **Study 1 — hedging experiment** (`simulate_delta_hedge_on_price_path`,
 `src/options_risk/historical_risk_study_v2.py:178`): a standardized, short,
@@ -175,7 +307,7 @@ horizon:
 Required label: **"Hypothetical nonlinear portfolio evaluated on historical
 risk-factor paths."**
 
-## 9. Volatility-units provenance
+## Volatility-units provenance
 
 `trailing_realized_vol()` (`historical_risk_study_v2.py:144`) returns
 **annualized** volatility (`std(daily log returns, ddof=1) * sqrt(252)`) —
@@ -214,10 +346,11 @@ re-verified in this session — see `CASE-STUDY.md` for the full trace):
   the backtest's inputs at all, since it draws its forecast from Historical
   Simulation, never from the vol-units-affected legs.
 
-## 10. Known limitations and caveats
+## Known limitations and caveats (full list)
 
 Pulled verbatim in substance from `research/historical-volatility-and-tail-risk.md`
-§8 (not softened):
+§8 (not softened); field 14 above gives the concise "at minimum" version of
+this same list:
 
 - No paid options tapes; no invented option panels — every option price
   comes from Black-Scholes-Merton off realized volatility.
@@ -244,40 +377,27 @@ Pulled verbatim in substance from `research/historical-volatility-and-tail-risk.
   the 5% rejection boundary than the pre-fix number (0.717) suggested.
 - `yf_spy_daily_2015_2025_v1`'s raw bytes were reused from a sibling
   Directive #9 repository's already-verified acquisition, not freshly
-  pulled here — disclosed in the dataset manifest (field 4 above).
+  pulled here — disclosed in the dataset manifest, see "Additional dataset
+  provenance" above.
 - The Monte Carlo VaR/ES leg uses a distinct, vectorized code path
   (`full_revaluation_mc_var_es`) from this repository's reference
   `monte_carlo_var`, validated to match it to floating-point tolerance, not
   an approximation.
 - **Volatility-units defect disclosure**: Delta-Normal and Monte Carlo
   VaR/ES were previously computed against an annualized (not daily/per-
-  period) volatility input, overstating both by ~16–45x, while BSM option
-  pricing and Historical Simulation were unaffected throughout — see field 9
-  and `TECHNICAL-PAPER.md`'s corrected VaR/ES section.
+  period) volatility input, overstating both by ~16–43x, while BSM option
+  pricing and Historical Simulation were unaffected throughout — see field
+  13 above and `TECHNICAL-PAPER.md`'s corrected VaR/ES section.
 
-## 11. Program sign-off citation (external, reproduced verbatim — not independently re-verified by this document)
-
-> "Directive #9 Final Four-Stream Independent Program Audit — SIGN-OFF YES;
-> P0=0; P1=0; HISTORICAL EMPIRICAL VALIDATION COMPLETE / ACCEPTED."
-
-This is an **external citation**, reproduced exactly as supplied to this
-publication task. This document, and this publication pack as a whole,
-**does not independently re-verify** the "Grokbot four-stream independent
-audit" itself — this repository's local evidence (test suite, artifact
-hashes, code review commits) supports the *specific defect fixes and
-artifacts* cited elsewhere in this gate, but the program-level sign-off
-claim above is reproduced as a citation to that external audit process, not
-re-derived here.
-
-## 12. Period classification table
+## Period classification table
 
 | Period | Date range | Classification | Notes |
 |---|---|---|---|
 | DEV (formation) | 2015-01-01 – 2023-12-31 | Formation / development | 108 hedging episodes initiated, 95 eligible VaR/ES roll snapshots |
 | VAL 2024 | 2024-01-01 – 2024-12-31 | Validation | 12 hedging episodes, 12 roll snapshots |
-| 2025 | 2025-01-01 – 2025-12-31 | **HISTORICAL EVALUATION** | 12 hedging episodes initiated (11 completed within data), 12 roll snapshots. **Never** described as "untouched holdout" or "clean holdout" — SPY's 2025 price history was already inspected once under this repository's own superseded v1 study (`options_hist_risk_v1_holdout_2025`), per Directive #9 Addendum 13. See `research/holdout-audit.md`. |
+| 2025 | 2025-01-01 – 2025-12-31 | **HISTORICAL EVALUATION** (= field 7) | 12 hedging episodes initiated (11 completed within data), 12 roll snapshots. **Never** described as "untouched holdout" or "clean holdout" — SPY's 2025 price history was already inspected once under this repository's own superseded v1 study (`options_hist_risk_v1_holdout_2025`), per Directive #9 Addendum 13. See `research/holdout-audit.md`. |
 
-## 13. Required-language statement
+## Required-language statement
 
 Every description of this study's constructs in this publication pack uses,
 verbatim, the two labels required by Directive #9's D9-C spec:
@@ -296,7 +416,7 @@ historical underlying (SPY) prices and realized volatility. This is a
 standardized hypothetical construct evaluated on real historical
 underlying/rate/vol paths, nothing more.
 
-## 14. Standing prohibitions in force for this publication pack
+## Standing prohibitions
 
 - No modification, retuning, or regeneration of anything under `results/`,
   `configs/`, `src/`, `data/`, `research/historical-volatility-and-tail-risk.md`,
@@ -311,8 +431,18 @@ underlying/rate/vol paths, nothing more.
   methodology, or the 2025 classification.
 - No invented metric, table value, or claim not traceable to a committed
   artifact.
-- No modification of any `.github/workflows/*` file; nothing in this pack
-  externally publishes this content.
+- **No existing workflow file was modified.** One new, explicitly
+  authorized, publication-only verification workflow was added:
+  `.github/workflows/publication-pack.yml`. It lints, type-checks, and
+  validates this pack's own scripts and artifacts (hash checks against
+  `SOURCE-GATE.md`, citation-resolution checks against
+  `RESULT-SOURCE-MAP.md`, byte-identity checks on the regenerated
+  tables/figure); it does **not** run the empirical study
+  (`scripts/run_historical_risk_study_v2.py`), does not fetch data over the
+  network, and does not publish this content externally in any way. It
+  triggers only on pushes to this pack's own branch and on pull requests
+  touching `publication/options-risk-study/**` or the workflow file itself.
+  `ci.yml` (the repository's pre-existing test workflow) is untouched.
 - This pack's PR is not to be merged by this session; `main` is not touched;
   PR #3 / branch `research/historical-risk-validation` is used only as this
   PR's base (read-only reference).
@@ -322,3 +452,16 @@ underlying/rate/vol paths, nothing more.
 - Pre-fix/superseded values appear only inside clearly labeled
   PRE-FIX/SUPERSEDED-vs-CORRECTED/AUTHORITATIVE comparison sections, never
   as standalone current evidence.
+
+## Reviewer instructions
+
+This document is the source-of-truth gate: any number appearing in
+`TECHNICAL-PAPER.md`, `CASE-STUDY.md`, or any other document in this pack
+must trace to one of the 14 fields above, to one of the unnumbered sections
+above, or to a row in `RESULT-SOURCE-MAP.md` (which gives the exact source
+file, JSON key path, and sha256 for every table/number in the technical
+paper). If a reviewer finds a number in this pack that does not trace to
+one of those three places, that is a defect in this pack, not a judgment
+call — please flag it. `D10-STATUS.md` gives the full deliverables
+checklist, red-team resolution summary, and CI status for this pack as a
+whole.

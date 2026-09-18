@@ -60,8 +60,9 @@ Both studies are evaluated on the frozen `options_hist_risk_v2` experiment
 sha256 `4bd18561466b5f85b09031868322929c8ad28bd9c2da9358ac3a106fdb725181`),
 run once per period (DEV, VAL 2024, 2025 HISTORICAL EVALUATION) against
 real SPY daily closes, FRED DGS3MO, and FRED VIXCLS
-(`data/manifests/` — see `SOURCE-GATE.md` field 4 for the reuse-provenance
-disclosure on SPY). Neither the SPY underlying path, the option contracts,
+(`data/manifests/` — see `SOURCE-GATE.md`'s "Additional dataset provenance"
+section for the reuse-provenance disclosure on SPY). Neither the SPY
+underlying path, the option contracts,
 the rolling schedule, nor the rate/vol handling was altered for this
 publication pack.
 
@@ -434,8 +435,9 @@ Consolidating §3.1 and §2.1:
 
 ## 5. Limitations
 
-Reproduced from `SOURCE-GATE.md` field 10 / `research/historical-volatility-and-tail-risk.md`
-§8, not softened:
+Reproduced from `SOURCE-GATE.md`'s "Known limitations and caveats (full
+list)" section (field 14 gives the concise version) /
+`research/historical-volatility-and-tail-risk.md` §8, not softened:
 
 - No paid options tapes; no invented option panels.
 - DGS3MO is a short-term Treasury constant-maturity yield proxy, not a full
@@ -454,7 +456,8 @@ Reproduced from `SOURCE-GATE.md` field 10 / `research/historical-volatility-and-
   boundary than the pre-fix figure (0.717) suggested — this is weaker, not
   stronger, evidence for correct coverage than the pre-fix numbers implied.
 - SPY's raw bytes are reused from a sibling repository's already-verified
-  acquisition, not freshly pulled here (§1.1 / `SOURCE-GATE.md` field 4).
+  acquisition, not freshly pulled here (§1.1 / `SOURCE-GATE.md`'s
+  "Additional dataset provenance" section).
 - The Monte Carlo leg's vectorized implementation, while validated to
   floating-point tolerance against the reference implementation, is a
   distinct code path from this repository's stress-testing module.

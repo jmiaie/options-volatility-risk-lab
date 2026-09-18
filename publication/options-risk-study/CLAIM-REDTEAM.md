@@ -80,18 +80,19 @@ as describing an actually-held position.
 
 - `TECHNICAL-PAPER.md:27` — "Neither construct reflects a deployed trading
   strategy or real historical options P&L" — explicit negation/disclaimer.
-- `SOURCE-GATE.md` field 13 — "neither construct is, or is presented as, a
-  deployed options trading strategy, an observed historical trading
-  position, real historical options P&L, or an executable trading
-  strategy" — explicit negation/disclaimer, and this is the section
-  specifically required by the task to carry this language.
+- `SOURCE-GATE.md`'s "Required-language statement" section — "neither
+  construct is, or is presented as, a deployed options trading strategy, an
+  observed historical trading position, real historical options P&L, or an
+  executable trading strategy" — explicit negation/disclaimer, and this is
+  the section specifically required by the task to carry this language.
 - `CLAIM-REGISTER.md` C17 — records the disclaimer as a claim with its own
   evidentiary basis, `superseded: false` (it was never part of the withdrawn
   narrative in the first place — it is a standing constraint, not a
   corrected number).
 - Every description of Study 1 ("hedging experiment") and Study 2
   ("nonlinear portfolio") in `TECHNICAL-PAPER.md` §1.1, `CASE-STUDY.md`,
-  and `SOURCE-GATE.md` field 8/13 uses "standardized," "hypothetical," or
+  and `SOURCE-GATE.md`'s "Methodology summary" / "Required-language
+  statement" sections uses "standardized," "hypothetical," or
   the required verbatim labels ("Historical underlying-path hypothetical
   option hedging experiment" / "Hypothetical nonlinear portfolio evaluated
   on historical risk-factor paths") rather than language implying an
@@ -107,9 +108,9 @@ as describing an actually-held position.
 
 **Verdict**: **No P0.** No sentence in this pack asserts or implies actual
 deployed trading, an observed historical position, or real P&L. The
-required disclaimer is present verbatim in the two places (`SOURCE-GATE.md`
-field 13, `TECHNICAL-PAPER.md` abstract) most likely to be read in
-isolation.
+required disclaimer is present verbatim in the two places (`SOURCE-GATE.md`'s
+"Required-language statement" section, `TECHNICAL-PAPER.md` abstract) most
+likely to be read in isolation.
 
 ## Additional interpretive checks (beyond the two mandatory ones)
 

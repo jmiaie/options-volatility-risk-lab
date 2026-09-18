@@ -59,6 +59,47 @@ are correct; only the ratio-language pairing is imprecise), and without
 editing the prohibited file. Also cross-referenced in `CLAIM-REDTEAM.md`
 CL-2.
 
+### CIT-2 (P1, round-3, externally identified) — SOURCE-GATE.md field renumbering broke every existing cross-reference to it
+
+**What was found**: round 3 replaced `SOURCE-GATE.md`'s original
+improvised 14-field structure with the program's authoritative
+SOURCE-GATE MATRIX schema (Repository / Source PR-branch / Accepted HEAD /
+Experiment ID / Dataset IDs / Dataset SHA / 2025-holdout status / Final
+config SHA / Primary artifact path / Result artifact SHA / Independent
+review status / Primary finding / Primary null-negative finding / Primary
+limitation). Several old field numbers now mean something completely
+different under the new schema (e.g. old field 12 was the full period
+classification table; new field 12 is "Primary finding" — a citation to
+"field 12" that meant the former would now silently resolve to the wrong
+content if left unchanged). Five files, twelve citation locations total, cited
+`SOURCE-GATE.md field N` for a field number whose meaning changed:
+`CLAIM-REGISTER.md` (C15, C16, C17, C20 — four locations),
+`CITATION-REDTEAM.md` itself (this document, the dataset-manifest check
+below — one location), `CLAIM-REDTEAM.md` (three locations),
+`TECHNICAL-PAPER.md` (three locations), and `reproducibility.json` (one
+location).
+
+**Why it matters**: a stale field-number citation after a renumbering is a
+citation that would silently misattribute content — exactly the failure
+mode this document exists to catch — even though no one edited those
+citing documents maliciously; the renumbering itself is what broke them.
+
+**Fixed before finalizing**: yes, all of them. Method: grepped every file
+under `publication/options-risk-study/` for `SOURCE-GATE.md field`,
+`SOURCE-GATE field`, `source gate field`, and bare `field N` patterns (N =
+1 through 14), read each hit in context, and either (a) confirmed the old
+field number's meaning is unchanged under the new schema and left it as-is
+(this applied to two references: field 11, "Independent review status" /
+the Grokbot sign-off citation, unchanged in both schemas; and one
+`field 7` reference, which is the *new* number for "2025 / holdout status"
+that a `field 12` citation was corrected to), or (b) replaced the citation
+with a **stable named-section reference** (e.g. `SOURCE-GATE.md`'s
+"Additional dataset provenance" section, "Required-language statement"
+section, "Known limitations and caveats (full list)" section) rather than
+a number, per the explicit instruction that future renumbering should not
+break these references again. Full list of repaired citations and their
+old→new form is in `D10-STATUS.md` §0 (round 3).
+
 ## Checks performed that found no issue
 
 - **Program sign-off citation (`SOURCE-GATE.md` field 11)**: byte-compared
@@ -98,8 +139,9 @@ CL-2.
   CLASSIFICATION" section and its "v2 AUTHORITATIVE rebuild" section,
   read in full in this session.
 - **Dataset manifest citations**: the SPY `acquisition_provenance` field
-  quoted/paraphrased in `SOURCE-GATE.md` field 4 was checked against the
-  actual field content in `data/manifests/yf_spy_daily_2015_2025_v1.json`,
+  quoted/paraphrased in `SOURCE-GATE.md`'s "Additional dataset provenance"
+  section was checked against the actual field content in
+  `data/manifests/yf_spy_daily_2015_2025_v1.json`,
   read directly in this session — the sibling-repository path
   (`jmiaie/Advanced_Algorithmic_Trading_Simulator_public`,
   `data/raw/yf_stat_arb_etfs_daily_2015_2025_v1/SPY.csv`) and the specific
@@ -134,9 +176,11 @@ CL-2.
 | Severity | Count | Fixed | Not fixed (rationale) |
 |---|---:|---:|---|
 | P0 | 0 | — | — |
-| P1 | 0 | — | — |
+| P1 | 1 (CIT-2, round-3) | 1 — all 12 stale cross-reference locations repaired | — |
 | P2 | 1 (CIT-1) | Addressed within this pack's own text (cannot edit the cited source document) | — |
 
-No P0 or P1 citation findings. The one P2 finding (a ratio-language
-imprecision in an existing, protected source document) was disclosed and
-corrected in this pack's own voice without modifying the prohibited file.
+No P0 citation findings. CIT-2 (round 3, the SOURCE-GATE.md renumbering
+cross-reference break) was found and fully repaired — see `D10-STATUS.md`
+§0 for the complete before/after list. CIT-1 (a ratio-language imprecision
+in an existing, protected source document) was disclosed and corrected in
+this pack's own voice without modifying the prohibited file.

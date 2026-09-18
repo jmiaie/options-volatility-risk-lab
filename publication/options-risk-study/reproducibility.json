@@ -81,7 +81,7 @@
     "yf_spy_daily_2015_2025_v1": {
       "manifest_path": "data/manifests/yf_spy_daily_2015_2025_v1.json",
       "dataset_canonical_sha256": "0c83ab20bf76ec39b97855ac393b7bc74363bd4ff373381f0a92842a2c7c6a63",
-      "reuse_provenance": "REUSED, not freshly acquired in this repository -- see SOURCE-GATE.md field 4 and the manifest's own acquisition_provenance field for full disclosure."
+      "reuse_provenance": "REUSED, not freshly acquired in this repository -- see SOURCE-GATE.md's 'Additional dataset provenance' section and the manifest's own acquisition_provenance field for full disclosure."
     },
     "fred_dgs3mo_daily_2015_2025_v1": {
       "manifest_path": "data/manifests/fred_dgs3mo_daily_2015_2025_v1.json",
