@@ -1589,7 +1589,6 @@
     "snapshots": [
       {
         "S0": 458.8092651367188,
-        "daily_factor_vol_20d": 0.00597077794542189,
         "hs_var_95_primary_every_roll": 254.67820698301549,
         "portfolio_greeks": {
           "delta": -24.481358179337704,
@@ -1608,10 +1607,10 @@
           "primary": {
             "confidence_level": 0.95,
             "delta_normal": {
-              "es": 138.33668759885634,
-              "factor_vol": 0.00597077794542189,
+              "es": 2196.0268354980412,
+              "factor_vol": 0.09478316146305306,
               "portfolio_dollar_delta": -11232.273955810731,
-              "var": 110.31278882317815
+              "var": 1751.1612339366895
             },
             "historical_simulation_primary": {
               "es": 337.8431555153198,
@@ -1627,20 +1626,20 @@
             },
             "monte_carlo": {
               "antithetic_sampling": "not included in this release",
-              "es": 207.98534720519342,
+              "es": 9072.877104329213,
               "n_obs": 50000,
               "n_sims": 50000,
               "seed": 0,
-              "var": 152.24197266175287
+              "var": 6826.851733285002
             }
           },
           "secondary": {
             "confidence_level": 0.99,
             "delta_normal": {
-              "es": 178.74369405285225,
-              "factor_vol": 0.00597077794542189,
+              "es": 2837.468177309171,
+              "factor_vol": 0.09478316146305306,
               "portfolio_dollar_delta": -11232.273955810731,
-              "var": 156.01748237862378
+              "var": 2476.700751313443
             },
             "historical_simulation_primary": {
               "es": 416.778829145255,
@@ -1656,11 +1655,11 @@
             },
             "monte_carlo": {
               "antithetic_sampling": "not included in this release",
-              "es": 294.44178543841036,
+              "es": 12415.575541496019,
               "n_obs": 50000,
               "n_sims": 50000,
               "seed": 0,
-              "var": 243.6221163334501
+              "var": 10521.405502161222
             }
           }
         },
@@ -1668,7 +1667,6 @@
       },
       {
         "S0": 474.8745727539063,
-        "daily_factor_vol_20d": 0.007061573474589653,
         "hs_var_95_primary_every_roll": 258.53357198910777,
         "portfolio_greeks": {
           "delta": -27.81326123276532,
@@ -1687,10 +1685,10 @@
           "primary": {
             "confidence_level": 0.95,
             "delta_normal": {
-              "es": 192.38494260325507,
-              "factor_vol": 0.007061573474589653,
+              "es": 3054.0162847298884,
+              "factor_vol": 0.11209900367144707,
               "portfolio_dollar_delta": -13207.810544802218,
-              "var": 153.41208405750186
+              "var": 2435.3413351697204
             },
             "historical_simulation_primary": {
               "es": 312.0158617275559,
@@ -1706,20 +1704,20 @@
             },
             "monte_carlo": {
               "antithetic_sampling": "not included in this release",
-              "es": 268.40386401421165,
+              "es": 11344.025524783074,
               "n_obs": 50000,
               "n_sims": 50000,
               "seed": 0,
-              "var": 198.69079640701347
+              "var": 8496.120263546722
             }
           },
           "secondary": {
             "confidence_level": 0.99,
             "delta_normal": {
-              "es": 248.5789989476085,
-              "factor_vol": 0.007061573474589653,
+              "es": 3946.0692742125525,
+              "factor_vol": 0.11209900367144707,
               "portfolio_dollar_delta": -13207.810544802218,
-              "var": 216.9736381107627
+              "var": 3444.349724988027
             },
             "historical_simulation_primary": {
               "es": 384.443459408302,
@@ -1735,11 +1733,11 @@
             },
             "monte_carlo": {
               "antithetic_sampling": "not included in this release",
-              "es": 375.9023871952296,
+              "es": 15606.101513948064,
               "n_obs": 50000,
               "n_sims": 50000,
               "seed": 0,
-              "var": 313.01289319791533
+              "var": 13177.43093764052
             }
           }
         },
@@ -1747,7 +1745,6 @@
       },
       {
         "S0": 497.83197021484375,
-        "daily_factor_vol_20d": 0.007619098399675219,
         "hs_var_95_primary_every_roll": 272.1529712470168,
         "portfolio_greeks": {
           "delta": -29.943710067005227,
@@ -1766,10 +1763,10 @@
           "primary": {
             "confidence_level": 0.95,
             "delta_normal": {
-              "es": 234.27758563375215,
-              "factor_vol": 0.007619098399675219,
+              "es": 3719.0413760612796,
+              "factor_vol": 0.12094943748042501,
               "portfolio_dollar_delta": -14906.936178199263,
-              "var": 186.81822066580833
+              "var": 2965.6473135438982
             },
             "historical_simulation_primary": {
               "es": 342.9097771158704,
@@ -1785,20 +1782,20 @@
             },
             "monte_carlo": {
               "antithetic_sampling": "not included in this release",
-              "es": 315.0761533672008,
+              "es": 12982.25527011248,
               "n_obs": 50000,
               "n_sims": 50000,
               "seed": 0,
-              "var": 234.66141386978813
+              "var": 9702.397145841194
             }
           },
           "secondary": {
             "confidence_level": 0.99,
             "delta_normal": {
-              "es": 302.70813778185675,
-              "factor_vol": 0.007619098399675219,
+              "es": 4805.342714437609,
+              "factor_vol": 0.12094943748042501,
               "portfolio_dollar_delta": -14906.936178199263,
-              "var": 264.2205746194448
+              "var": 4194.371590257813
             },
             "historical_simulation_primary": {
               "es": 419.90041063919244,
@@ -1814,11 +1811,11 @@
             },
             "monte_carlo": {
               "antithetic_sampling": "not included in this release",
-              "es": 438.62544726431884,
+              "es": 17904.74756941042,
               "n_obs": 50000,
               "n_sims": 50000,
               "seed": 0,
-              "var": 366.5695774982839
+              "var": 15091.745129786428
             }
           }
         },
@@ -1826,7 +1823,6 @@
       },
       {
         "S0": 508.4442443847656,
-        "daily_factor_vol_20d": 0.006122599173543079,
         "hs_var_95_primary_every_roll": 246.18975545721764,
         "portfolio_greeks": {
           "delta": -24.820092981021112,
@@ -1845,10 +1841,10 @@
           "primary": {
             "confidence_level": 0.95,
             "delta_normal": {
-              "es": 159.37541669644455,
-              "factor_vol": 0.006122599173543079,
+              "es": 2530.0063060565017,
+              "factor_vol": 0.09719324874314748,
               "portfolio_dollar_delta": -12619.633421294904,
-              "var": 127.08954501369928
+              "var": 2017.4839820555833
             },
             "historical_simulation_primary": {
               "es": 330.8612020895889,
@@ -1864,20 +1860,20 @@
             },
             "monte_carlo": {
               "antithetic_sampling": "not included in this release",
-              "es": 237.34923536112035,
+              "es": 10338.198374563006,
               "n_obs": 50000,
               "n_sims": 50000,
               "seed": 0,
-              "var": 173.9646980906731
+              "var": 7773.370032811806
             }
           },
           "secondary": {
             "confidence_level": 0.99,
             "delta_normal": {
-              "es": 205.9276625456126,
-              "factor_vol": 0.006122599173543079,
+              "es": 3269.000298987127,
+              "factor_vol": 0.09719324874314748,
               "portfolio_dollar_delta": -12619.633421294904,
-              "var": 179.7451688168723
+              "var": 2853.3660963285965
             },
             "historical_simulation_primary": {
               "es": 434.2617230062072,
@@ -1893,11 +1889,11 @@
             },
             "monte_carlo": {
               "antithetic_sampling": "not included in this release",
-              "es": 335.6004299194429,
+              "es": 14158.314476114829,
               "n_obs": 50000,
               "n_sims": 50000,
               "seed": 0,
-              "var": 277.87345412081817
+              "var": 11991.926313629736
             }
           }
         },
@@ -1905,7 +1901,6 @@
       },
       {
         "S0": 487.2071228027344,
-        "daily_factor_vol_20d": 0.008678527504106226,
         "hs_var_95_primary_every_roll": 238.3764088790463,
         "portfolio_greeks": {
           "delta": -34.26477411548153,
@@ -1924,10 +1919,10 @@
           "primary": {
             "confidence_level": 0.95,
             "delta_normal": {
-              "es": 298.8452183917315,
-              "factor_vol": 0.008678527504106226,
+              "es": 4744.020770191846,
+              "factor_vol": 0.13776735313259494,
               "portfolio_dollar_delta": -16694.042010289362,
-              "var": 238.30590452518666
+              "var": 3782.9889559916755
             },
             "historical_simulation_primary": {
               "es": 314.7155482596259,
@@ -1943,20 +1938,20 @@
             },
             "monte_carlo": {
               "antithetic_sampling": "not included in this release",
-              "es": 378.93774980021755,
+              "es": 14810.621103736123,
               "n_obs": 50000,
               "n_sims": 50000,
               "seed": 0,
-              "var": 285.1824007506391
+              "var": 11027.000129664604
             }
           },
           "secondary": {
             "confidence_level": 0.99,
             "delta_normal": {
-              "es": 386.1354439847891,
-              "factor_vol": 0.008678527504106226,
+              "es": 6129.7101430275825,
+              "factor_vol": 0.13776735313259494,
               "portfolio_dollar_delta": -16694.042010289362,
-              "var": 337.0405884631967
+              "var": 5350.353472850903
             },
             "historical_simulation_primary": {
               "es": 419.1832039842314,
@@ -1972,11 +1967,11 @@
             },
             "monte_carlo": {
               "antithetic_sampling": "not included in this release",
-              "es": 521.9800143324215,
+              "es": 20519.947926872013,
               "n_obs": 50000,
               "n_sims": 50000,
               "seed": 0,
-              "var": 439.06194920931176
+              "var": 17239.61626600551
             }
           }
         },
@@ -1984,7 +1979,6 @@
       },
       {
         "S0": 513.93603515625,
-        "daily_factor_vol_20d": 0.005927306780912415,
         "hs_var_95_primary_every_roll": 225.54942340585902,
         "portfolio_greeks": {
           "delta": -24.515796647650177,
@@ -2003,10 +1997,10 @@
           "primary": {
             "confidence_level": 0.95,
             "delta_normal": {
-              "es": 154.04629268355052,
-              "factor_vol": 0.005927306780912415,
+              "es": 2445.4090849928616,
+              "factor_vol": 0.09409307812008637,
               "portfolio_dollar_delta": -12599.551327790217,
-              "var": 122.83998156057115
+              "var": 1950.0242535901878
             },
             "historical_simulation_primary": {
               "es": 301.49516450228,
@@ -2022,20 +2016,20 @@
             },
             "monte_carlo": {
               "antithetic_sampling": "not included in this release",
-              "es": 231.8194428942117,
+              "es": 10083.829583644107,
               "n_obs": 50000,
               "n_sims": 50000,
               "seed": 0,
-              "var": 169.68053959009154
+              "var": 7589.75806610887
             }
           },
           "secondary": {
             "confidence_level": 0.99,
             "delta_normal": {
-              "es": 199.04194532436034,
-              "factor_vol": 0.005927306780912415,
+              "es": 3159.6929267926384,
+              "factor_vol": 0.09409307812008637,
               "portfolio_dollar_delta": -12599.551327790217,
-              "var": 173.73493012888113
+              "var": 2757.9565149972145
             },
             "historical_simulation_primary": {
               "es": 437.3349952234639,
@@ -2051,11 +2045,11 @@
             },
             "monte_carlo": {
               "antithetic_sampling": "not included in this release",
-              "es": 328.18775106039095,
+              "es": 13794.866933677207,
               "n_obs": 50000,
               "n_sims": 50000,
               "seed": 0,
-              "var": 271.5470147969202
+              "var": 11692.442935097779
             }
           }
         },
@@ -2063,7 +2057,6 @@
       },
       {
         "S0": 532.728515625,
-        "daily_factor_vol_20d": 0.004227730344786498,
         "hs_var_95_primary_every_roll": 264.95168351022403,
         "portfolio_greeks": {
           "delta": -24.24659444792285,
@@ -2082,10 +2075,10 @@
           "primary": {
             "confidence_level": 0.95,
             "delta_normal": {
-              "es": 112.64261831229902,
-              "factor_vol": 0.004227730344786498,
+              "es": 1788.1461304890802,
+              "factor_vol": 0.06711313861527858,
               "portfolio_dollar_delta": -12916.852269203306,
-              "var": 89.82375956844314
+              "var": 1425.9079778577538
             },
             "historical_simulation_primary": {
               "es": 363.317795712634,
@@ -2101,20 +2094,20 @@
             },
             "monte_carlo": {
               "antithetic_sampling": "not included in this release",
-              "es": 176.951148210117,
+              "es": 7263.336365067059,
               "n_obs": 50000,
               "n_sims": 50000,
               "seed": 0,
-              "var": 129.02137129509208
+              "var": 5517.666802566291
             }
           },
           "secondary": {
             "confidence_level": 0.99,
             "delta_normal": {
-              "es": 145.5445988652705,
-              "factor_vol": 0.004227730344786498,
+              "es": 2310.4488795969555,
+              "factor_vol": 0.06711313861527858,
               "portfolio_dollar_delta": -12916.852269203306,
-              "var": 127.0394573027672
+              "var": 2016.6888642943823
             },
             "historical_simulation_primary": {
               "es": 545.159997069209,
@@ -2130,11 +2123,11 @@
             },
             "monte_carlo": {
               "antithetic_sampling": "not included in this release",
-              "es": 251.24926779432693,
+              "es": 9838.434063833338,
               "n_obs": 50000,
               "n_sims": 50000,
               "seed": 0,
-              "var": 207.62526986125476
+              "var": 8392.235952847657
             }
           }
         },
@@ -2142,7 +2135,6 @@
       },
       {
         "S0": 530.4523315429688,
-        "daily_factor_vol_20d": 0.009410294379320791,
         "hs_var_95_primary_every_roll": 263.68120603116876,
         "portfolio_greeks": {
           "delta": -37.13005731627402,
@@ -2161,10 +2153,10 @@
           "primary": {
             "confidence_level": 0.95,
             "delta_normal": {
-              "es": 382.30850265587594,
-              "factor_vol": 0.009410294379320791,
+              "es": 6068.959332797546,
+              "factor_vol": 0.1493837921495504,
               "portfolio_dollar_delta": -19695.72547374162,
-              "var": 304.86140626032847
+              "var": 4839.5247918375535
             },
             "historical_simulation_primary": {
               "es": 345.5109644604885,
@@ -2180,20 +2172,20 @@
             },
             "monte_carlo": {
               "antithetic_sampling": "not included in this release",
-              "es": 469.6324529704328,
+              "es": 17767.757202349367,
               "n_obs": 50000,
               "n_sims": 50000,
               "seed": 0,
-              "var": 355.53935917396404
+              "var": 13193.878350517653
             }
           },
           "secondary": {
             "confidence_level": 0.99,
             "delta_normal": {
-              "es": 493.97766578510203,
-              "factor_vol": 0.009410294379320791,
+              "es": 7841.65234132536,
+              "factor_vol": 0.1493837921495504,
               "portfolio_dollar_delta": -19695.72547374162,
-              "var": 431.1713046742365
+              "var": 6844.632267811748
             },
             "historical_simulation_primary": {
               "es": 470.7122609477471,
@@ -2209,11 +2201,11 @@
             },
             "monte_carlo": {
               "antithetic_sampling": "not included in this release",
-              "es": 642.9505621346057,
+              "es": 24695.385737286273,
               "n_obs": 50000,
               "n_sims": 50000,
               "seed": 0,
-              "var": 542.8676043297669
+              "var": 20700.20874024016
             }
           }
         },
@@ -2221,7 +2213,6 @@
       },
       {
         "S0": 539.3126220703125,
-        "daily_factor_vol_20d": 0.011162490454103719,
         "hs_var_95_primary_every_roll": 312.90646833876565,
         "portfolio_greeks": {
           "delta": -43.6476873148439,
@@ -2240,10 +2231,10 @@
           "primary": {
             "confidence_level": 0.95,
             "delta_normal": {
-              "es": 542.0029966848714,
-              "factor_vol": 0.011162490454103719,
+              "es": 8604.030834479614,
+              "factor_vol": 0.17719904252214536,
               "portfolio_dollar_delta": -23539.74869307358,
-              "var": 432.2053907218336
+              "var": 6861.047874908851
             },
             "historical_simulation_primary": {
               "es": 427.0814616119594,
@@ -2259,20 +2250,20 @@
             },
             "monte_carlo": {
               "antithetic_sampling": "not included in this release",
-              "es": 630.5381566405457,
+              "es": 22282.55774896136,
               "n_obs": 50000,
               "n_sims": 50000,
               "seed": 0,
-              "var": 482.54361066296366
+              "var": 16444.0504534609
             }
           },
           "secondary": {
             "confidence_level": 0.99,
             "delta_normal": {
-              "es": 700.3176055226774,
-              "factor_vol": 0.011162490454103719,
+              "es": 11117.19733783943,
+              "factor_vol": 0.17719904252214536,
               "portfolio_dollar_delta": -23539.74869307358,
-              "var": 611.2763320577172
+              "var": 9703.710941786758
             },
             "historical_simulation_primary": {
               "es": 560.2624261453966,
@@ -2288,11 +2279,11 @@
             },
             "monte_carlo": {
               "antithetic_sampling": "not included in this release",
-              "es": 853.385671011695,
+              "es": 31205.16031102693,
               "n_obs": 50000,
               "n_sims": 50000,
               "seed": 0,
-              "var": 725.7245297873028
+              "var": 26013.47457080084
             }
           }
         },
@@ -2300,7 +2291,6 @@
       },
       {
         "S0": 557.1739501953125,
-        "daily_factor_vol_20d": 0.00860542515988583,
         "hs_var_95_primary_every_roll": 269.74892415344436,
         "portfolio_greeks": {
           "delta": -33.17443500110137,
@@ -2319,10 +2309,10 @@
           "primary": {
             "confidence_level": 0.95,
             "delta_normal": {
-              "es": 328.0993995851942,
-              "factor_vol": 0.00860542515988583,
+              "es": 5208.416499672195,
+              "factor_vol": 0.1366068893942169,
               "portfolio_dollar_delta": -18483.930995061288,
-              "var": 261.63384715705956
+              "var": 4153.308564807978
             },
             "historical_simulation_primary": {
               "es": 387.34795926902564,
@@ -2338,20 +2328,20 @@
             },
             "monte_carlo": {
               "antithetic_sampling": "not included in this release",
-              "es": 418.8099228312583,
+              "es": 16733.444964247527,
               "n_obs": 50000,
               "n_sims": 50000,
               "seed": 0,
-              "var": 314.70603865038606
+              "var": 12453.04992170354
             }
           },
           "secondary": {
             "confidence_level": 0.99,
             "delta_normal": {
-              "es": 423.934530429405,
-              "factor_vol": 0.00860542515988583,
+              "es": 6729.7520381348995,
+              "factor_vol": 0.1366068893942169,
               "portfolio_dollar_delta": -18483.930995061288,
-              "var": 370.0337429045342
+              "var": 5874.103562566855
             },
             "historical_simulation_primary": {
               "es": 507.70597853293776,
@@ -2367,11 +2357,11 @@
             },
             "monte_carlo": {
               "antithetic_sampling": "not included in this release",
-              "es": 577.874510444198,
+              "es": 23189.973824521592,
               "n_obs": 50000,
               "n_sims": 50000,
               "seed": 0,
-              "var": 485.5396779547485
+              "var": 19481.714336709334
             }
           }
         },
@@ -2379,7 +2369,6 @@
       },
       {
         "S0": 559.545166015625,
-        "daily_factor_vol_20d": 0.007273643698081082,
         "hs_var_95_primary_every_roll": 247.32307435742038,
         "portfolio_greeks": {
           "delta": -27.369535356126956,
@@ -2398,10 +2387,10 @@
           "primary": {
             "confidence_level": 0.95,
             "delta_normal": {
-              "es": 229.77001949331864,
-              "factor_vol": 0.007273643698081082,
+              "es": 3647.4859819067065,
+              "factor_vol": 0.11546551410248833,
               "portfolio_dollar_delta": -15314.491204614576,
-              "var": 183.22378595447543
+              "var": 2908.587431443628
             },
             "historical_simulation_primary": {
               "es": 365.52679726505335,
@@ -2417,20 +2406,20 @@
             },
             "monte_carlo": {
               "antithetic_sampling": "not included in this release",
-              "es": 319.2879419434952,
+              "es": 13788.692413659715,
               "n_obs": 50000,
               "n_sims": 50000,
               "seed": 0,
-              "var": 236.37309200329798
+              "var": 10308.464602500288
             }
           },
           "secondary": {
             "confidence_level": 0.99,
             "delta_normal": {
-              "es": 296.88394871738404,
-              "factor_vol": 0.007273643698081082,
+              "es": 4712.886579318309,
+              "factor_vol": 0.11546551410248833,
               "portfolio_dollar_delta": -15314.491204614576,
-              "var": 259.13689701307584
+              "var": 4113.670710105332
             },
             "historical_simulation_primary": {
               "es": 488.4308196793427,
@@ -2446,11 +2435,11 @@
             },
             "monte_carlo": {
               "antithetic_sampling": "not included in this release",
-              "es": 447.2256786561544,
+              "es": 19002.713324520635,
               "n_obs": 50000,
               "n_sims": 50000,
               "seed": 0,
-              "var": 372.32392760924597
+              "var": 16028.369739481503
             }
           }
         },
@@ -2458,7 +2447,6 @@
       },
       {
         "S0": 591.4791870117188,
-        "daily_factor_vol_20d": 0.007446396969435878,
         "hs_var_95_primary_every_roll": 257.6175009583846,
         "portfolio_greeks": {
           "delta": -27.947782823708494,
@@ -2477,10 +2465,10 @@
           "primary": {
             "confidence_level": 0.95,
             "delta_normal": {
-              "es": 253.905306232668,
-              "factor_vol": 0.007446396969435878,
+              "es": 4030.621781108026,
+              "factor_vol": 0.11820788726755421,
               "portfolio_dollar_delta": -16530.531863347176,
-              "var": 202.46980691592213
+              "var": 3214.108542592773
             },
             "historical_simulation_primary": {
               "es": 379.421606104657,
@@ -2496,20 +2484,20 @@
             },
             "monte_carlo": {
               "antithetic_sampling": "not included in this release",
-              "es": 348.78282007909667,
+              "es": 14972.340653079105,
               "n_obs": 50000,
               "n_sims": 50000,
               "seed": 0,
-              "var": 258.68877161427
+              "var": 11185.03471039131
             }
           },
           "secondary": {
             "confidence_level": 0.99,
             "delta_normal": {
-              "es": 328.0689538212057,
-              "factor_vol": 0.007446396969435878,
+              "es": 5207.933188152261,
+              "factor_vol": 0.11820788726755421,
               "portfolio_dollar_delta": -16530.531863347176,
-              "var": 286.35691173887733
+              "var": 4545.775047993252
             },
             "historical_simulation_primary": {
               "es": 576.2165976329876,
@@ -2525,11 +2513,11 @@
             },
             "monte_carlo": {
               "antithetic_sampling": "not included in this release",
-              "es": 487.6521780834951,
+              "es": 20651.420318250304,
               "n_obs": 50000,
               "n_sims": 50000,
               "seed": 0,
-              "var": 406.4215824858644
+              "var": 17408.92166891053
             }
           }
         },

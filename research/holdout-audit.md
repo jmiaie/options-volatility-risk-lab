@@ -166,3 +166,57 @@ deleted. Full before/after numbers in
 `research/historical-volatility-and-tail-risk.md` §6.3. No parameter,
 threshold, or methodology was changed in response to the corrected
 numbers, and 2025 remains labeled `HISTORICAL EVALUATION` throughout.
+
+## v2 post-execution defect found and corrected (2026-09-18) — volatility-units mismatch in Delta-Normal/Monte Carlo VaR
+
+Independent review of `src/options_risk/historical_risk_study_v2.py` found
+that `trailing_realized_vol()` returns **annualized** volatility (correct,
+as-is, for the Black-Scholes option pricing that consumes it, since option
+maturity `T` is also expressed in years) but that same annualized figure
+was being passed directly as the one-day factor vol to `delta_normal_var`
+and `full_revaluation_mc_var_es` at `horizon=1` — both of which document
+their vol parameter as **per one period** (one trading day), scaled to the
+horizon internally via `sqrt(horizon)`. Feeding them the annualized figure
+overstated one-day Delta-Normal VaR by exactly `sqrt(252) ≈ 15.87x`
+(a deterministic, portfolio-independent ratio, since Delta-Normal is
+linear in factor vol) and Monte Carlo VaR by a comparable ~40–50x
+(sub-linear because the full-revaluation book has options-driven
+curvature). Historical Simulation was unaffected throughout — it consumes
+observed daily log returns directly, never a vol parameter — and so was
+the Kupiec/Christoffersen backtest, which draws its forecast from
+Historical Simulation. This is a units-mismatch defect found by reading
+`delta_normal_var`'s and `full_revaluation_mc_var_es`'s own documented vol
+contract against what was actually being passed to them at each call site,
+not by reacting to the 2025 numbers themselves — the same standard applied
+to the two defects above.
+
+Fixed at the call site only (`run_nonlinear_portfolio_study`): BSM option
+pricing continues to receive the annualized figure (`annualized_vol20`,
+renamed from the previous undifferentiated `vol20` for clarity);
+Delta-Normal and the Monte Carlo factor draw now receive
+`daily_factor_vol20 = annualized_vol20 / sqrt(252)` instead. Neither
+`trailing_realized_vol()` nor `delta_normal_var`/`full_revaluation_mc_var_es`
+themselves were modified — both were already internally correct and
+correctly documented; only the value passed between them was wrong. 8 new
+regression tests added in
+`tests/test_historical_risk_study_v2.py::TestVolatilityUnitsFix`, including
+a deterministic linear-portfolio proof that pre-fix and post-fix
+Delta-Normal VaR differ by exactly `sqrt(252)`, a reconstructed-simulated-
+return check that Monte Carlo's empirical draw std matches the converted
+daily sigma, and a monkeypatched proof that BSM pricing still receives the
+annualized sigma. All three v2 artifacts (DEV, VAL 2024, 2025 HISTORICAL
+EVALUATION) were regenerated under the fix; verified by full field-level
+diff that only `var_es.{primary,secondary}.{delta_normal,monte_carlo}` and
+the new `daily_factor_vol_20d` provenance field changed — Historical
+Simulation and the Kupiec/Christoffersen backtest section are byte-identical
+to the pre-fix artifacts in every period. Pre-fix artifacts preserved at
+`results/historical_risk/superseded_volatility_units_fix/`, not deleted.
+Full before/after VaR/ES tables, and an explicit audit of which prior
+interpretive claims (the "order of magnitude divergence explained by
+recent vol + convexity" narrative, and the 2025-realized-vol-explains-the-
+VaR-gap claim) survived correction vs. were withdrawn, are in
+`research/historical-volatility-and-tail-risk.md` §6.2 and §7. No universe,
+portfolio construction, confidence level, HS lookback, Monte Carlo
+n_sims/seed, target period, or 2025 classification was changed in response
+to the corrected numbers, and 2025 remains labeled `HISTORICAL EVALUATION`
+throughout.

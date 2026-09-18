@@ -24,7 +24,9 @@ from options_risk.historical_risk_study_v2 import (
     trailing_realized_vol,
     var_es_all_methods,
 )
-from options_risk.risk.var import monte_carlo_var
+from options_risk.portfolio.portfolio import Portfolio
+from options_risk.portfolio.positions import EquityPosition
+from options_risk.risk.var import delta_normal_var, monte_carlo_var
 
 
 def _synthetic_prices(
@@ -583,3 +585,245 @@ class TestNextSessionBacktestAlignment:
         backtest = out["kupiec_christoffersen_backtest"]
         assert "kupiec" in backtest, backtest.get("note")
         assert backtest["kupiec"]["n_breaches"] == 1
+
+
+class TestVolatilityUnitsFix:
+    """Real defect (independent review, 2026-09-17): trailing_realized_vol
+    returns ANNUALIZED volatility (std(daily log returns) * sqrt(252)) --
+    correct as-is for BSM option pricing (paired with T in years) -- but
+    run_nonlinear_portfolio_study passed that same annualized figure
+    directly to var_es_all_methods as `mc_vol`, which feeds it to BOTH
+    delta_normal_var and full_revaluation_mc_var_es with horizon=1. Both
+    of those functions' own docstrings state their vol parameter is
+    "per one period" (daily), scaled internally via sqrt(horizon). Feeding
+    them the annualized figure overstated 1-day Delta-Normal/MC VaR by
+    sqrt(252)x. Historical Simulation never consumes a vol parameter at
+    all, so it (and the Kupiec/Christoffersen backtest, which draws its
+    forecast from HS-primary) is unaffected. Fix: convert once at the call
+    site (`daily_factor_vol20 = annualized_vol20 / sqrt(252)`), route the
+    daily figure only to Delta-Normal/MC, and keep BSM pricing on the
+    annualized figure.
+    """
+
+    def test_annualized_to_daily_conversion_matches_sqrt_252_scaling(self):
+        """1. A 20%-annualized regime must convert to ~0.20 / sqrt(252) for
+        the one-day factor distribution -- verified end-to-end via the
+        snapshot's own recorded annualized and daily-converted fields."""
+        prices = _synthetic_prices(n=HS_LOOKBACKS["primary"] + 45, seed=10)
+        rate_series = pd.Series(0.02, index=prices.index)
+        vix_series = pd.Series(0.18, index=prices.index)
+        period = PeriodSpec(
+            "eval",
+            str(prices.index[HS_LOOKBACKS["primary"] + 1].date()),
+            str(prices.index[-1].date()),
+        )
+        out = run_nonlinear_portfolio_study(
+            prices, rate_series, vix_series, period, mc_n_sims=200, mc_seed=0
+        )
+        assert out["snapshots"]
+        for snap in out["snapshots"]:
+            assert snap["daily_factor_vol_20d"] == pytest.approx(
+                snap["realized_vol_20d"] / np.sqrt(252.0)
+            )
+
+    def test_delta_normal_scales_from_daily_sigma_not_annualized(self):
+        """2. Delta-Normal's factor_vol, as actually recorded in the
+        snapshot's var_es section, must equal the DAILY converted figure,
+        never the annualized realized_vol_20d used for BSM."""
+        prices = _synthetic_prices(n=HS_LOOKBACKS["primary"] + 45, seed=11)
+        rate_series = pd.Series(0.02, index=prices.index)
+        vix_series = pd.Series(0.18, index=prices.index)
+        period = PeriodSpec(
+            "eval",
+            str(prices.index[HS_LOOKBACKS["primary"] + 1].date()),
+            str(prices.index[-1].date()),
+        )
+        out = run_nonlinear_portfolio_study(
+            prices, rate_series, vix_series, period, mc_n_sims=200, mc_seed=0
+        )
+        assert out["snapshots"]
+        for snap in out["snapshots"]:
+            for conf_name in ("primary", "secondary"):
+                factor_vol_used = snap["var_es"][conf_name]["delta_normal"]["factor_vol"]
+                assert factor_vol_used == pytest.approx(snap["daily_factor_vol_20d"])
+                assert factor_vol_used != pytest.approx(snap["realized_vol_20d"], rel=0.5)
+
+    def test_full_revaluation_mc_simulated_return_std_matches_converted_daily_sigma(self):
+        """3. Reconstruct the exact single-factor simulated returns MC draws
+        for an equity-only (linear) book -- invertible from realized losses,
+        loss = -qty * price * (exp(r) - 1) -- and confirm their empirical
+        standard deviation matches the DAILY factor vol passed in, not the
+        (much larger) annualized figure."""
+        portfolio = Portfolio(positions=[EquityPosition(symbol="SPY", quantity=1.0, price=100.0)])
+        annualized_vol20 = 0.20
+        daily_factor_vol20 = annualized_vol20 / np.sqrt(252.0)
+        summary = full_revaluation_mc_var_es(
+            portfolio,
+            mean_return=0.0,
+            vol=daily_factor_vol20,
+            n_sims=200_000,
+            horizon=1,
+            confidence_level=0.95,
+            seed=7,
+        )
+        spot_shocks = -summary.losses / 100.0
+        simulated_returns = np.log(1.0 + spot_shocks)
+        empirical_std = simulated_returns.std(ddof=1)
+        assert empirical_std == pytest.approx(daily_factor_vol20, rel=0.02)
+        assert empirical_std < annualized_vol20 / 10
+
+    def test_bsm_option_pricing_still_receives_annualized_sigma(self, monkeypatch):
+        """4. Patch build_standardized_portfolio to record the sigma it is
+        actually called with on each roll, proving BSM option pricing
+        (T already in years) still receives the ANNUALIZED realized vol --
+        not the new daily-converted figure introduced for Delta-Normal/MC."""
+        import options_risk.historical_risk_study_v2 as mod
+
+        captured_sigmas: list[float] = []
+        original = mod.build_standardized_portfolio
+
+        def spy(S0, T, r, sigma, q, **kwargs):
+            captured_sigmas.append(sigma)
+            return original(S0, T, r, sigma, q, **kwargs)
+
+        monkeypatch.setattr(mod, "build_standardized_portfolio", spy)
+
+        prices = _synthetic_prices(n=HS_LOOKBACKS["primary"] + 45, seed=12)
+        rate_series = pd.Series(0.02, index=prices.index)
+        vix_series = pd.Series(0.18, index=prices.index)
+        period = PeriodSpec(
+            "eval",
+            str(prices.index[HS_LOOKBACKS["primary"] + 1].date()),
+            str(prices.index[-1].date()),
+        )
+        out = run_nonlinear_portfolio_study(
+            prices, rate_series, vix_series, period, mc_n_sims=200, mc_seed=0
+        )
+        assert captured_sigmas, "no rolls executed -- fixture too short for this test"
+        assert len(captured_sigmas) == len(out["snapshots"])
+        for sigma_used, snap in zip(captured_sigmas, out["snapshots"], strict=True):
+            assert sigma_used == pytest.approx(snap["realized_vol_20d"])
+            assert sigma_used == pytest.approx(snap["daily_factor_vol_20d"] * np.sqrt(252.0))
+            assert sigma_used > snap["daily_factor_vol_20d"] * 10
+
+    def test_historical_simulation_is_unaffected_by_the_volatility_units_fix(self):
+        """5. Historical Simulation never consumes a vol parameter -- it
+        draws directly from observed daily log-return windows -- so its
+        VaR/ES must be byte-identical regardless of what value mc_vol
+        carries, proving HS is immune to this defect and its fix."""
+        portfolio = build_standardized_portfolio(S0=100.0, T=30 / 252, r=0.02, sigma=0.2, q=0.0)
+        rng = np.random.default_rng(0)
+        hs_returns = rng.normal(0, 0.01, 300)
+        result_daily = var_es_all_methods(
+            portfolio,
+            hs_returns,
+            hs_returns,
+            mc_vol=0.2 / np.sqrt(252.0),
+            confidence_level=0.95,
+            mc_n_sims=2000,
+            mc_seed=0,
+        )
+        result_annualized = var_es_all_methods(
+            portfolio,
+            hs_returns,
+            hs_returns,
+            mc_vol=0.2,
+            confidence_level=0.95,
+            mc_n_sims=2000,
+            mc_seed=0,
+        )
+        assert (
+            result_daily["historical_simulation_primary"]
+            == result_annualized["historical_simulation_primary"]
+        )
+        assert (
+            result_daily["historical_simulation_sensitivity"]
+            == result_annualized["historical_simulation_sensitivity"]
+        )
+        # Sanity: the two mc_vol values actually differ in effect (proves
+        # this isn't a vacuous comparison) -- Delta-Normal DOES change.
+        assert result_daily["delta_normal"]["var"] != result_annualized["delta_normal"]["var"]
+
+    def test_next_session_kupiec_christoffersen_wiring_remains_intact(self):
+        """6. The Kupiec/Christoffersen backtest's per-roll forecast
+        (hs_var_95_primary_every_roll) must still be drawn from the
+        HS-primary VaR leg -- which never consumes mc_vol -- so this units
+        fix (which only changes the value passed as mc_vol) must leave that
+        wiring, and the previously-fixed next-session date-keyed realized-
+        return lookup (see TestNextSessionBacktestAlignment), completely
+        intact."""
+        prices = _synthetic_prices(n=HS_LOOKBACKS["primary"] + 400, seed=13)
+        rate_series = pd.Series(0.02, index=prices.index)
+        vix_series = pd.Series(0.18, index=prices.index)
+        period = PeriodSpec(
+            "eval",
+            str(prices.index[HS_LOOKBACKS["primary"] + 1].date()),
+            str(prices.index[-1].date()),
+        )
+        out = run_nonlinear_portfolio_study(
+            prices, rate_series, vix_series, period, mc_n_sims=100, mc_seed=0
+        )
+        assert out["snapshots"]
+        for snap in out["snapshots"]:
+            assert snap["hs_var_95_primary_every_roll"] == pytest.approx(
+                snap["var_es"]["primary"]["historical_simulation_primary"]["var"]
+            )
+        assert "kupiec" in out["kupiec_christoffersen_backtest"]
+
+    def test_deterministic_linear_portfolio_var_scales_by_sqrt_252(self):
+        """7. Deterministic proof of the defect's exact magnitude on a pure
+        LINEAR portfolio (Delta-Normal has no convexity, isolating the
+        units bug exactly, with no basis-risk from BSM curvature): feeding
+        delta_normal_var the annualized vol directly (pre-fix behavior) vs.
+        the correctly-converted daily vol (the fix) must produce VaR/ES
+        figures differing by exactly sqrt(252), since delta_normal_var's
+        own pnl_std is linear in factor_vol."""
+        dollar_delta = 10_000.0
+        annualized_vol20 = 0.20
+        daily_factor_vol20 = annualized_vol20 / np.sqrt(252.0)
+        pre_fix = delta_normal_var(
+            dollar_delta=dollar_delta,
+            factor_vol=annualized_vol20,
+            confidence_level=0.95,
+            horizon=1,
+        )
+        post_fix = delta_normal_var(
+            dollar_delta=dollar_delta,
+            factor_vol=daily_factor_vol20,
+            confidence_level=0.95,
+            horizon=1,
+        )
+        assert pre_fix.var / post_fix.var == pytest.approx(np.sqrt(252.0), rel=1e-9)
+        assert pre_fix.es / post_fix.es == pytest.approx(np.sqrt(252.0), rel=1e-9)
+
+    def test_full_revaluation_mc_matches_scalar_reference_under_daily_scaled_vol(self):
+        """8. full_revaluation_mc_var_es's vectorized-vs-scalar-reference
+        equivalence (see TestFullRevaluationMcVarEs) must continue to hold
+        when both receive the SAME small, correctly daily-converted sigma
+        this fix introduces, on the actual standardized (nonlinear)
+        portfolio whose options were priced with the annualized sigma --
+        proving the fix's vectorized MC path stays exact at realistic
+        (small, daily) vol magnitudes, not just at the old annualized
+        scale."""
+        portfolio = build_standardized_portfolio(S0=100.0, T=30 / 252, r=0.02, sigma=0.20, q=0.0)
+        daily_factor_vol20 = 0.20 / np.sqrt(252.0)
+        vectorized = full_revaluation_mc_var_es(
+            portfolio,
+            mean_return=0.0,
+            vol=daily_factor_vol20,
+            n_sims=5000,
+            horizon=1,
+            confidence_level=0.95,
+            seed=11,
+        )
+        reference = monte_carlo_var(
+            portfolio,
+            mean_return=0.0,
+            vol=daily_factor_vol20,
+            n_sims=5000,
+            horizon=1,
+            confidence_level=0.95,
+            seed=11,
+        )
+        assert vectorized.var == pytest.approx(reference.var, rel=1e-9)
+        assert vectorized.es == pytest.approx(reference.es, rel=1e-9)

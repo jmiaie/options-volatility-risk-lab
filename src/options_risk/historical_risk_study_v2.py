@@ -660,10 +660,20 @@ def run_nonlinear_portfolio_study(
         if ret_pos_val is None or ret_pos_val < HS_LOOKBACKS["primary"]:
             continue
         S0 = float(full_prices.iloc[idx_pos])
-        vol20 = trailing_realized_vol(returns, ret_pos_val, REALIZED_VOL_WINDOW_PRIMARY)
+        # trailing_realized_vol returns ANNUALIZED vol (std * sqrt(252)) --
+        # correct as-is for BSM option pricing below (T is also in years),
+        # but Delta-Normal and the 1-day Monte Carlo factor draw both model
+        # a ONE-DAY return distribution and scale by sqrt(horizon)
+        # themselves (see delta_normal_var's and full_revaluation_mc_var_es's
+        # own docstrings: "volatility ... per one period"). Feeding them the
+        # annualized figure directly overstated the one-day factor vol by
+        # sqrt(252)x. Historical Simulation is unaffected -- it consumes
+        # observed daily log returns directly, never a vol parameter.
+        annualized_vol20 = trailing_realized_vol(returns, ret_pos_val, REALIZED_VOL_WINDOW_PRIMARY)
         vol60 = trailing_realized_vol(returns, ret_pos_val, REALIZED_VOL_WINDOW_SECONDARY)
-        if not np.isfinite(vol20) or vol20 <= 0:
+        if not np.isfinite(annualized_vol20) or annualized_vol20 <= 0:
             continue
+        daily_factor_vol20 = annualized_vol20 / np.sqrt(252.0)
         pit_rate = point_in_time_value(rate_series, pd.Timestamp(roll_date))
         try:
             pit_vix = point_in_time_value(vix_series, pd.Timestamp(roll_date))
@@ -671,7 +681,9 @@ def run_nonlinear_portfolio_study(
         except ValueError:
             vix_context = None
 
-        portfolio = build_standardized_portfolio(S0, T, pit_rate.value, vol20, dividend_yield)
+        portfolio = build_standardized_portfolio(
+            S0, T, pit_rate.value, annualized_vol20, dividend_yield
+        )
         hs_primary_window = _historical_log_returns_window(
             returns, ret_pos_val, HS_LOOKBACKS["primary"]
         )
@@ -688,7 +700,7 @@ def run_nonlinear_portfolio_study(
                 portfolio,
                 hs_primary_window,
                 hs_sensitivity_window,
-                mc_vol=vol20,
+                mc_vol=daily_factor_vol20,
                 confidence_level=conf_level,
                 mc_n_sims=mc_n_sims,
                 mc_seed=mc_seed,
@@ -702,8 +714,13 @@ def run_nonlinear_portfolio_study(
             {
                 "roll_date": str(pd.Timestamp(roll_date).date()),
                 "S0": S0,
-                "realized_vol_20d": vol20,
+                "realized_vol_20d": annualized_vol20,
                 "realized_vol_60d_sensitivity": vol60 if np.isfinite(vol60) else None,
+                # Explicit provenance for the two volatility units in play:
+                # BSM option pricing above used realized_vol_20d (annualized,
+                # matching its T-in-years convention); Delta-Normal and the
+                # 1-day Monte Carlo factor draw used this one instead.
+                "daily_factor_vol_20d": daily_factor_vol20,
                 "rate_used": pit_rate.value,
                 "rate_as_of": str(pit_rate.as_of_date.date()),
                 "vixcls_context": vix_context,

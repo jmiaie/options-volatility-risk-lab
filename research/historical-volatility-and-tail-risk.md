@@ -14,7 +14,7 @@ none of its numbers are reused here.
 (`status: frozen-for-holdout`, frozen on creation — see "Freeze basis" below).
 **Code**: `src/options_risk/historical_risk_study_v2.py`.
 **Runner**: `scripts/run_historical_risk_study_v2.py`.
-**Tests**: `tests/test_historical_risk_study_v2.py` (21 tests, all passing).
+**Tests**: `tests/test_historical_risk_study_v2.py` (34 tests, all passing).
 **Result artifacts**: `results/historical_risk/options_hist_risk_v2_{dev_formation,val_2024,historical_evaluation_2025}.json`.
 
 Every number in this report is read directly from those three committed JSON
@@ -215,8 +215,8 @@ required by spec, at **both** 95% (primary) and 99% (secondary) confidence,
 - **Historical Simulation**: full revaluation under the actual trailing
   252-session (primary) and 504-session (sensitivity) return distribution.
 - **Delta-Normal**: linear (dollar-delta × factor-vol) parametric
-  approximation, using the same 20-session realized vol as the Monte
-  Carlo leg.
+  approximation, using the same **daily** (one-period) factor vol as the
+  Monte Carlo leg — see the volatility-units provenance note in §6.2.
 - **Monte Carlo full revaluation**: 50,000 simulated iid-normal
   single-factor draws (fixed seed 0), **every draw fully repriced** through
   the same Black-Scholes formula (option convexity captured, not
@@ -259,60 +259,130 @@ experiment's 20-session vol warm-up.)
 
 ### 6.2 VaR / ES by method, confidence level, and period
 
-Dollar VaR/ES, mean across each period's roll snapshots:
+**Corrected 2026-09-18 — volatility-units defect (independent review,
+tracker Issue #3).** `trailing_realized_vol()` returns **annualized**
+volatility (`std(daily log returns) * sqrt(252)`) — correct as-is for the
+Black-Scholes option pricing used to build the standardized portfolio
+above (paired with maturity `T` already in years) — but the Delta-Normal
+and 1-day Monte Carlo legs were being fed that same annualized figure
+directly as their factor vol. Both `delta_normal_var` and
+`full_revaluation_mc_var_es`'s own docstrings state their vol parameter is
+**per one period** (one trading day) and scale it to the horizon
+internally via `sqrt(horizon)`; at `horizon=1` this means they expected a
+*daily* figure and instead received one inflated by `sqrt(252) ≈ 15.87`.
+Historical Simulation never consumes a vol parameter at all (it resamples
+observed daily log returns directly), so it — and the Kupiec/Christoffersen
+backtest, which draws its forecast from Historical Simulation — was never
+affected; this was verified, not assumed, by a full field-level diff
+against the pre-fix artifacts (every field outside
+`var_es.{primary,secondary}.{delta_normal,monte_carlo}` and the new
+`daily_factor_vol_20d` provenance field is byte-identical). Fixed at the
+call site only (`run_nonlinear_portfolio_study`): the BSM-pricing sigma is
+untouched (still `annualized_vol20`); Delta-Normal and the Monte Carlo
+factor draw now receive `daily_factor_vol20 = annualized_vol20 /
+sqrt(252)` instead. See `src/options_risk/historical_risk_study_v2.py` and
+the 8 regression tests in
+`tests/test_historical_risk_study_v2.py::TestVolatilityUnitsFix`, including
+a deterministic linear-portfolio proof that pre-fix and post-fix
+Delta-Normal VaR differ by exactly `sqrt(252)`.
 
-| Period | Confidence | Method | Mean VaR | Mean ES |
-|---|---|---|---:|---:|
-| DEV | 95% | Historical Simulation (252d) | 226.8 | 366.9 |
-| DEV | 95% | Delta-Normal | 3,193.6 | 4,005.0 |
-| DEV | 95% | Monte Carlo (50k) | 8,403.7 | 11,816.8 |
-| DEV | 99% | Historical Simulation (252d) | 423.5 | 588.5 |
-| DEV | 99% | Delta-Normal | 4,516.8 | 5,174.8 |
-| DEV | 99% | Monte Carlo (50k) | 13,917.9 | 17,342.5 |
-| VAL 2024 | 95% | Historical Simulation (252d) | 259.3 | 350.7 |
-| VAL 2024 | 95% | Delta-Normal | 3,192.1 | 4,003.0 |
-| VAL 2024 | 95% | Monte Carlo (50k) | 10,043.1 | 13,453.3 |
-| VAL 2024 | 99% | Historical Simulation (252d) | 418.9 | 471.7 |
-| VAL 2024 | 99% | Delta-Normal | 4,514.6 | 5,172.3 |
-| VAL 2024 | 99% | Monte Carlo (50k) | 15,645.0 | 18,581.9 |
-| 2025 HIST. EVAL | 95% | Historical Simulation (252d) | 408.6 | 814.3 |
-| 2025 HIST. EVAL | 95% | Delta-Normal | 7,225.7 | 9,061.3 |
-| 2025 HIST. EVAL | 95% | Monte Carlo (50k) | 18,083.9 | 25,318.9 |
-| 2025 HIST. EVAL | 99% | Historical Simulation (252d) | 701.1 | 1,789.1 |
-| 2025 HIST. EVAL | 99% | Delta-Normal | 10,219.4 | 11,708.0 |
-| 2025 HIST. EVAL | 99% | Monte Carlo (50k) | 29,831.6 | 36,893.3 |
+Dollar VaR/ES, mean across each period's roll snapshots — **corrected
+figures** (pre-fix figures preserved for comparison, not deleted):
 
-**The three methods diverge sharply, and this is a real finding, not
-noise to explain away.** Historical Simulation's mean VaR is roughly an
-order of magnitude below Delta-Normal's, which is itself well below Monte
-Carlo's, in every period. Two distinct, verifiable causes:
+| Period | Confidence | Method | Mean VaR (corrected) | Mean ES (corrected) | Mean VaR (pre-fix, superseded) | Mean ES (pre-fix, superseded) |
+|---|---|---|---:|---:|---:|---:|
+| DEV | 95% | Historical Simulation (252d) | 226.8 | 366.9 | 226.8 | 366.9 |
+| DEV | 95% | Delta-Normal | 201.2 | 252.3 | 3,193.6 | 4,005.0 |
+| DEV | 95% | Monte Carlo (50k) | 227.8 | 298.5 | 8,403.7 | 11,816.8 |
+| DEV | 99% | Historical Simulation (252d) | 423.5 | 588.5 | 423.5 | 588.5 |
+| DEV | 99% | Delta-Normal | 284.5 | 326.0 | 4,516.8 | 5,174.8 |
+| DEV | 99% | Monte Carlo (50k) | 344.0 | 405.3 | 13,917.9 | 17,342.5 |
+| VAL 2024 | 95% | Historical Simulation (252d) | 259.3 | 350.7 | 259.3 | 350.7 |
+| VAL 2024 | 95% | Delta-Normal | 201.1 | 252.2 | 3,192.1 | 4,003.0 |
+| VAL 2024 | 95% | Monte Carlo (50k) | 249.3 | 333.6 | 10,043.1 | 13,453.3 |
+| VAL 2024 | 99% | Historical Simulation (252d) | 418.9 | 471.7 | 418.9 | 471.7 |
+| VAL 2024 | 99% | Delta-Normal | 284.4 | 325.8 | 4,514.6 | 5,172.3 |
+| VAL 2024 | 99% | Monte Carlo (50k) | 387.7 | 462.9 | 15,645.0 | 18,581.9 |
+| 2025 HIST. EVAL | 95% | Historical Simulation (252d) | 408.6 | 814.3 | 408.6 | 814.3 |
+| 2025 HIST. EVAL | 95% | Delta-Normal | 455.2 | 570.8 | 7,225.7 | 9,061.3 |
+| 2025 HIST. EVAL | 95% | Monte Carlo (50k) | 513.0 | 671.2 | 18,083.9 | 25,318.9 |
+| 2025 HIST. EVAL | 99% | Historical Simulation (252d) | 701.1 | 1,789.1 | 701.1 | 1,789.1 |
+| 2025 HIST. EVAL | 99% | Delta-Normal | 643.8 | 737.5 | 10,219.4 | 11,708.0 |
+| 2025 HIST. EVAL | 99% | Monte Carlo (50k) | 773.0 | 909.4 | 29,831.6 | 36,893.3 |
 
-1. **Different volatility inputs.** Historical Simulation resamples the
-   *actual* trailing 252-session (roughly one-year) empirical return
-   distribution ending at each roll date. Delta-Normal and Monte Carlo
-   instead both use that roll's own **20-session trailing realized vol** —
-   a much shorter, more reactive window. Over a 9-year DEV period spanning
-   very different volatility regimes, a roll's most-recent 20 sessions can
-   run hotter or cooler than the trailing year as a whole; empirically
-   here it runs hotter often enough that the 20-day-vol-driven methods
-   (Delta-Normal, Monte Carlo) price in more risk than the 252-day
-   empirical resample does.
-2. **Linear vs. convex treatment of a genuinely nonlinear book.**
-   Delta-Normal collapses the whole position to a single linear
-   dollar-delta exposure, discarding the calls' and puts' gamma entirely.
-   Monte Carlo and Historical Simulation both fully reprice the book
-   (capturing convexity), which is why Monte Carlo's ES consistently
-   exceeds Delta-Normal's ES by a wide margin at the same confidence level
-   despite sharing the same vol input — full revaluation captures the fat
-   tail that a linear approximation cannot.
+(Historical Simulation is repeated unchanged in both column pairs as a
+visual confirmation that it was genuinely unaffected, not omitted from the
+comparison. Full corrected artifacts:
+`results/historical_risk/options_hist_risk_v2_{dev_formation,val_2024,historical_evaluation_2025}.json`;
+pre-fix artifacts preserved at
+`results/historical_risk/superseded_volatility_units_fix/`.)
 
-This divergence is exactly the kind of finding these three methods being
-run side-by-side is supposed to surface: **a book with meaningful options
-convexity should not be risk-managed off a Delta-Normal VaR alone**, and a
-252-day historical resample can materially understate forward-looking
-tail risk when recent realized vol has moved well above the trailing
-year's norm (as it had by the 2025 evaluation window, consistent with
-Study 1's realized-vol finding above).
+**Prior interpretive claim withdrawn: the "order of magnitude" divergence
+was not a genuine methodological finding.** The previous version of this
+section reported Delta-Normal at roughly 14x Historical Simulation's VaR
+and Monte Carlo at roughly 35–45x, and offered two explanations — a
+20-session-vs-252-session volatility-window mismatch, and Delta-Normal's
+linear treatment discarding convexity. Both explanations were plausible
+*in kind* but wrong *in magnitude*: Delta-Normal's VaR/ES fell by exactly
+`sqrt(252) ≈ 15.87` at every single roll and confidence level once the
+units defect was corrected (a deterministic, portfolio-independent ratio —
+confirmed both in this artifact-level table and in the dedicated
+`test_deterministic_linear_portfolio_var_scales_by_sqrt_252` regression
+test), and Monte Carlo's VaR fell by a comparable ~40–50x. That leaves only
+a residual, much smaller gap between methods to actually explain — the
+claim that recent (20-day) vol was running "hot" broadly enough to explain
+an order-of-magnitude gap is **withdrawn**; it was never the dominant
+effect, the volatility-units defect was.
+
+**What the corrected numbers actually show**, now that all three methods
+sit within the same order of magnitude in every period and confidence
+level:
+
+1. **The 20-session-vs-252-session vol-window difference is real but
+   small, and its sign is not consistent across periods.** In DEV and VAL
+   2024, Delta-Normal (driven by the shorter 20-session window) is
+   modestly *below* Historical Simulation (e.g. DEV 95%: 201.2 vs.
+   226.8) — the opposite direction from the old narrative. In the 2025
+   HISTORICAL EVALUATION period, Delta-Normal is modestly *above*
+   Historical Simulation (455.2 vs. 408.6 at 95%), consistent with 2025's
+   mean 20-session annualized realized vol (16.33%) running somewhat
+   hotter than DEV's 9-year average (15.15%) and VAL 2024's (11.84%) — but
+   this is now correctly sized as an ~11% effect, not the order-of-magnitude
+   effect previously (mis)attributed to it. **Audited per the critical
+   reporting rule: no sentence in this report now claims 2025 realized vol
+   explains a VaR difference of more than this modest, correctly-scaled
+   amount.**
+2. **Convexity survives as a real, still-supported finding, at its true
+   scale.** Monte Carlo's ES exceeds Delta-Normal's ES in every single
+   period/confidence row post-correction (e.g. DEV 95%: 298.5 vs. 252.3;
+   2025 95%: 671.2 vs. 570.8) — full revaluation continues to price in
+   more tail risk than the linear approximation, as expected from a book
+   with genuine gamma. This part of the original claim is **retained**,
+   simply no longer conflated with the units defect's much larger effect.
+3. **New finding, visible only after correction: in the 2025 period at
+   99% confidence, Historical Simulation's ES (1,789.1) is nearly 2.5x
+   Monte Carlo's (909.4) and over 2x Delta-Normal's (737.5) — the
+   opposite ranking from every other row in this table.** Historical
+   Simulation draws real historical daily returns, including whatever
+   single worst days actually occurred in the trailing 252-session window
+   feeding each 2025 roll; Monte Carlo and Delta-Normal both assume an
+   i.i.d.-normal daily return around a smoothly-estimated 20-session
+   vol, which cannot reproduce a fat realized tail the way resampling
+   actual history can. This was invisible pre-fix (Delta-Normal/Monte
+   Carlo's VaR/ES were inflated ~16–45x by the units defect, dwarfing this
+   effect); it is a genuine, previously-unreported tail-risk finding about
+   this book in this period, not an artifact of the correction itself
+   (Historical Simulation's own numbers did not change).
+
+**Revised conclusion:** running all three methods side-by-side is still
+useful — DEV/VAL show Delta-Normal is not systematically conservative
+relative to Historical Simulation, and 2025 shows Historical Simulation's
+tail (ES at 99%) can be fatter than either parametric method captures. But
+the previously reported "order of magnitude, book-should-not-be-risk-managed-
+off-Delta-Normal-alone" framing significantly overstated the case; the
+methods now agree far more closely than they disagreed under the pre-fix
+numbers, and the genuinely interesting residual finding is the 2025 ES tail
+divergence in item 3 above, not a blanket convexity/vol-window story.
 
 ### 6.3 Kupiec / Christoffersen backtesting
 
@@ -379,15 +449,30 @@ methodology choice was changed in response to these corrected numbers.
 
 ## 7. Cross-study comparison: 2025 vs. DEV/VAL
 
-Both studies point the same direction for 2025: **realized volatility ran
-meaningfully hotter than what a 20-session trailing window (Study 1) or a
-252-session historical resample (Study 2, HS leg) would have priced in**,
-which mechanically increases both the hedging replication error (Study 1
-§5.2) and the Delta-Normal/Monte Carlo VaR/ES levels (Study 2 §6.2)
-relative to DEV/VAL. No claim is made here about *why* 2025 realized vol
-ran hot (e.g., specific macro events) — this study only characterizes the
-downstream effect on hedging error and tail-risk estimates, using the
-data and methodology in scope.
+**Study 1 (hedging error) claim unaffected by the §6.2 volatility-units
+fix** (Study 1's discrete-hedging simulator never calls the code path that
+fix touched): 2025 realized volatility over each 30-day option's life ran
+meaningfully hotter than what the trailing 20 sessions had priced in at
+initiation (§5.2's realized-vs-assumed vol gap), which mechanically
+increases the hedging replication error relative to DEV/VAL.
+
+**Study 2 (VaR/ES) claim corrected 2026-09-18, audited per the
+volatility-units fix's reporting rule.** The prior version of this section
+extended the same "2025 realized vol ran hot" explanation to the
+Delta-Normal/Monte Carlo VaR/ES levels in §6.2, implying a comparably large
+effect. §6.2's correction shows that framing overstated the case: the
+VaR/ES levels reported pre-fix were inflated up to ~16–45x by the
+volatility-units defect, not primarily by 2025's vol regime. The genuine,
+corrected effect is real but modest — 2025's mean 20-session annualized
+realized vol (16.33%) does run somewhat hotter than DEV's (15.15%) and VAL
+2024's (11.84%), consistent with Delta-Normal/Monte Carlo sitting modestly
+above (not below, as in DEV/VAL) Historical Simulation's VaR in the 2025
+period (§6.2, item 1) — an ~11% effect at 95% VaR, not an order-of-magnitude
+one. No claim is made here about *why* 2025 realized vol ran hot (e.g.,
+specific macro events) — this study only characterizes the downstream
+effect on hedging error and tail-risk estimates, using the data and
+methodology in scope, and this section now states that effect's corrected
+size rather than repeating the pre-fix magnitude.
 
 ## 8. Constraints and disclosed limitations (complete list)
 
@@ -431,6 +516,13 @@ data and methodology in scope.
   `monte_carlo_var`, validated to match it to floating-point tolerance —
   not an approximation, but a distinct code path from the one used
   elsewhere in this repository's stress-testing module.
+- **Volatility-units defect disclosure (corrected 2026-09-18, P1):** §6.2
+  discloses in full that Delta-Normal and Monte Carlo VaR/ES were
+  previously computed against an annualized (not daily/per-period)
+  volatility input, overstating both by ~16–45x, while BSM option pricing
+  and Historical Simulation were unaffected throughout. Included here for
+  completeness alongside this section's other disclosed limitations, not
+  as a substitute for §6.2's full explanation.
 
 ## 9. Reproducibility
 
@@ -441,7 +533,7 @@ data and methodology in scope.
 python scripts/run_historical_risk_study_v2.py
 python scripts/run_historical_risk_study_v2.py --skip-dev --skip-validation --allow-2025
 
-pytest tests/test_historical_risk_study_v2.py   # 21 tests
+pytest tests/test_historical_risk_study_v2.py   # 34 tests
 ```
 
 All runs are fully seeded (`seed: 0` in the frozen config; Monte Carlo
