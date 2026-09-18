@@ -126,13 +126,26 @@ match its §7 figures exactly.)
 
 All three source values sha256: `b2c3594445b7f1a726be135cb5cb17f43f69d6a3a938657b3e4faca3dcb62799`.
 
-## §4 — genuine surviving findings (convexity magnitudes)
+## §4 — genuine surviving findings (nonlinear-revaluation / convexity-consistent magnitudes)
 
 The "+18% to +42%" Monte-Carlo-ES-over-Delta-Normal-ES range is
 `(mean_es_corrected[monte_carlo] / mean_es_corrected[delta_normal]) - 1`
 computed for all 6 period × confidence rows from
 `tables/var_es_corrected_vs_prefix.csv`; source artifacts and hashes as in
-the §2.2/§3 table above.
+the §2.2/§3 table above. This range is an observed, artifact-backed gap
+between the two methods' ES; its attribution to convexity specifically is
+stated throughout this pack as "consistent with," not "proven by," since no
+separate gamma/attribution decomposition was performed to isolate
+convexity as the sole cause (see `QUANT-REDTEAM.md`/`CLAIM-REDTEAM.md` for
+this precision fix).
+
+## §5 — figure: `figures/var_es_corrected_vs_superseded_95_all_periods.png`
+
+| Paper item | Source file(s) | JSON key path | sha256 |
+|---|---|---|---|
+| All 18 bars (3 periods × 3 methods × {corrected, pre-fix}, 95% confidence only) | `results/historical_risk/options_hist_risk_v2_{dev_formation,val_2024,historical_evaluation_2025}.json` (corrected) and `results/historical_risk/superseded_volatility_units_fix/options_hist_risk_v2_{dev_formation,val_2024,historical_evaluation_2025}.json` (pre-fix) | `nonlinear_portfolio_study.snapshots[*].var_es.primary.{historical_simulation_primary,delta_normal,monte_carlo}.var` (mean per period/method) | current: DEV `6e840d4934ead483233aa83bebd232abd94b1652ed410f85408a5a898f5e5f26`, VAL `4df81b2d7d6078f9f5bf2cb8526838291d2de249e96fe4cbdd7ed4b2a76ef0b8`, 2025 `b2c3594445b7f1a726be135cb5cb17f43f69d6a3a938657b3e4faca3dcb62799`; pre-fix: DEV `7bd4ea0c3a278c86c31e71fc265fda967d8d8a8ffb3481662f995e95576f459a`, VAL `3a8b75fdd52d17727409b99844426b75fc307a8d38df41f9dabeffd2d89e7918`, 2025 `8449bf6e20d2095ed564b693ff9567f46490b719de384d593078504710909a2f` |
+| Bar heights and numeric value labels | `scripts/build_figures.py`, which imports and calls `build_var_es_table()` from `scripts/build_tables.py` directly (no reimplementation, no independent computation path) | n/a — identical computation to the §2.2/§3 table above | same as `tables/var_es_corrected_vs_prefix.csv`'s `mean_var_corrected` / `mean_var_prefix_superseded` columns, `confidence_key == "primary"` rows only |
+| Rendered PNG file itself | `publication/options-risk-study/figures/var_es_corrected_vs_superseded_95_all_periods.png` | n/a (binary image) | `ee5b2502abb247cfea7d9664b484ad5ffcbc8890596191a47abab72f4a5ec3d4` (computed this session; confirmed byte-identical across repeated regenerations in this environment) |
 
 ## Config and code citations (not data, no sha256 applicable to code)
 
@@ -150,3 +163,4 @@ the §2.2/§3 table above.
 | `monte_carlo_var()` (reference, scalar) | `src/options_risk/risk/var.py` | line 190 |
 | `kupiec_pof_test()` | `src/options_risk/risk/backtesting.py` | line 74 |
 | `christoffersen_independence_test()` | `src/options_risk/risk/backtesting.py` | line 134 |
+| `build_figure()` (figure builder, this pack's own script) | `publication/options-risk-study/scripts/build_figures.py` | imports `build_var_es_table()` from `build_tables.py` in the same directory |

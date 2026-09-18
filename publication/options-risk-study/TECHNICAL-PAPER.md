@@ -41,8 +41,9 @@ most of that divergence was the units defect. The corrected numbers show all
 three methods sitting within the same order of magnitude at every period and
 confidence level, with two much smaller, genuine residual findings that
 survive correction: full-revaluation Monte Carlo's ES exceeds Delta-Normal's
-ES in every period/confidence row (a real convexity effect, at its true,
-much smaller scale), and 2025's realized volatility ran modestly — not
+ES in every period/confidence row (a persistent nonlinear-revaluation
+difference consistent with the book's convexity, at its true, much smaller
+scale), and 2025's realized volatility ran modestly — not
 dramatically — hotter than DEV/VAL, producing an ~11% (not order-of-
 magnitude) shift in Delta-Normal's relative position. Historical Simulation
 and the Kupiec/Christoffersen backtest were never affected by the units
@@ -171,9 +172,10 @@ resulting 95%-confidence Delta-Normal VaR/ES move from a pre-fix
 15.8745 (to 6 significant figures), matching `sqrt(252) = 15.8745...`
 deterministically, because Delta-Normal VaR is linear in factor vol. Monte
 Carlo's VaR at the same roll falls from 7,039.23 to 226.61, a ~31.1x
-reduction (sub-linear, because the full-revaluation book has genuine
-gamma). Historical Simulation's VaR/ES at that same roll (137.71 / 192.51)
-is byte-identical before and after.
+reduction — sub-linear relative to Delta-Normal's exact `sqrt(252)` ratio,
+consistent with (not a formal decomposition proving) the full-revaluation
+book's nonlinearity/convexity. Historical Simulation's VaR/ES at that same
+roll (137.71 / 192.51) is byte-identical before and after.
 
 ---
 
@@ -305,9 +307,10 @@ column (15.875 in every Delta-Normal row, to 3 decimal places) and in the
 dedicated regression test
 `tests/test_historical_risk_study_v2.py::test_deterministic_linear_portfolio_var_scales_by_sqrt_252`.
 Monte Carlo's VaR fell by a comparable ~35–41x across periods and
-confidence levels (sub-linear relative to Delta-Normal because the
-full-revaluation book has genuine gamma, but still overwhelmingly dominated
-by the same units error, not by vol-regime or convexity effects). **The
+confidence levels (sub-linear relative to Delta-Normal, consistent with the
+full-revaluation book's nonlinearity rather than Delta-Normal's exact
+linear scaling, but still overwhelmingly dominated by the same units error,
+not by vol-regime or convexity effects). **The
 "recent vol running hot" and "convexity" explanations were never the
 dominant effect on the size of the gap reported pre-fix — the
 volatility-units defect was.** This publication pack does not repeat, soften,
@@ -336,15 +339,23 @@ period and confidence level:
    hashes). No sentence in this paper attributes more than this modest,
    correctly-scaled amount to 2025's realized-vol level.
 
-2. **Convexity survives as a real, genuine finding, at its true (much
-   smaller) scale.** Monte Carlo's ES exceeds Delta-Normal's ES in **every
-   single** period/confidence row post-correction: DEV 95% (298.5 vs.
-   252.3), DEV 99% (405.3 vs. 326.0), VAL 2024 95% (333.6 vs. 252.2), VAL
-   2024 99% (462.9 vs. 325.8), 2025 95% (671.2 vs. 570.8), 2025 99% (909.4
-   vs. 737.5) — full revaluation continues to price in more tail risk than
-   the linear approximation, exactly as expected from a book with genuine
-   gamma. This part of the original claim is retained, simply no longer
-   conflated with the units defect's much larger effect.
+2. **A persistent nonlinear-revaluation difference survives, at its true
+   (much smaller) scale, consistent with convexity.** Monte Carlo's ES
+   exceeds Delta-Normal's ES in **every single** period/confidence row
+   post-correction: DEV 95% (298.5 vs. 252.3), DEV 99% (405.3 vs. 326.0),
+   VAL 2024 95% (333.6 vs. 252.2), VAL 2024 99% (462.9 vs. 325.8), 2025 95%
+   (671.2 vs. 570.8), 2025 99% (909.4 vs. 737.5) — full revaluation prices
+   in more tail risk than the linear approximation in every single row.
+   This is compatible with, and expected from, the book's convexity (every
+   roll's standardized portfolio has genuine, nonzero gamma — see each
+   snapshot's own `portfolio_greeks.gamma` field), but this pack has not run
+   a separate gamma/attribution decomposition isolating convexity as the
+   sole or dominant cause of this specific gap, so it is reported here as an
+   observed, persistent difference between the two methods that is
+   consistent with convexity, not as a proven causal decomposition. This
+   part of the original claim is retained at its correct, much smaller
+   scale and reframed accordingly; it is no longer conflated with the units
+   defect's much larger effect.
 
 3. **A genuine finding visible only after correction: in the 2025 period at
    99% confidence, Historical Simulation's ES (1,789.1) exceeds both
@@ -390,13 +401,16 @@ convexity/vol-window story.
 
 Consolidating §3.1 and §2.1:
 
-- **Convexity effect (Study 2, retained, correctly scaled)**: full-
-  revaluation Monte Carlo's ES exceeds the linear Delta-Normal
-  approximation's ES in all 6 period × confidence rows, by amounts ranging
-  from roughly +18% (2025 95%: 671.2 vs. 570.8, the smallest gap in the
-  table) to roughly +42% (VAL 2024 99%: 462.9 vs. 325.8, the largest) — a
-  real, modest, and consistent effect, not the multi-thousand-percent gap
-  the pre-fix numbers implied.
+- **Nonlinear-revaluation ES premium, consistent with convexity (Study 2,
+  retained, correctly scaled)**: full-revaluation Monte Carlo's ES exceeds
+  the linear Delta-Normal approximation's ES in all 6 period × confidence
+  rows, by amounts ranging from roughly +18% (2025 95%: 671.2 vs. 570.8,
+  the smallest gap in the table) to roughly +42% (VAL 2024 99%: 462.9 vs.
+  325.8, the largest) — a real, modest, and consistent effect, not the
+  multi-thousand-percent gap the pre-fix numbers implied. This is reported
+  as an observed, persistent difference between the two methods that is
+  compatible with the book's convexity; no separate gamma/attribution
+  decomposition was performed to isolate convexity as its sole cause.
 - **2025 realized vol running modestly hotter (Study 1 and Study 2,
   retained, correctly scaled)**: 2025's mean 20-session annualized realized
   vol (16.33%) exceeds DEV's (15.15%) and VAL 2024's (11.84%) by a
@@ -461,8 +475,8 @@ Carlo-vs-Historical-Simulation divergence originally attributed to vol
 regime and convexity was, in fact, mostly a units-conversion defect. With
 that defect corrected, all three VaR/ES methods agree to within a
 comparable order of magnitude, and the residual findings that survive
-correction — a modest, consistent convexity premium in Monte Carlo's ES,
-and a modest 2025 vol elevation with a genuinely fat realized 99% tail — are
-smaller, more defensible, and more useful than the withdrawn narrative they
-replace. Every number in this paper traces to a committed artifact listed
+correction — a modest, persistent nonlinear-revaluation premium in Monte
+Carlo's ES consistent with convexity, and a modest 2025 vol elevation with
+a genuinely fat realized 99% tail — are smaller, more defensible, and more
+useful than the withdrawn narrative they replace. Every number in this paper traces to a committed artifact listed
 in `RESULT-SOURCE-MAP.md`.

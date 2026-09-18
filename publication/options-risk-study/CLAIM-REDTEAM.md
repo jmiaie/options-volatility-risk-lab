@@ -150,6 +150,52 @@ precise phrasing as if it were this pack's own independently-verified
 conclusion. See `CITATION-REDTEAM.md` CIT-1 for the citation-accuracy
 framing of the same finding.
 
+### CL-4 (P2, externally identified by the orchestrating session in a follow-up review — not found by this pack's own first-pass red-team) — unproven causal attribution to convexity
+
+**What was found**: `TECHNICAL-PAPER.md` §3.1 item 2 originally read
+"Convexity survives as a real, genuine finding, at its true (much smaller)
+scale," and stated that Monte Carlo's ES exceeding Delta-Normal's ES in
+every row was "exactly as expected from a book with genuine gamma."
+Similar phrasing ("because the full-revaluation book has genuine gamma")
+also appeared in §1.3's case-study paragraph, §3's Monte Carlo ratio
+discussion, the §4 bullet heading ("Convexity effect"), the conclusion, and
+in `CASE-STUDY.md` §4/§5. The artifacts genuinely establish: (a) Monte
+Carlo's full-revaluation ES exceeds Delta-Normal's linear ES in every
+accepted period/confidence row, and (b) the standardized book has nonzero
+gamma at every roll (`portfolio_greeks.gamma`, directly in the artifacts).
+Both are true and artifact-backed. But this pack never ran a separate
+gamma/attribution decomposition isolating convexity as the sole or
+dominant cause of that specific ES gap — "compatible with convexity" and
+"proven to be caused by convexity" are different claims, and the original
+phrasing ("genuine finding," "exactly as expected," "because... gamma")
+read as the latter.
+
+**Why it matters**: this is exactly the category of overreach this pack
+exists to police (the whole point of the central withdrawal is that a
+plausible-sounding mechanism is not the same as a proven one) — leaving an
+unproven "because convexity" causal claim standing, even for a real and
+much smaller effect than the withdrawn OOM narrative, would be inconsistent
+with that standard applied to itself.
+
+**Fixed before finalizing**: yes, throughout. Every instance of
+"convexity/gamma [is/was] the cause" was reworded to "consistent with
+convexity" / "compatible with the book's convexity" / "a persistent
+nonlinear-revaluation difference," with an explicit note that no separate
+gamma-attribution decomposition was performed — in `TECHNICAL-PAPER.md`
+(abstract, §1.3, §3, §3.1 item 2, §4, §6 conclusion), `CASE-STUDY.md` (§4,
+§5), `CLAIM-REGISTER.md` (C5, C10), and `RESULT-SOURCE-MAP.md` (§4 heading).
+The measured +18%/+42% ES-gap figures and the ~35–41x Monte Carlo VaR-ratio
+range themselves were **not** changed — those are artifact-backed
+observations, independent of what causes them, and remain exactly as
+computed. Item 3 of §3.1 (the 2025 HS-vs-parametric ES tail-ranking
+finding) was reviewed against the same standard and left unchanged: its
+explanation ("Historical Simulation draws real historical daily returns...
+Monte Carlo and Delta-Normal both assume an iid-normal daily return...")
+is a direct structural fact about what each method's own definition
+assumes (documented in each method's own docstring/methodology, not
+inferred from the data), not an attribution requiring a decomposition to
+prove — it does not invoke convexity as an explanation at all.
+
 ### CL-3 (P2) — checked for asymmetric caveat treatment between the two corrections
 
 The pack discusses two distinct defect corrections (the volatility-units
@@ -169,8 +215,17 @@ re-litigated here." No fix needed — already adequately separated.
 |---|---:|---:|---|
 | P0 | 0 | — | — |
 | P1 | 1 (CL-1, = QT-1) | 1 | — |
-| P2 | 2 (CL-2, CL-3) | CL-2 addressed within pack scope; CL-3 required no change | CL-2: cannot edit the cited source document (standing prohibition) — addressed by stating the more precise ratio in this pack's own text instead |
+| P2 | 3 (CL-2, CL-3, CL-4) | CL-2 addressed within pack scope; CL-3 required no change; CL-4 fixed throughout | CL-2: cannot edit the cited source document (standing prohibition) — addressed by stating the more precise ratio in this pack's own text instead |
 
 **Both mandatory checks (withdrawn-OOM-narrative survival; deployed-trading/
 real-P&L implication) came back clean: zero occurrences of either failure
 mode anywhere in this pack.**
+
+**Provenance note on CL-4**: unlike every other finding in this pack's three
+red-team documents, CL-4 (unproven causal attribution to convexity) was
+**not** caught by this pack's own first-pass red-team review — it was
+identified by the orchestrating session in an independent follow-up review
+and sent back as a required fix. It is recorded here, with full detail, in
+the same format as this pack's self-identified findings, both because it
+belongs in this document's permanent record and so a reviewer can see that
+an external catch was integrated rather than only self-reported findings.

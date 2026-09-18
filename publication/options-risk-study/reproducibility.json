@@ -18,9 +18,10 @@
       "PyYAML": "6.0.3",
       "pytest": "9.1.1",
       "mypy": "2.3.1",
-      "ruff": "0.16.8"
+      "ruff": "0.16.8",
+      "matplotlib": "3.11.2"
     },
-    "note": "Versions read directly from `pip freeze` in the provided venv in this session -- not asserted from memory. matplotlib is NOT installed in this venv; see D10-STATUS.md for the figure-generation fallback."
+    "note": "Versions read directly from `pip freeze`/`pip show` in the provided venv in this session -- not asserted from memory. matplotlib was installed in this venv in a follow-up remediation pass (pip install matplotlib, resolved to 3.11.2) specifically to generate the required figure; it was not present in the venv when this pack was first built. Pin matplotlib==3.11.2 when regenerating the figure to maximize byte-for-byte reproducibility (see publication_pack_derived_artifacts.figure_builder_script below)."
   },
   "experiment_runner": {
     "script": "scripts/run_historical_risk_study_v2.py",
@@ -141,7 +142,10 @@
   },
   "publication_pack_derived_artifacts": {
     "table_builder_script": "publication/options-risk-study/scripts/build_tables.py",
+    "figure_builder_script": "publication/options-risk-study/scripts/build_figures.py",
     "how_to_regenerate": "source /tmp/optionsrisk-venv/bin/activate && cd /home/user/options-volatility-risk-lab && python publication/options-risk-study/scripts/build_tables.py",
+    "how_to_regenerate_figure_only": "source /tmp/optionsrisk-venv/bin/activate && cd /home/user/options-volatility-risk-lab && python publication/options-risk-study/scripts/build_figures.py",
+    "note_on_entry_points": "build_tables.py's own main() calls build_figures.py's build_figure() at the end, so a single invocation of build_tables.py regenerates every table AND the figure. build_figures.py imports build_var_es_table() directly from build_tables.py (no reimplementation), so the figure's bar heights can never silently diverge from the CSV table's numbers.",
     "inputs": "Reads only the already-committed artifacts listed in output_artifact_hashes and input_dataset_hashes above, plus the config file. No network calls. No re-execution of scripts/run_historical_risk_study_v2.py.",
     "outputs": [
       "publication/options-risk-study/tables/var_es_corrected_vs_prefix.csv",
@@ -149,8 +153,14 @@
       "publication/options-risk-study/tables/kupiec_christoffersen.csv",
       "publication/options-risk-study/tables/case_study_dev_first_roll.json",
       "publication/options-risk-study/tables/dataset_and_artifact_hashes.json",
-      "publication/options-risk-study/figures/var_es_before_after_2025_95.png (only if matplotlib is importable; skipped with a note in this session -- see D10-STATUS.md)"
-    ]
+      "publication/options-risk-study/figures/var_es_corrected_vs_superseded_95_all_periods.png"
+    ],
+    "figure_output": {
+      "path": "publication/options-risk-study/figures/var_es_corrected_vs_superseded_95_all_periods.png",
+      "sha256_computed_this_session": "ee5b2502abb247cfea7d9664b484ad5ffcbc8890596191a47abab72f4a5ec3d4",
+      "title": "Corrected vs. superseded 95% VaR by method, DEV / VAL 2024 / 2025",
+      "determinism_note": "Confirmed byte-identical (sha256 match) across repeated regenerations in this same environment/matplotlib version in this session. savefig() metadata fields (Software/Creation Time/Author/Description) are explicitly blanked to avoid embedding a variable timestamp or matplotlib-version string in the PNG's own metadata chunk. Cross-environment byte-identity additionally depends on the exact matplotlib/freetype/fontconfig build, which the publication-pack.yml CI workflow pins as closely as possible and falls back to a content-level check with disclosure if genuine rendering differences persist -- see .github/workflows/publication-pack.yml."
+    }
   },
   "test_suite": {
     "relevant_files": [

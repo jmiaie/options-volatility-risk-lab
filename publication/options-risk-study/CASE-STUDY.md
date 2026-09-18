@@ -121,7 +121,7 @@ confirmed independently by the dedicated regression test
 | Method | Pre-fix VaR (95%) | Post-fix VaR (95%) | Ratio (pre/post) |
 |---|---:|---:|---:|
 | Delta-Normal | 3,382.80 | 213.10 | 15.875 (exactly `sqrt(252)`) |
-| Monte Carlo (50k, seed 0) | 7,039.23 | 226.61 | 31.06 (sub-linear — the full-revaluation book has genuine gamma, so the relationship between input vol and output VaR is not perfectly linear) |
+| Monte Carlo (50k, seed 0) | 7,039.23 | 226.61 | 31.06 (sub-linear relative to Delta-Normal's exact ratio — consistent with, though not a formal decomposition proving, the full-revaluation book's nonlinearity/convexity) |
 | Historical Simulation (252d) | 137.71 | 137.71 | 1.000 (byte-identical — Historical Simulation consumes no vol parameter at all) |
 
 `publication/options-risk-study/tables/case_study_dev_first_roll.json`'s
@@ -138,9 +138,12 @@ in `factor_vol` holds everywhere — see
 `publication/options-risk-study/tables/var_es_corrected_vs_prefix.csv`'s
 `var_ratio_prefix_over_corrected` column, which reads `15.875` for every
 `delta_normal` row across all three periods and both confidence levels.
-Monte Carlo's ratio varies roll-to-roll and period-to-period (because the
-full-revaluation book's convexity makes the input-vol-to-output-VaR mapping
-nonlinear) but stays in the same broad ~35–41x range throughout (also in
+Monte Carlo's ratio varies roll-to-roll and period-to-period — consistent
+with the full-revaluation book's nonlinearity (convexity) making the
+input-vol-to-output-VaR mapping non-proportional, though this observation
+alone does not decompose how much of that variation owes to convexity
+specifically versus other nonlinear-revaluation effects — but stays in the
+same broad ~35–41x range throughout (also in
 that same CSV). Historical Simulation is unaffected everywhere, at every
 roll, in every period — confirmed by the "byte-identical outside
 `var_es.{primary,secondary}.{delta_normal,monte_carlo}`" field-level diff

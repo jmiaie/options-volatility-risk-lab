@@ -141,6 +141,22 @@ present verbatim in both `TECHNICAL-PAPER.md` and `SOURCE-GATE.md`.
   VAL 2024, and all four superseded-set hashes were not supplied and were
   computed fresh).
 
+## Round-2 addition — figure data-integrity check
+
+`figures/var_es_corrected_vs_superseded_95_all_periods.png` (added in the
+round-2 remediation pass, see `D10-STATUS.md` §0) was checked for the same
+class of issue this document exists to catch: does the figure show numbers
+that agree with the already-verified table? `scripts/build_figures.py`
+imports `build_var_es_table()` directly from `scripts/build_tables.py`
+rather than recomputing anything independently, so by construction the
+figure's 18 bar heights are the identical `mean_var_corrected` /
+`mean_var_prefix_superseded` values already checked row-by-row earlier in
+this document — confirmed by reading `build_figures.py`'s source (it never
+opens a JSON artifact itself) and by regenerating the figure and diffing
+its sha256 against the committed file (byte-identical). No new numeric
+claim was introduced by the figure; it is a visualization of the existing,
+already-verified table.
+
 ## Summary
 
 | Severity | Count | Fixed | Not fixed (rationale) |
@@ -150,3 +166,5 @@ present verbatim in both `TECHNICAL-PAPER.md` and `SOURCE-GATE.md`.
 | P2 | 2 (QT-2, QT-3) | 2 | — |
 
 No P0 findings. All P1/P2 findings were fixed before finalizing this pack.
+The round-2 figure addition introduced no new quantitative claims requiring
+a fresh finding.
