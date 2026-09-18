@@ -1,0 +1,32 @@
+{
+  "S0": 163.2582550048828,
+  "check_daily_equals_annualized_over_sqrt252": 0.01483546539740085,
+  "confidence_95_corrected": {
+    "delta_normal_es": 267.23146035375765,
+    "delta_normal_var": 213.09638220047478,
+    "historical_simulation_es": 192.50769720055962,
+    "historical_simulation_var": 137.70867610227077,
+    "monte_carlo_es": 292.3088305496678,
+    "monte_carlo_var": 226.6097062463822
+  },
+  "confidence_95_prefix_superseded": {
+    "delta_normal_es": 4242.167919531957,
+    "delta_normal_var": 3382.8001955401633,
+    "historical_simulation_es": 192.50769720055962,
+    "historical_simulation_var": 137.70867610227077,
+    "monte_carlo_es": 9686.100809669098,
+    "monte_carlo_var": 7039.229298223088
+  },
+  "daily_factor_vol_20d": 0.01483546539740085,
+  "delta_normal_prefix_over_corrected_var_ratio": 15.874507866387543,
+  "historical_simulation_unchanged": true,
+  "monte_carlo_prefix_over_corrected_var_ratio": 31.063229438944074,
+  "portfolio_dollar_delta": -8732.681984965413,
+  "realized_vol_20d_annualized": 0.23550571215256,
+  "roll_date": "2016-02-01",
+  "source_current_artifact": "results/historical_risk/options_hist_risk_v2_dev_formation.json",
+  "source_current_sha256": "6e840d4934ead483233aa83bebd232abd94b1652ed410f85408a5a898f5e5f26",
+  "source_prefix_artifact": "results/historical_risk/superseded_volatility_units_fix/options_hist_risk_v2_dev_formation.json",
+  "source_prefix_sha256": "7bd4ea0c3a278c86c31e71fc265fda967d8d8a8ffb3481662f995e95576f459a",
+  "sqrt_252": 15.874507866387544
+}

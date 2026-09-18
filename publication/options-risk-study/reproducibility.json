@@ -1,0 +1,168 @@
+{
+  "_meta": {
+    "purpose": "D10-C publication pack reproducibility manifest. Documents the exact commands that, run against the frozen local data described in data/manifests/, would regenerate the current artifacts this pack cites. This publication task did NOT execute any of the commands below -- all artifacts are already-committed D9-C outputs, read-only, from repository commit db9cf44a04f1282f81ed11c7d145b5afe2db8d95.",
+    "repository": "jmiaie/options-volatility-risk-lab",
+    "publication_branch": "publication/options-risk-study",
+    "source_commit": "db9cf44a04f1282f81ed11c7d145b5afe2db8d95",
+    "source_commit_parent": "53277193f29a613d39d7e67983298eb832cf03d8",
+    "no_rerun_performed": true,
+    "no_2025_rerun_performed": true
+  },
+  "environment": {
+    "python_version": "3.11.15",
+    "venv": "/tmp/optionsrisk-venv",
+    "key_packages": {
+      "numpy": "2.4.6",
+      "pandas": "3.0.5",
+      "scipy": "1.17.1",
+      "PyYAML": "6.0.3",
+      "pytest": "9.1.1",
+      "mypy": "2.3.1",
+      "ruff": "0.16.8"
+    },
+    "note": "Versions read directly from `pip freeze` in the provided venv in this session -- not asserted from memory. matplotlib is NOT installed in this venv; see D10-STATUS.md for the figure-generation fallback."
+  },
+  "experiment_runner": {
+    "script": "scripts/run_historical_risk_study_v2.py",
+    "config_flag_source": "scripts/run_historical_risk_study_v2.py's own argparse block (read directly, not guessed)",
+    "flags": {
+      "--config": {
+        "type": "path",
+        "default": "configs/experiments/options_historical_risk_study_v2.yaml",
+        "used_value": "configs/experiments/options_historical_risk_study_v2.yaml (default)"
+      },
+      "--raw-dir": {
+        "type": "path",
+        "default": null,
+        "note": "Points at data/raw/{dataset_id}/ inputs; not committed to this public repo (gitignored)."
+      },
+      "--results-dir": {
+        "type": "path",
+        "default": "results/historical_risk"
+      },
+      "--ledger": {
+        "type": "path",
+        "default": "research/experiment-ledger.csv",
+        "note": "NOT touched by this publication pack (standing prohibition)."
+      },
+      "--branch": {
+        "type": "string",
+        "default": "research/historical-risk-validation"
+      },
+      "--allow-2025": {
+        "type": "store_true",
+        "note": "Required to include the 2025 HISTORICAL EVALUATION period; refused unless the config's status is 'frozen-for-holdout' (it is)."
+      },
+      "--skip-dev": {
+        "type": "store_true"
+      },
+      "--skip-validation": {
+        "type": "store_true"
+      },
+      "--mc-n-sims": {
+        "type": "int",
+        "default": null,
+        "note": "Overrides Monte Carlo n_sims (spec default 50000); NOT used for any committed artifact -- all committed artifacts use the full spec value of 50000."
+      }
+    },
+    "commands_that_would_regenerate_the_committed_artifacts": [
+      "python scripts/run_historical_risk_study_v2.py",
+      "python scripts/run_historical_risk_study_v2.py --skip-dev --skip-validation --allow-2025"
+    ],
+    "commands_source": "research/historical-volatility-and-tail-risk.md, top matter and §9 (verbatim, cross-checked against the script's own argparse block in this session)",
+    "seed": 0,
+    "monte_carlo_seed": 0,
+    "monte_carlo_n_sims": 50000,
+    "not_executed_in_this_session": true,
+    "why_not_executed": "D10-C is a publication/communication phase; no empirical rerun of any evaluation period, including 2025, is permitted. This section is transcribed and cross-checked for documentation purposes only."
+  },
+  "input_dataset_hashes": {
+    "yf_spy_daily_2015_2025_v1": {
+      "manifest_path": "data/manifests/yf_spy_daily_2015_2025_v1.json",
+      "dataset_canonical_sha256": "0c83ab20bf76ec39b97855ac393b7bc74363bd4ff373381f0a92842a2c7c6a63",
+      "reuse_provenance": "REUSED, not freshly acquired in this repository -- see SOURCE-GATE.md field 4 and the manifest's own acquisition_provenance field for full disclosure."
+    },
+    "fred_dgs3mo_daily_2015_2025_v1": {
+      "manifest_path": "data/manifests/fred_dgs3mo_daily_2015_2025_v1.json",
+      "dataset_canonical_sha256": "31ad77f46517b4a51a2313ad86524d3f0f07634e4ca450ba2c387adbddf42a9f"
+    },
+    "fred_vixcls_daily_2015_2025_v1": {
+      "manifest_path": "data/manifests/fred_vixcls_daily_2015_2025_v1.json",
+      "dataset_canonical_sha256": "b727ab1751d4c9c180159cc1eb3358a2fef6ebf1abe15c74adb46f93019753b1"
+    }
+  },
+  "config_hash": {
+    "path": "configs/experiments/options_historical_risk_study_v2.yaml",
+    "sha256_computed_this_session": "4bd18561466b5f85b09031868322929c8ad28bd9c2da9358ac3a106fdb725181"
+  },
+  "output_artifact_hashes": {
+    "current_authoritative": {
+      "dev_formation": {
+        "path": "results/historical_risk/options_hist_risk_v2_dev_formation.json",
+        "sha256_computed_this_session": "6e840d4934ead483233aa83bebd232abd94b1652ed410f85408a5a898f5e5f26"
+      },
+      "val_2024": {
+        "path": "results/historical_risk/options_hist_risk_v2_val_2024.json",
+        "sha256_computed_this_session": "4df81b2d7d6078f9f5bf2cb8526838291d2de249e96fe4cbdd7ed4b2a76ef0b8"
+      },
+      "historical_evaluation_2025": {
+        "path": "results/historical_risk/options_hist_risk_v2_historical_evaluation_2025.json",
+        "sha256_computed_this_session": "b2c3594445b7f1a726be135cb5cb17f43f69d6a3a938657b3e4faca3dcb62799"
+      }
+    },
+    "superseded_volatility_units_fix": {
+      "dev_formation": {
+        "path": "results/historical_risk/superseded_volatility_units_fix/options_hist_risk_v2_dev_formation.json",
+        "sha256_computed_this_session": "7bd4ea0c3a278c86c31e71fc265fda967d8d8a8ffb3481662f995e95576f459a"
+      },
+      "val_2024": {
+        "path": "results/historical_risk/superseded_volatility_units_fix/options_hist_risk_v2_val_2024.json",
+        "sha256_computed_this_session": "3a8b75fdd52d17727409b99844426b75fc307a8d38df41f9dabeffd2d89e7918"
+      },
+      "historical_evaluation_2025": {
+        "path": "results/historical_risk/superseded_volatility_units_fix/options_hist_risk_v2_historical_evaluation_2025.json",
+        "sha256_computed_this_session": "8449bf6e20d2095ed564b693ff9567f46490b719de384d593078504710909a2f"
+      }
+    },
+    "superseded_next_session_backtest_fix": {
+      "dev_formation": {
+        "path": "results/historical_risk/superseded_next_session_backtest_fix/options_hist_risk_v2_dev_formation.json",
+        "sha256_computed_this_session": "977b65a5c5ca2c9530e2f5f5759e44189740b9f09c7d2b8a10a33a7acdc64895"
+      },
+      "val_2024": {
+        "path": "results/historical_risk/superseded_next_session_backtest_fix/options_hist_risk_v2_val_2024.json",
+        "sha256_computed_this_session": "3a8b75fdd52d17727409b99844426b75fc307a8d38df41f9dabeffd2d89e7918"
+      },
+      "historical_evaluation_2025": {
+        "path": "results/historical_risk/superseded_next_session_backtest_fix/options_hist_risk_v2_historical_evaluation_2025.json",
+        "sha256_computed_this_session": "cb44ec98d871e553209a25c14d0cbd776382a0c16990c2a2c01bb2463348ca9a"
+      }
+    }
+  },
+  "publication_pack_derived_artifacts": {
+    "table_builder_script": "publication/options-risk-study/scripts/build_tables.py",
+    "how_to_regenerate": "source /tmp/optionsrisk-venv/bin/activate && cd /home/user/options-volatility-risk-lab && python publication/options-risk-study/scripts/build_tables.py",
+    "inputs": "Reads only the already-committed artifacts listed in output_artifact_hashes and input_dataset_hashes above, plus the config file. No network calls. No re-execution of scripts/run_historical_risk_study_v2.py.",
+    "outputs": [
+      "publication/options-risk-study/tables/var_es_corrected_vs_prefix.csv",
+      "publication/options-risk-study/tables/hedging_experiment_summary.csv",
+      "publication/options-risk-study/tables/kupiec_christoffersen.csv",
+      "publication/options-risk-study/tables/case_study_dev_first_roll.json",
+      "publication/options-risk-study/tables/dataset_and_artifact_hashes.json",
+      "publication/options-risk-study/figures/var_es_before_after_2025_95.png (only if matplotlib is importable; skipped with a note in this session -- see D10-STATUS.md)"
+    ]
+  },
+  "test_suite": {
+    "relevant_files": [
+      "tests/test_historical_risk_study_v2.py"
+    ],
+    "relevant_classes": [
+      "TestFullRevaluationMcVarEs",
+      "TestNextSessionBacktestAlignment",
+      "TestVolatilityUnitsFix"
+    ],
+    "relevant_regression_test": "TestVolatilityUnitsFix::test_deterministic_linear_portfolio_var_scales_by_sqrt_252",
+    "full_suite_command": "source /tmp/optionsrisk-venv/bin/activate && cd /home/user/options-volatility-risk-lab && python -m pytest tests/ -q",
+    "note": "Run once in this session as part of the D10-C sanity check; see D10-STATUS.md for the observed pass/fail counts. This publication pack changes zero test files."
+  }
+}

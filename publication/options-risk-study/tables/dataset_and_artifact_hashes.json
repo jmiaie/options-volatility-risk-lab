@@ -1,0 +1,62 @@
+{
+  "config": {
+    "path": "configs/experiments/options_historical_risk_study_v2.yaml",
+    "sha256_computed": "4bd18561466b5f85b09031868322929c8ad28bd9c2da9358ac3a106fdb725181"
+  },
+  "current_artifacts": {
+    "dev_formation": {
+      "path": "results/historical_risk/options_hist_risk_v2_dev_formation.json",
+      "sha256_computed": "6e840d4934ead483233aa83bebd232abd94b1652ed410f85408a5a898f5e5f26"
+    },
+    "historical_evaluation_2025": {
+      "path": "results/historical_risk/options_hist_risk_v2_historical_evaluation_2025.json",
+      "sha256_computed": "b2c3594445b7f1a726be135cb5cb17f43f69d6a3a938657b3e4faca3dcb62799"
+    },
+    "val_2024": {
+      "path": "results/historical_risk/options_hist_risk_v2_val_2024.json",
+      "sha256_computed": "4df81b2d7d6078f9f5bf2cb8526838291d2de249e96fe4cbdd7ed4b2a76ef0b8"
+    }
+  },
+  "datasets": {
+    "fred_dgs3mo_daily_2015_2025_v1": {
+      "dataset_canonical_sha256": "31ad77f46517b4a51a2313ad86524d3f0f07634e4ca450ba2c387adbddf42a9f",
+      "manifest_path": "data/manifests/fred_dgs3mo_daily_2015_2025_v1.json"
+    },
+    "fred_vixcls_daily_2015_2025_v1": {
+      "dataset_canonical_sha256": "b727ab1751d4c9c180159cc1eb3358a2fef6ebf1abe15c74adb46f93019753b1",
+      "manifest_path": "data/manifests/fred_vixcls_daily_2015_2025_v1.json"
+    },
+    "yf_spy_daily_2015_2025_v1": {
+      "dataset_canonical_sha256": "0c83ab20bf76ec39b97855ac393b7bc74363bd4ff373381f0a92842a2c7c6a63",
+      "manifest_path": "data/manifests/yf_spy_daily_2015_2025_v1.json"
+    }
+  },
+  "superseded_next_session_backtest_fix": {
+    "dev_formation": {
+      "path": "results/historical_risk/superseded_next_session_backtest_fix/options_hist_risk_v2_dev_formation.json",
+      "sha256_computed": "977b65a5c5ca2c9530e2f5f5759e44189740b9f09c7d2b8a10a33a7acdc64895"
+    },
+    "historical_evaluation_2025": {
+      "path": "results/historical_risk/superseded_next_session_backtest_fix/options_hist_risk_v2_historical_evaluation_2025.json",
+      "sha256_computed": "cb44ec98d871e553209a25c14d0cbd776382a0c16990c2a2c01bb2463348ca9a"
+    },
+    "val_2024": {
+      "path": "results/historical_risk/superseded_next_session_backtest_fix/options_hist_risk_v2_val_2024.json",
+      "sha256_computed": "3a8b75fdd52d17727409b99844426b75fc307a8d38df41f9dabeffd2d89e7918"
+    }
+  },
+  "superseded_volatility_units_fix": {
+    "dev_formation": {
+      "path": "results/historical_risk/superseded_volatility_units_fix/options_hist_risk_v2_dev_formation.json",
+      "sha256_computed": "7bd4ea0c3a278c86c31e71fc265fda967d8d8a8ffb3481662f995e95576f459a"
+    },
+    "historical_evaluation_2025": {
+      "path": "results/historical_risk/superseded_volatility_units_fix/options_hist_risk_v2_historical_evaluation_2025.json",
+      "sha256_computed": "8449bf6e20d2095ed564b693ff9567f46490b719de384d593078504710909a2f"
+    },
+    "val_2024": {
+      "path": "results/historical_risk/superseded_volatility_units_fix/options_hist_risk_v2_val_2024.json",
+      "sha256_computed": "3a8b75fdd52d17727409b99844426b75fc307a8d38df41f9dabeffd2d89e7918"
+    }
+  }
+}
