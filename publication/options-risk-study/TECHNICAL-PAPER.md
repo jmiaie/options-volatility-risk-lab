@@ -425,10 +425,10 @@ Consolidating §3.1 and §2.1:
   modestly above, rather than below, Historical Simulation in 2025 only
   (§2.1 mean-realized-vol figures section of `RESULT-SOURCE-MAP.md`).
 - **2025's fat realized tail at 99% ES (Study 2, new finding, correctly
-  visible only post-fix)**: Historical Simulation's 99% ES materially
-  exceeds both parametric methods' 99% ES in the 2025 period only (§3.1
-  item 3) — the one row in the entire table where the method ranking
-  flips relative to every other period/confidence combination.
+  visible only post-fix)**: Historical Simulation's ES is the highest of the
+  three methods in **all six** period/confidence cells (§3.1 item 3). What is
+  unique to 2025-99% is the *size* of the gap — ≈1.97x Monte Carlo's and
+  ≈2.43x Delta-Normal's ES — not the ranking direction.
 - **No claim is made about *why* 2025 realized vol ran hot** (e.g., specific
   macro events) — this study characterizes the downstream effect on
   hedging error and tail-risk estimates using the data and methodology in
