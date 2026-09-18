@@ -75,7 +75,7 @@ daily_factor_vol20 = annualized_vol20 / sqrt(252)
 The snapshot's own `daily_factor_vol_20d` field confirms this exact value:
 
 ```
-daily_factor_vol_20d = 0.014836  (more precisely: 0.01483546539740085)
+daily_factor_vol_20d = 0.014835  (more precisely: 0.01483546539740085)
 ```
 
 `publication/options-risk-study/tables/case_study_dev_first_roll.json`'s
@@ -102,7 +102,7 @@ scaled by the normal-distribution quantile/tail factors at 95% confidence
 `factor_vol`, so any change in `factor_vol` produces an exactly
 proportional change in the output.
 
-| | Pre-fix (superseded) `factor_vol` = 0.235506 (annualized, wrong) | Post-fix (corrected) `factor_vol` = 0.014836 (daily, correct) |
+| | Pre-fix (superseded) `factor_vol` = 0.235506 (annualized, wrong) | Post-fix (corrected) `factor_vol` = 0.014835 (daily, correct) |
 |---|---:|---:|
 | Delta-Normal VaR (95%) | **3,382.80** | **213.10** |
 | Delta-Normal ES (95%) | **4,242.17** | **267.23** |
@@ -121,7 +121,7 @@ confirmed independently by the dedicated regression test
 | Method | Pre-fix VaR (95%) | Post-fix VaR (95%) | Ratio (pre/post) |
 |---|---:|---:|---:|
 | Delta-Normal | 3,382.80 | 213.10 | 15.875 (exactly `sqrt(252)`) |
-| Monte Carlo (50k, seed 0) | 7,039.23 | 226.61 | 31.06 (sub-linear relative to Delta-Normal's exact ratio — consistent with, though not a formal decomposition proving, the full-revaluation book's nonlinearity/convexity) |
+| Monte Carlo (50k, seed 0) | 7,039.23 | 226.61 | 31.06 (super-linear relative to Delta-Normal's exact ratio — consistent with, though not a formal decomposition proving, the full-revaluation book's nonlinearity/convexity) |
 | Historical Simulation (252d) | 137.71 | 137.71 | 1.000 (byte-identical — Historical Simulation consumes no vol parameter at all) |
 
 `publication/options-risk-study/tables/case_study_dev_first_roll.json`'s

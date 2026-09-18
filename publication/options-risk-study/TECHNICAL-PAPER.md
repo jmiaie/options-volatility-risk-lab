@@ -167,13 +167,13 @@ Simulation, so it too was unaffected throughout.
 **Concrete verified example.** See `CASE-STUDY.md` for the full,
 field-by-field trace of the DEV period's first eligible roll
 (2016-02-01): `realized_vol_20d` (annualized) = 0.235506,
-`daily_factor_vol_20d` = 0.014836 = 0.235506 / √252 exactly, and the
+`daily_factor_vol_20d` = 0.014835 = 0.235506 / √252 (0.01483546539740085), and the
 resulting 95%-confidence Delta-Normal VaR/ES move from a pre-fix
 3,382.80 / 4,242.17 to a corrected 213.10 / 267.23 — a ratio of exactly
 15.8745 (to 6 significant figures), matching `sqrt(252) = 15.8745...`
 deterministically, because Delta-Normal VaR is linear in factor vol. Monte
 Carlo's VaR at the same roll falls from 7,039.23 to 226.61, a ~31.1x
-reduction — sub-linear relative to Delta-Normal's exact `sqrt(252)` ratio,
+reduction — super-linear relative to Delta-Normal's exact `sqrt(252)` ratio of 15.875,
 consistent with (not a formal decomposition proving) the full-revaluation
 book's nonlinearity/convexity. Historical Simulation's VaR/ES at that same
 roll (137.71 / 192.51) is byte-identical before and after.
@@ -189,8 +189,9 @@ referenced to exact JSON key paths in `RESULT-SOURCE-MAP.md`.
 
 ### 2.1 Study 1 — hedging replication error
 
-Mean values across each period's episodes, dollars per 1-lot (100-share-
-equivalent) short call. Source:
+Mean values across each period's episodes, dollars per configured contract unit `option_qty`
+(multiplied directly into per-share Black-Scholes values, with no ×100 lot multiplier:
+these are **not** 100-share-lot dollars) short call. Source:
 `hedging_experiment.summary_by_frequency_and_cost_scenario` in each current
 artifact; full table in `tables/hedging_experiment_summary.csv`.
 
@@ -308,7 +309,7 @@ column (15.875 in every Delta-Normal row, to 3 decimal places) and in the
 dedicated regression test
 `tests/test_historical_risk_study_v2.py::test_deterministic_linear_portfolio_var_scales_by_sqrt_252`.
 Monte Carlo's VaR fell by a comparable ~35–41x across periods and
-confidence levels (sub-linear relative to Delta-Normal, consistent with the
+confidence levels (super-linear relative to Delta-Normal's exact ratio of 15.875, consistent with the
 full-revaluation book's nonlinearity rather than Delta-Normal's exact
 linear scaling, but still overwhelmingly dominated by the same units error,
 not by vol-regime or convexity effects). **The
@@ -362,7 +363,9 @@ period and confidence level:
    99% confidence, Historical Simulation's ES (1,789.1) exceeds both
    full-revaluation Monte Carlo's ES (909.4, a ratio of 1789.1/909.4 ≈
    1.97x) and Delta-Normal's ES (737.5, a ratio of 1789.1/737.5 ≈ 2.43x) —
-   the opposite ranking from every other row in the table above.**
+   the widest such gap in the table, not a single-row inversion: Historical Simulation’s ES is
+   the highest of the three methods in every period and confidence cell (6 of 6, measured from
+   the cited CSV).**
    Historical Simulation draws real historical daily returns, including
    whatever single worst days actually occurred in the trailing 252-session
    window feeding each 2025 roll; Monte Carlo and Delta-Normal both assume
@@ -414,13 +417,13 @@ Consolidating §3.1 and §2.1:
   decomposition was performed to isolate convexity as its sole cause.
 - **2025 realized vol running modestly hotter (Study 1 and Study 2,
   retained, correctly scaled)**: 2025's mean 20-session annualized realized
-  vol (16.33%) exceeds DEV's (15.15%) and VAL 2024's (11.84%) by a
-  double-digit-percentage, not order-of-magnitude, amount. This is the
+  vol (16.33%) exceeds DEV's (15.15%) by a low-single-digit amount (+7.8%) and VAL 2024's
+  (11.84%) by a double-digit amount (+37.9%) — in neither case order-of-magnitude. This is the
   correctly-scaled mechanism behind (a) Study 1's larger 2025 hedging
   replication error (§2.1's realized-minus-assumed vol bias grows from
   +0.0051 in DEV to +0.0169 in 2025) and (b) Study 2's Delta-Normal sitting
   modestly above, rather than below, Historical Simulation in 2025 only
-  (§3.1 item 1).
+  (§2.1 mean-realized-vol figures section of `RESULT-SOURCE-MAP.md`).
 - **2025's fat realized tail at 99% ES (Study 2, new finding, correctly
   visible only post-fix)**: Historical Simulation's 99% ES materially
   exceeds both parametric methods' 99% ES in the 2025 period only (§3.1

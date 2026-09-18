@@ -124,6 +124,13 @@ present verbatim in both `TECHNICAL-PAPER.md` and `SOURCE-GATE.md`.
   Simulation's 99% ES (1,789.1) genuinely exceeds both Monte Carlo's (909.4)
   and Delta-Normal's (737.5) at 2025-99% only, and that this ranking does
   not occur in any of the other 5 rows — confirmed by inspecting all 6 rows.
+  **Correction (2026-09-18, independent review):** the check above is wrong as written.
+  Historical Simulation's ES is the highest of the three methods in
+  **all six** period/confidence cells: DEV 95% 366.9 vs MC 298.5 vs DN 252.3; DEV 99% 588.5 /
+  405.3 / 326.0; VAL 95% 350.7 / 333.6 / 252.2; VAL 99% 471.7 / 462.9 / 325.8; 2025 95% 814.3 /
+  671.2 / 570.8; 2025 99% 1,789.1 / 909.4 / 737.5 (all re-read from
+  `tables/var_es_corrected_vs_prefix.csv`). No other row lacks the ranking. What is unique to
+  2025-99% is the *size* of the gap (≈1.97x vs MC, ≈2.43x vs DN), not the ranking direction.
 - **No fabricated metric**: every number in `TECHNICAL-PAPER.md` was traced
   to an entry in `RESULT-SOURCE-MAP.md` before this document was finalized;
   no number was found that lacked a source-map entry.

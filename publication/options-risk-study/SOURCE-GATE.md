@@ -121,7 +121,7 @@ experiment"), 2025 HISTORICAL EVALUATION, mean absolute replication error,
 BASE (1bp) cost scenario**:
 
 - Daily rebalancing ≈ **6.65** (exact: 6.6459)
-- Weekly rebalancing ≈ **7.46** (exact: 7.4550)
+- Weekly rebalancing ≈ **7.45** (exact: 7.454970530990272)
 
 Full tables for all three periods, both confidence levels, and all methods
 are in `TECHNICAL-PAPER.md` §2 and `RESULT-SOURCE-MAP.md`.
@@ -178,8 +178,11 @@ already-accepted, already-computed D9-C evidence for external readers.
 D10-C performs **no new empirical work** — no retraining, no retuning, no
 re-acquiring data, no rerunning any evaluation period (including 2025), and
 no alteration of any existing result artifact, config, or source file.
-Every file under `publication/options-risk-study/` is new; nothing outside
-that directory was modified to produce it.
+Every file under `publication/options-risk-study/` is new. Nothing outside that directory was
+modified to produce it, with one disclosed exception: `.github/workflows/publication-pack.yml`
+was added so this pack has its own CI verification gate (`ci.yml` never runs on a PR whose base
+is a non-`main` branch); it only checks out the repo, installs dependencies, runs
+`scripts/verify_pack.py`, `ruff` and `mypy`, and commits nothing.
 
 ## Branch and PR provenance
 
@@ -331,7 +334,7 @@ forecast from Historical Simulation).
 re-verified in this session — see `CASE-STUDY.md` for the full trace):
 
 - `realized_vol_20d` (annualized) = **0.235506**
-- `daily_factor_vol_20d` = **0.014836** = 0.235506 / √252 exactly
+- `daily_factor_vol_20d` = **0.014835** = 0.235506 / √252 to 6 d.p. (0.01483546539740085)
   (verified to 14 significant figures in
   `tables/case_study_dev_first_roll.json`'s
   `check_daily_equals_annualized_over_sqrt252` field)

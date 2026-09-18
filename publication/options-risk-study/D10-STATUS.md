@@ -321,3 +321,37 @@ current status.
 ---
 
 **READY FOR INDEPENDENT REVIEW. NO MERGE. NO D11.**
+
+---
+
+## Independent-review remediation — 2026-09-18
+
+An independent review of this pack (not a re-run of `scripts/verify_pack.py`) reported findings.
+The ones that reproduced against the committed artifacts are corrected here. **No empirical code
+was run, no artifact was regenerated, and no frozen value was touched**: every correction below is
+documentation, or the verifier's own docstring.
+
+| # | Finding | Correction |
+|---|---|---|
+| 1 | `0.235506 / sqrt(252)` printed as `0.014836` | The correct 6 d.p. value is `0.014835` (`0.01483546539740085`); fixed in `CASE-STUDY.md` (x2), `SOURCE-GATE.md`, `TECHNICAL-PAPER.md`, `RESULT-SOURCE-MAP.md` |
+| 2 | Weekly-rebalancing ratio printed as `7.46` | The exact value `7.454970530990272` rounds to **`7.45`**; fixed in `SOURCE-GATE.md` |
+| 3 | Monte Carlo's 35-41x reduction described as "sub-linear" | The measured ratios (35.248-40.463) **exceed** Delta-Normal's exact `sqrt(252) = 15.875`, so the reduction is **super-linear**; fixed in `CLAIM-REGISTER.md`, `TECHNICAL-PAPER.md` (x2), `CASE-STUDY.md` |
+| 4 | The 35-41x range stated "at every roll" | That range is the six period/confidence **cell aggregates** (the cited CSV has one row per cell per method); reworded to say so, and to state that the per-roll distribution is not summarized in this claim |
+| 5 | Working-capital comparison called "small (<=~11% in every period)" | The register's own ratios are 0.887 / 0.776 / 1.114 (DEV / VAL 2024 / 2025) = **-11.3% / -22.4% / +11.4%**; reworded to "bounded, not uniform" |
+| 6 | 2025 realized-vol increase called a uniform "double-digit" | It is **+7.8%** vs DEV (single-digit) and **+37.9%** vs VAL 2024 (double-digit); both now stated |
+| 7 | 2025-99% ES described as "the opposite ranking from every other row" / "the only row where this ranking flips" | Historical Simulation's ES is the highest of the three methods in **all six** cells; 2025-99% holds the **widest gap** (~1.97x vs MC, ~2.43x vs DN), not a unique inversion. Corrected in `TECHNICAL-PAPER.md` and `CLAIM-REGISTER.md`; the corresponding `QUANT-REDTEAM.md` entry recorded the same false check as "confirmed", so a dated correction is appended there |
+| 8 | Table units given as "dollars per 1-lot (100-share-equivalent)" | `option_qty` is multiplied directly into per-share Black-Scholes values with no x100 lot factor; wording corrected |
+| 9 | `RESULT-SOURCE-MAP.md` promised the manifest **file's** own hash in `tables/dataset_and_artifact_hashes.json` | That table records each `dataset_canonical` value alongside the manifest `path`, not a hash of the manifest file; promise reworded |
+| 10 | `SOURCE-GATE.md` said nothing outside the pack was modified | One disclosed exception: `.github/workflows/publication-pack.yml` was added (`ci.yml` never runs on a non-`main` base); it only verifies and commits nothing |
+| 11 | Paper cross-referenced "(§3.1 item 1)" | No such heading exists (§3.1 item 3 is the ES restatement); the reference now points at the §2.1 mean-realized-vol figures section of `RESULT-SOURCE-MAP.md` |
+| 12 | Verifier docstring said figure output goes to a temporary directory | The figure is regenerated at its committed path and the original bytes restored; docstring corrected |
+
+One reviewer finding did **not** reproduce: that `D10-STATUS.md` overcounts its relocated sections
+("ten" vs eleven). `SOURCE-GATE.md` contains exactly **ten** unnumbered sections after field 14;
+`Reviewer instructions` is a separate heading outside that set. No change was made.
+
+Verified after this round: `scripts/verify_pack.py` passes **all 20 checks** with a
+matplotlib-capable interpreter (`/home/ubuntu/d10a-regime/.venv/bin/python`, matplotlib 3.11.2) --
+13 SOURCE-GATE sha256 citations, the section-reference check, all 5 recomputed tables
+byte-for-byte, and the figure regenerating byte-identical (`ee5b2502abb2...`). With matplotlib
+absent the verifier **fails closed** on the figure check, as it did before this round.

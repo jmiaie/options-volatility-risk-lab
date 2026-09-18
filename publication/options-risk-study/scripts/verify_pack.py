@@ -21,7 +21,9 @@ Fails closed if:
 This script performs NO network calls and NEVER re-runs
 scripts/run_historical_risk_study_v2.py or touches results/historical_risk/,
 data/, configs/, or src/ -- it only reads already-committed files and
-writes table/figure output to a private temporary directory for comparison.
+writes table output to a private temporary directory for comparison. The figure is
+different: `build_figures.build_figure()` writes to the committed `figures/` path, so the check
+snapshots the committed bytes first and writes them back afterwards.
 """
 
 from __future__ import annotations

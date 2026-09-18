@@ -16,9 +16,9 @@ of `hedging_experiment.episodes`.
 Note on the "sha256" column below for dataset rows: `dataset_canonical` is
 itself a sha256 *field inside* each manifest file. The column shows that
 field's **value** (the hash of the underlying dataset bytes), not the hash
-of the manifest JSON file itself. Both the manifest file's own hash and the
-`dataset_canonical` value it contains are recorded in
-`tables/dataset_and_artifact_hashes.json`.
+of the manifest JSON file itself. The `dataset_canonical` value it contains is recorded, alongside each manifest's `path`, in
+`tables/dataset_and_artifact_hashes.json`; that file does **not** record a hash of the manifest
+JSON file itself.
 
 | Paper item | Source file | JSON key path | `dataset_canonical` / file value |
 |---|---|---|---|
@@ -45,7 +45,7 @@ of the manifest JSON file itself. Both the manifest file's own hash and the
 | Paper item | Source file | JSON key path | Source file sha256 |
 |---|---|---|---|
 | `realized_vol_20d` = 0.235506 (annualized) | `results/historical_risk/options_hist_risk_v2_dev_formation.json` | `nonlinear_portfolio_study.snapshots[0].realized_vol_20d` | `6e840d4934ead483233aa83bebd232abd94b1652ed410f85408a5a898f5e5f26` |
-| `daily_factor_vol_20d` = 0.014836 | same file | `nonlinear_portfolio_study.snapshots[0].daily_factor_vol_20d` | same |
+| `daily_factor_vol_20d` = 0.014835 | same file | `nonlinear_portfolio_study.snapshots[0].daily_factor_vol_20d` | same |
 | Corrected DN VaR/ES = 213.10 / 267.23 (95%) | same file | `nonlinear_portfolio_study.snapshots[0].var_es.primary.delta_normal.{var,es}` | same |
 | Corrected MC VaR/ES = 226.61 / 292.31 (95%) | same file | `nonlinear_portfolio_study.snapshots[0].var_es.primary.monte_carlo.{var,es}` | same |
 | Corrected HS VaR/ES = 137.71 / 192.51 (95%) | same file | `nonlinear_portfolio_study.snapshots[0].var_es.primary.historical_simulation_primary.{var,es}` | same |
