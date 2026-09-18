@@ -1,0 +1,62 @@
+name: Publication pack (D10-C)
+
+# Validates publication/options-risk-study/ ONLY. This workflow never runs
+# scripts/run_historical_risk_study_v2.py, never touches results/, configs/,
+# data/, or src/, and never fetches data over the network -- it validates
+# that the already-committed publication pack is internally consistent with
+# the already-committed, already-frozen D9-C artifacts it cites.
+
+on:
+  push:
+    branches: [publication/options-risk-study]
+  pull_request:
+    paths:
+      - publication/options-risk-study/**
+      - .github/workflows/publication-pack.yml
+
+jobs:
+  verify-pack:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install package and dev dependencies (offline after this step)
+        run: |
+          python -m pip install -e ".[dev]"
+          # Pinned to match the exact version used to generate the committed
+          # figure, to maximize byte-for-byte reproducibility of the PNG
+          # across environments (see reproducibility.json's environment
+          # note). Pillow + numpy are pulled in for the figure's
+          # content-level fallback check when byte-identity does not hold.
+          python -m pip install "matplotlib==3.11.2" pillow
+
+      - name: Ruff lint (publication pack scripts only)
+        run: ruff check publication/options-risk-study/scripts
+
+      - name: Ruff format check (publication pack scripts only)
+        run: ruff format --check publication/options-risk-study/scripts
+
+      - name: mypy (publication pack scripts only)
+        run: |
+          mypy --ignore-missing-imports \
+            publication/options-risk-study/scripts/build_tables.py \
+            publication/options-risk-study/scripts/build_figures.py \
+            publication/options-risk-study/scripts/verify_pack.py
+
+      - name: Verify publication pack (hashes, citations, tables, figure)
+        run: python publication/options-risk-study/scripts/verify_pack.py
+
+      - name: Confirm this job touched nothing outside publication/
+        run: |
+          git status --porcelain
+          if [ -n "$(git status --porcelain -- . ':!publication/options-risk-study')" ]; then
+            echo "This workflow modified files outside publication/options-risk-study/ -- failing closed."
+            git status --porcelain -- . ':!publication/options-risk-study'
+            exit 1
+          fi
+          echo "Confirmed: no files outside publication/options-risk-study/ were touched."

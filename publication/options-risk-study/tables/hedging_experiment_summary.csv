@@ -1,0 +1,19 @@
+period,period_key,rebalance_frequency,cost_scenario,n_episodes,mean_absolute_replication_error,mean_transaction_cost,mean_n_rebalances,mean_realized_minus_assumed_vol,mean_max_cash_requirement,source_artifact,source_sha256
+DEV,dev_formation,daily,BASE,106,1.877,0.08,30.9,0.0051,246.71,results/historical_risk/options_hist_risk_v2_dev_formation.json,6e840d4934ead483233aa83bebd232abd94b1652ed410f85408a5a898f5e5f26
+DEV,dev_formation,daily,GROSS,106,1.867,0.0,30.9,0.0051,246.66,results/historical_risk/options_hist_risk_v2_dev_formation.json,6e840d4934ead483233aa83bebd232abd94b1652ed410f85408a5a898f5e5f26
+DEV,dev_formation,daily,STRESS,106,1.973,0.402,30.9,0.0051,246.89,results/historical_risk/options_hist_risk_v2_dev_formation.json,6e840d4934ead483233aa83bebd232abd94b1652ed410f85408a5a898f5e5f26
+DEV,dev_formation,weekly,BASE,106,2.177,0.053,7.0,0.0051,230.31,results/historical_risk/options_hist_risk_v2_dev_formation.json,6e840d4934ead483233aa83bebd232abd94b1652ed410f85408a5a898f5e5f26
+DEV,dev_formation,weekly,GROSS,106,2.173,0.0,7.0,0.0051,230.28,results/historical_risk/options_hist_risk_v2_dev_formation.json,6e840d4934ead483233aa83bebd232abd94b1652ed410f85408a5a898f5e5f26
+DEV,dev_formation,weekly,STRESS,106,2.197,0.265,7.0,0.0051,230.42,results/historical_risk/options_hist_risk_v2_dev_formation.json,6e840d4934ead483233aa83bebd232abd94b1652ed410f85408a5a898f5e5f26
+VAL 2024,val_2024,daily,BASE,12,2.11,0.151,31.0,0.0073,477.99,results/historical_risk/options_hist_risk_v2_val_2024.json,4df81b2d7d6078f9f5bf2cb8526838291d2de249e96fe4cbdd7ed4b2a76ef0b8
+VAL 2024,val_2024,daily,GROSS,12,2.019,0.0,31.0,0.0073,477.91,results/historical_risk/options_hist_risk_v2_val_2024.json,4df81b2d7d6078f9f5bf2cb8526838291d2de249e96fe4cbdd7ed4b2a76ef0b8
+VAL 2024,val_2024,daily,STRESS,12,2.503,0.754,31.0,0.0073,478.31,results/historical_risk/options_hist_risk_v2_val_2024.json,4df81b2d7d6078f9f5bf2cb8526838291d2de249e96fe4cbdd7ed4b2a76ef0b8
+VAL 2024,val_2024,weekly,BASE,12,3.088,0.1,7.0,0.0073,456.7,results/historical_risk/options_hist_risk_v2_val_2024.json,4df81b2d7d6078f9f5bf2cb8526838291d2de249e96fe4cbdd7ed4b2a76ef0b8
+VAL 2024,val_2024,weekly,GROSS,12,3.064,0.0,7.0,0.0073,456.65,results/historical_risk/options_hist_risk_v2_val_2024.json,4df81b2d7d6078f9f5bf2cb8526838291d2de249e96fe4cbdd7ed4b2a76ef0b8
+VAL 2024,val_2024,weekly,STRESS,12,3.189,0.498,7.0,0.0073,456.9,results/historical_risk/options_hist_risk_v2_val_2024.json,4df81b2d7d6078f9f5bf2cb8526838291d2de249e96fe4cbdd7ed4b2a76ef0b8
+2025 HISTORICAL EVALUATION,historical_evaluation_2025,daily,BASE,11,6.646,0.177,30.9,0.0169,546.56,results/historical_risk/options_hist_risk_v2_historical_evaluation_2025.json,b2c3594445b7f1a726be135cb5cb17f43f69d6a3a938657b3e4faca3dcb62799
+2025 HISTORICAL EVALUATION,historical_evaluation_2025,daily,GROSS,11,6.612,0.0,30.9,0.0169,546.45,results/historical_risk/options_hist_risk_v2_historical_evaluation_2025.json,b2c3594445b7f1a726be135cb5cb17f43f69d6a3a938657b3e4faca3dcb62799
+2025 HISTORICAL EVALUATION,historical_evaluation_2025,daily,STRESS,11,6.781,0.883,30.9,0.0169,547.0,results/historical_risk/options_hist_risk_v2_historical_evaluation_2025.json,b2c3594445b7f1a726be135cb5cb17f43f69d6a3a938657b3e4faca3dcb62799
+2025 HISTORICAL EVALUATION,historical_evaluation_2025,weekly,BASE,11,7.455,0.116,7.0,0.0169,494.71,results/historical_risk/options_hist_risk_v2_historical_evaluation_2025.json,b2c3594445b7f1a726be135cb5cb17f43f69d6a3a938657b3e4faca3dcb62799
+2025 HISTORICAL EVALUATION,historical_evaluation_2025,weekly,GROSS,11,7.465,0.0,7.0,0.0169,494.65,results/historical_risk/options_hist_risk_v2_historical_evaluation_2025.json,b2c3594445b7f1a726be135cb5cb17f43f69d6a3a938657b3e4faca3dcb62799
+2025 HISTORICAL EVALUATION,historical_evaluation_2025,weekly,STRESS,11,7.476,0.578,7.0,0.0169,494.95,results/historical_risk/options_hist_risk_v2_historical_evaluation_2025.json,b2c3594445b7f1a726be135cb5cb17f43f69d6a3a938657b3e4faca3dcb62799
