@@ -6,6 +6,64 @@ hedging / nonlinear portfolio VaR study (`options_hist_risk_v2`).
 `db9cf44a04f1282f81ed11c7d145b5afe2db8d95` (parent
 `53277193f29a613d39d7e67983298eb832cf03d8`).
 
+## Post-review integration status
+
+This publication pack was originally authored and reviewed under a
+no-merge / stop-at-independent-review instruction. That language is preserved
+below as a historical record of the authoring phase.
+
+The pack has subsequently been integrated into `main`. This integration does
+not, by itself, constitute Directive #10 program sign-off.
+
+Current lifecycle status:
+INTEGRATED ON MAIN / FINAL D10 PROGRAM SIGN-OFF PENDING.
+
+| Integration record | Value |
+| --- | --- |
+| Accepted D9 head | `db9cf44a04f1282f81ed11c7d145b5afe2db8d95` |
+| Cleared publication head / accepted publication ancestor | `135e7ec26d8c04ccf6d1e88f60399604a098356a` (PR #6 head; the parent of the `main` merge) |
+| Current `main` head | `8d7f761d6ece8276b529c8ebfaa1cfc32dd74b91` (the PR #6 merge commit itself) |
+| Integration path | Pack authored on `publication/options-risk-study`; PR **#5** merged it into `research/historical-risk-validation` (`fe46daee`, 2026-09-18T13:22:31Z); PR **#6** merged `publication/options-risk-study` → `main` (`8d7f761`, 2026-09-18T19:49:25Z). `main`'s head **is** that merge commit. |
+| Relevant pull requests | #5 (pack, merged), #6 (`main` integration, merged); #3 remains open, draft (PR hygiene inventory) |
+| Exact-head CI evidence | At exact `main` merge head `8d7f761d`: repository `CI` run `35388074363` (success) — https://github.com/jmiaie/options-volatility-risk-lab/actions/runs/35388074363 . **No `Publication pack (D10-C)` run is attached to exact main merge head `8d7f761d`.** The pack verifier passed at the cleared parent `135e7ec2`: `Publication pack (D10-C)` run `35388063391` (pull_request, success) — https://github.com/jmiaie/options-volatility-risk-lab/actions/runs/35388063391 — and run `35382939185` (push, success). The pack workflow triggers on `publication/options-risk-study/**` paths, so the merge commit inherits the parent's pack verification without a new run. Disclosed as an exact-merge-head verification nuance (P2): parent content unchanged. |
+| Diff from accepted D9 is publication-only | **Yes** — `git diff --name-status db9cf44a 8d7f761d` yields only `.github/workflows/publication-pack.yml` (added) and `publication/options-risk-study/**`. No accepted empirical source, configuration, manifest, or result artifact appears in that diff. |
+| Disclosed integration nuance | Pack CI is attached to the cleared parent `135e7ec2`, not to the `main` merge head `8d7f761d` (path-filtered trigger). This remediation PR deliberately places its documentation change **inside** `publication/options-risk-study/` so the pack workflow runs at the remediation head. |
+
+**Current program state.** D9: COMPLETE / ACCEPTED. D10: TECHNICALLY
+INTEGRATED / FORMAL SIGN-OFF PENDING. D11: PARTIALLY STARTED THROUGH THE
+PUBLIC HUB / NOT FORMALLY ACTIVATED. D12: DRAFTED / BLOCKED BY D11 HIRING
+EVIDENCE. D13: DRAFTED / NOT YET JUSTIFIED.
+
+**Final D10 program sign-off remains PENDING.** No authoritative
+`DIRECTIVE #10 PUBLICATION PACK SIGN-OFF: YES` has been issued for this pack.
+A D9 program sign-off is not a D10 program sign-off. This section records
+integration state only: it is not a sign-off, and it does not strengthen,
+weaken, or restate any finding, number, or claim in the pack.
+
+### How to read the rest of this directory
+
+Every "no merge", "no pull request merged", "draft PR only", "not on `main`",
+"not from `main`", "no external publication", and "READY FOR INDEPENDENT
+(D10) REVIEW" statement preserved below, or elsewhere in this directory, is
+**authoring-phase language** kept deliberately as the contemporaneous record
+(append-only history; the historical record is not rewritten). Where such a
+statement could be read as describing the *current* lifecycle state, this
+section supersedes it; the statement itself is left unedited. The
+machine-readable `reproducibility.json` field `merge` is likewise left
+byte-unchanged on purpose, so the pack's own hash and regeneration gates stay
+valid at the recorded tip.
+
+*Repository visibility note:* the host repository is public, so this pack is
+world-readable on `main`. No PyPI/npm release, website deployment, or other
+external-service publication was performed.
+
+---
+
+*Post-review integration section added 2026-09-21 as documentation-only
+reconciliation. No empirical artifact, configuration, dataset manifest,
+experiment identity, ledger row, number, or finding was changed; no
+rerun, retune, or reacquisition was performed.*
+
 ## 0. Follow-up remediation (round 2)
 
 After the initial pack was opened as draft PR #5, the orchestrating session
@@ -321,6 +379,8 @@ current status.
 ---
 
 **READY FOR INDEPENDENT REVIEW. NO MERGE. NO D11.**
+
+*(Authoring-phase status — 2026-09-18. Superseded as a statement of current state: the pack is now integrated on `main`. See "Post-review integration status" at the top of this file.)*
 
 ---
 
