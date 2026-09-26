@@ -9,6 +9,28 @@ round-trip solve, a closed-form toy answer, an out-of-sample backtest).
 No live trading, no brokerage integration, no invented market data or
 performance numbers.
 
+## Historical evaluation (SPY 2015–2025)
+
+Alongside the synthetic library, the repo contains one historical study on
+real, frozen SPY / FRED (DGS3MO, VIXCLS) daily snapshots, 2015–2025
+(`src/options_risk/historical_risk_study_v2.py`, pre-registered spec v2).
+Result summary, quoted from the committed writeup:
+
+- A volatility-units defect (annualized vol fed where a daily figure was required) inflated Delta-Normal VaR by exactly `sqrt(252) ≈ 15.87x` and Monte Carlo VaR by 35.2–40.5x (range across the six period/confidence aggregate cells); after correction, all three VaR/ES methods sit within the same order of magnitude, and the earlier "vol running hot + convexity" explanation is withdrawn.
+- Full-revaluation Monte Carlo ES exceeds Delta-Normal ES in every period/confidence row, by roughly +18% to +42%.
+- 2025 mean realized vol (16.33%) exceeded DEV's (15.15%) and VAL 2024's (11.84%) modestly, not by an order of magnitude.
+
+**Classification:** historical evaluation (2025 is labeled HISTORICAL
+EVALUATION, not an untouched holdout) of a hypothetical, standardized
+portfolio and hedging construct. No options tape (options are priced with
+BSM off realized vol), no deployed strategy, no live trading.
+
+Links: [technical paper](publication/options-risk-study/TECHNICAL-PAPER.md) ·
+[case study](publication/options-risk-study/CASE-STUDY.md) ·
+[result source map](publication/options-risk-study/RESULT-SOURCE-MAP.md) ·
+[research report](research/historical-volatility-and-tail-risk.md) ·
+[results](results/historical_risk/) · [dataset manifests](data/manifests/)
+
 ## Why this project
 
 Most "options pricing" portfolio projects stop at a Black-Scholes formula.
@@ -37,7 +59,7 @@ revaluation risk stack (VaR/ES/stress) that is explicitly compared against
 
 ## Validation
 
-Every claim below is a real, passing test in `tests/` (178 tests total) —
+Every claim below is a real, passing test in `tests/` (part of the full suite) —
 not aspirational:
 
 - **Put-call parity, arbitrage bounds, monotonicity, positive Gamma** —
@@ -48,7 +70,8 @@ not aspirational:
   ITM/ATM/OTM, short/long maturity, low/high vol — `tests/test_implied_vol.py`
 - **Monte Carlo vs. analytic BSM**: convergence, CI coverage, seed
   reproducibility, antithetic/control-variate variance never worse than
-  naive — `tests/test_monte_carlo.py`
+  naive — `tests/test_monte_carlo.py`. (Antithetic variates are used in
+  the pricing Monte Carlo only, not in the historical study's Monte Carlo VaR.)
 - **Portfolio accounting invariants**: position-level Greek scaling, a
   delta-hedged book summing to zero Delta — `tests/test_portfolio.py`
 - **Delta-hedge self-financing accounting**: portfolio-value identity holds
@@ -85,7 +108,7 @@ written to `results/` — nothing is hand-typed or invented.
 
 ```bash
 pip install -e ".[dev,viz]"
-pytest                                  # full test suite (178 tests)
+pytest                                  # full test suite
 ruff check src tests                    # lint
 ruff format --check src tests           # format check
 mypy                                    # static types
@@ -120,17 +143,19 @@ model output under stated assumptions.
 ## Scope & data
 
 - Vanilla European options only — no exotics, no American exercise.
-- All market data used in tests/examples/results is **synthetic**
-  (seeded fixtures in `options_risk.data.chain.synthetic_chain`), labeled
-  as such everywhere it appears. An optional `yfinance`-based real-data
-  path can be added under the `data` extra but is not exercised in CI and
-  ships no network calls in this repository as-is.
+- Unit tests, CI, and `examples/` use **synthetic** data only (seeded
+  fixtures in `options_risk.data.chain.synthetic_chain`) and make no
+  network calls.
+- The historical study (above) uses frozen SPY/FRED 2015–2025 snapshots
+  recorded in `data/manifests/`; its results are committed under
+  `results/historical_risk/`. Acquisition scripts (`yfinance`, optional
+  `data` extra) are not run in CI.
 - No live trading, no brokerage integration, no deep learning.
 
 ## Setup
 
 ```bash
-git clone <repo>
+git clone https://github.com/jmiaie/options-volatility-risk-lab.git
 cd options-volatility-risk-lab
 pip install -e ".[dev,viz]"
 pytest
@@ -155,10 +180,10 @@ src/options_risk/
   stress/        full-revaluation scenario engine, stress suite
   attribution/   Greek-based P&L explain vs. full revaluation
   data/          option-chain schema, cleaning, synthetic fixtures
-  reporting/     (reserved for future lightweight viz, post-validation)
-tests/           178 tests covering the financial invariants above
+tests/           full suite covering the financial invariants above
 examples/        10 runnable, seeded example scripts
 results/         reproducible small artifacts written by examples/
-research/        two research reports referenced above
+research/        research reports referenced above
+publication/     historical-study writeup + reproducibility bundle
 docs/            model-risk.md
 ```

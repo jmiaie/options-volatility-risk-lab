@@ -21,8 +21,18 @@ Unit conventions (chosen once, documented, and tested — see
 
 All Greeks include continuous dividend yield ``q``. At ``T == 0`` all
 Greeks except Delta are zero (the position is now pure stock/cash) and
-Delta is 1.0 (call, if ITM) / -1.0 (put, if ITM) / 0.0 (if OTM) — the
-subgradient at the kink is treated as 0 at exact-ATM expiry.
+Delta is 1.0 (call, if ITM) / -1.0 (put, if ITM) / 0.0 (if OTM), and
++0.5 (call) / -0.5 (put) at exact-ATM expiry (the midpoint of the
+subgradient at the kink).
+
+At ``sigma == 0`` (with ``T > 0``) the option value is the deterministic
+discounted forward payoff, and the Greeks are the ``sigma -> 0`` limits of
+the BSM formulas: Gamma and Vega are 0; for an in-the-money-forward call
+(``S e^{(r-q)T} > K``) Delta is ``e^{-qT}``, Theta is
+``q S e^{-qT} - r K e^{-rT}`` and Rho is ``K T e^{-rT}``; for an
+in-the-money-forward put Delta is ``-e^{-qT}``, Theta is
+``r K e^{-rT} - q S e^{-qT}`` and Rho is ``-K T e^{-rT}``. Out of the money
+(or exactly at the forward, where the limit is not defined) all are 0.
 """
 
 from __future__ import annotations
@@ -78,15 +88,20 @@ def greeks(
         # forward payoff, piecewise linear in S with a kink at K -> Gamma
         # and Vega are formally singular there; report 0 Gamma/Vega and the
         # one-sided Delta of the (locally linear) payoff.
+        # Theta = -dV/dT and Rho = dV/dr of V = +/-(S e^{-qT} - K e^{-rT}).
         forward = S * np.exp((r - q) * T)
         df_r = np.exp(-r * T)
-        if option_type == "call":
-            delta = df_r * np.exp((r - q) * T) if forward > K else 0.0
-            theta = 0.0
-        else:
-            delta = -df_r * np.exp((r - q) * T) if forward < K else 0.0
-            theta = 0.0
-        return Greeks(delta=float(delta), gamma=0.0, vega=0.0, theta=theta, rho=0.0)
+        df_q = np.exp(-q * T)
+        delta = theta = rho = 0.0
+        if option_type == "call" and forward > K:
+            delta = df_q
+            theta = q * S * df_q - r * K * df_r
+            rho = K * T * df_r
+        elif option_type == "put" and forward < K:
+            delta = -df_q
+            theta = r * K * df_r - q * S * df_q
+            rho = -K * T * df_r
+        return Greeks(delta=float(delta), gamma=0.0, vega=0.0, theta=float(theta), rho=float(rho))
 
     d1d2: D1D2 = d1_d2(S, K, T, r, sigma, q)
     d1, d2 = d1d2.d1, d1d2.d2

@@ -67,3 +67,22 @@ def test_theta_is_negative_for_atm_long_option() -> None:
     put_theta = greeks(100, 100, 0.5, 0.03, 0.25, "put").theta
     assert call_theta < 0
     assert put_theta < 0
+
+
+@pytest.mark.parametrize(
+    ("S", "K", "option_type"),
+    [(120.0, 100.0, "call"), (80.0, 100.0, "put"), (80.0, 100.0, "call"), (120.0, 100.0, "put")],
+)
+def test_zero_vol_greeks_match_small_sigma_limit(S: float, K: float, option_type: str) -> None:
+    """sigma == 0 Greeks equal the sigma -> 0 limit of the analytic formulas."""
+    T, r, q = 0.5, 0.05, 0.02
+    exact = greeks(S, K, T, r, 0.0, option_type, q=q)  # type: ignore[arg-type]
+    limit = greeks(S, K, T, r, 1e-6, option_type, q=q)  # type: ignore[arg-type]
+    for name in ("delta", "theta", "rho"):
+        assert getattr(exact, name) == pytest.approx(getattr(limit, name), abs=1e-6)
+    assert exact.gamma == 0.0 and exact.vega == 0.0
+
+
+def test_expiry_atm_delta_is_half() -> None:
+    assert greeks(100.0, 100.0, 0.0, 0.05, 0.2, "call").delta == 0.5
+    assert greeks(100.0, 100.0, 0.0, 0.05, 0.2, "put").delta == -0.5

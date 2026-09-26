@@ -3,8 +3,8 @@
 ### A Reproducible Study of Realized Paths, VaR Backtesting, and Full Revaluation
 
 **Status**: AUTHORITATIVE (v2). Supersedes `options_historical_risk_study_v1.yaml` /
-`historical_risk_study.py`, which Directive #9 itself labels **EXPLORATORY /
-NON-CONFORMING TO FINAL D9-C SPEC** (wrong dataset IDs, no FRED integration,
+`historical_risk_study.py`, which is labeled **EXPLORATORY /
+NON-CONFORMING TO THE PRE-REGISTERED SPEC v2** (wrong dataset IDs, no FRED integration,
 GBM-simulated hedging instead of real historical-path replay, no standardized
 nonlinear portfolio, no Monte Carlo VaR, a single confidence level, a single
 HS lookback). v1's artifacts remain committed, unmodified, for audit trail;
@@ -32,8 +32,8 @@ tapes were used, and no option panel is invented: the underlying (SPY) is
 the only real market series, and every option in this study is priced with
 Black-Scholes-Merton off **realized volatility**, never a fabricated implied
 volatility surface. The two questions this study actually answers, using
-the exact methodology and required labels specified by Directive #9's D9-C
-section:
+the exact methodology and required labels specified by the pre-registered
+spec v2:
 
 1. **"Historical underlying-path hypothetical option hedging experiment"** —
    replaying real SPY daily closes through discrete delta-hedging mechanics:
@@ -60,8 +60,8 @@ trading strategy.
 
 **Acquisition provenance (disclosed, not fabricated as fresh acquisition)**:
 `yf_spy_daily_2015_2025_v1`'s raw bytes are **reused** from the sibling
-Directive #9 repository (`Advanced_Algorithmic_Trading_Simulator_public`,
-Stat-Arb D9-B), whose own SPY acquisition was already independently
+repository `Advanced_Algorithmic_Trading_Simulator_public` (statistical
+arbitrage study), whose own SPY acquisition was already independently
 verified there (sha256-matched, same source, same date range). This repo
 did not freshly hit Yahoo Finance for SPY. Full disclosure is in
 `data/manifests/yf_spy_daily_2015_2025_v1.json`'s `acquisition_provenance`
@@ -91,9 +91,9 @@ distinct from committing raw vendor snapshots to a tracked path.
   day's own not-yet-realized return) — 20-session primary, 60-session
   secondary/sensitivity.
 
-## 3. 2025 labeling discipline (Addendum 13)
+## 3. 2025 labeling discipline
 
-Per Directive #9 Addendum 13: SPY's 2025 price history was **already
+Per the pre-registered labeling rules: SPY's 2025 price history was **already
 inspected** once under v1 (`options_hist_risk_v1_holdout_2025`, same
 underlying series in substance). The 2025 result in this v2 study is
 therefore labeled **`HISTORICAL EVALUATION`**, never `UNTOUCHED FINAL
@@ -105,7 +105,7 @@ enforced in the frozen config.
 
 This config's methodology (hedging mechanics, standardized portfolio
 composition, VaR/ES methods, confidence levels, lookback windows, cost
-scenarios) is taken directly from Directive #9's own D9-C spec text — none
+scenarios) is taken directly from the pre-registered spec v2 text — none
 of it was derived from, or tuned against, any observed result in this
 repository. It was therefore frozen **on creation** (`frozen_for_holdout_utc:
 2026-09-17T00:00:00Z` in the config's own `freeze_record`), rather than
@@ -481,7 +481,7 @@ size rather than repeating the pre-fix magnitude.
 - DGS3MO is a short-term Treasury constant-maturity yield proxy, never a
   full option discount curve; used point-in-time, carry-forward only,
   never future-backfilled.
-- **DGS3MO vintage disclosure (added 2026-09-17, P2):** this study uses
+- **DGS3MO vintage disclosure (added 2026-09-17):** this study uses
   FRED's standard `DGS3MO` series, keyed by its recorded
   `observation_date`, with causal carry-forward to the latest observation
   at or before each decision date (§2). This is **not** an ALFRED
@@ -509,14 +509,14 @@ size rather than repeating the pre-fix magnitude.
   periods — "fail to reject" there is weak evidence, not proof of correct
   VaR coverage.
 - `yf_spy_daily_2015_2025_v1`'s raw bytes were reused from a sibling
-  Directive #9 repository's already-verified acquisition, not freshly
+  repository's already-verified acquisition, not freshly
   pulled in this repository — disclosed in the dataset manifest.
 - The Monte Carlo VaR/ES leg uses `full_revaluation_mc_var_es`, a
   vectorized reimplementation of this codebase's existing
   `monte_carlo_var`, validated to match it to floating-point tolerance —
   not an approximation, but a distinct code path from the one used
   elsewhere in this repository's stress-testing module.
-- **Volatility-units defect disclosure (corrected 2026-09-18, P1):** §6.2
+- **Volatility-units defect disclosure (corrected 2026-09-18):** §6.2
   discloses in full that Delta-Normal and Monte Carlo VaR/ES were
   previously computed against an annualized (not daily/per-period)
   volatility input, overstating both by ~16–45x, while BSM option pricing

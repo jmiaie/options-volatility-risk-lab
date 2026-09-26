@@ -6,7 +6,7 @@ scenario's P&L — is **a model output, computed under stated assumptions,
 not a guarantee, a prediction, or a bound on what can actually happen.**
 This document collects the assumptions and known failure modes behind each
 model in the library, organized by module. It exists so that anyone using
-this code (including a recruiter skimming it) can see exactly what is and
+this code (including a reader skimming it) can see exactly what is and
 is not being claimed.
 
 ## 1. Black-Scholes-Merton (pricing, Greeks, implied vol)

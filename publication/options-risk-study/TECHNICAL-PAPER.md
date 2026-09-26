@@ -1,9 +1,9 @@
 # Historical Volatility, Hedging Error, and Nonlinear Portfolio Tail Risk
 
-### A publication-pack writeup of already-accepted, already-computed Directive #9 (D9-C) evidence
+### A writeup of already-computed results from the pre-registered historical study (spec v2)
 
-**Status**: D10-C publication/communication artifact. This paper writes up
-results that were already computed, reviewed, and accepted under D9-C. It
+**Status**: Research writeup. This paper writes up results that were
+already computed and independently reviewed under pre-registered spec v2. It
 performs no new empirical work: no retraining, no retuning, no re-acquiring
 data, and no rerun of any evaluation period, including 2025. Every number in
 this paper is read from a committed result artifact and cross-checked
@@ -29,11 +29,12 @@ options P&L; every option price is Black-Scholes-Merton off realized
 volatility, never a fabricated implied-volatility surface or a paid options
 tape.
 
-A defect found and fixed under D9-C (commit `db9cf44`) had fed the
+A defect found and fixed during independent review (commit `db9cf44`) had fed the
 Delta-Normal and Monte Carlo VaR/ES legs an **annualized** volatility figure
 where both methods' own documented contracts required a **daily** (one-
 period) figure — inflating Delta-Normal VaR by exactly `sqrt(252) ≈ 15.87x`
-and Monte Carlo VaR by a comparable ~35–41x. **This paper explicitly
+and Monte Carlo VaR by a comparable factor (35.2–40.5x across the six period/confidence
+aggregate cells). **This paper explicitly
 withdraws the prior report's interpretive claim that the resulting
 order-of-magnitude divergence between methods was a genuine finding
 explained by "recent realized vol running hot" and convexity.** It was not:
@@ -60,11 +61,11 @@ Both studies are evaluated on the frozen `options_hist_risk_v2` experiment
 sha256 `4bd18561466b5f85b09031868322929c8ad28bd9c2da9358ac3a106fdb725181`),
 run once per period (DEV, VAL 2024, 2025 HISTORICAL EVALUATION) against
 real SPY daily closes, FRED DGS3MO, and FRED VIXCLS
-(`data/manifests/` — see `SOURCE-GATE.md`'s "Additional dataset provenance"
-section for the reuse-provenance disclosure on SPY). Neither the SPY
+(`data/manifests/`; the SPY snapshot's reuse provenance is recorded in
+`data/manifests/yf_spy_daily_2015_2025_v1.json`). Neither the SPY
 underlying path, the option contracts,
 the rolling schedule, nor the rate/vol handling was altered for this
-publication pack.
+writeup.
 
 **Study 1 — "Historical underlying-path hypothetical option hedging
 experiment."** A standardized, short, one-lot, at-the-money 30-trading-day
@@ -150,7 +151,7 @@ volatility number that is too large by a factor of `sqrt(252) ≈ 15.87` — the
 exact conversion factor between an annualized and a daily standard
 deviation under the standard iid-normal-returns scaling convention.
 
-This is precisely the mistake the D9-C review found and fixed at commit
+This is precisely the mistake the independent review found and fixed at commit
 `db9cf44`: `run_nonlinear_portfolio_study` was passing `annualized_vol20`
 (the correct BSM-pricing figure) into the Delta-Normal and Monte Carlo legs
 as well, where it should have passed
@@ -308,14 +309,14 @@ deterministic, portfolio-independent ratio, confirmed both in
 column (15.875 in every Delta-Normal row, to 3 decimal places) and in the
 dedicated regression test
 `tests/test_historical_risk_study_v2.py::test_deterministic_linear_portfolio_var_scales_by_sqrt_252`.
-Monte Carlo's VaR fell by a comparable ~35–41x across periods and
-confidence levels (super-linear relative to Delta-Normal's exact ratio of 15.875, consistent with the
+Monte Carlo's VaR fell by a comparable factor, ranging 35.2–40.5x across
+the six period/confidence aggregate cells (not a per-roll figure) (super-linear relative to Delta-Normal's exact ratio of 15.875, consistent with the
 full-revaluation book's nonlinearity rather than Delta-Normal's exact
 linear scaling, but still overwhelmingly dominated by the same units error,
 not by vol-regime or convexity effects). **The
 "recent vol running hot" and "convexity" explanations were never the
 dominant effect on the size of the gap reported pre-fix — the
-volatility-units defect was.** This publication pack does not repeat, soften,
+volatility-units defect was.** This writeup does not repeat, soften,
 or present side-by-side without comment the pre-fix "order of magnitude,
 explained by recent vol + convexity" framing as if it were still a live
 interpretation. It is superseded and withdrawn.
@@ -350,7 +351,7 @@ period and confidence level:
    in more tail risk than the linear approximation in every single row.
    This is compatible with, and expected from, the book's convexity (every
    roll's standardized portfolio has genuine, nonzero gamma — see each
-   snapshot's own `portfolio_greeks.gamma` field), but this pack has not run
+   snapshot's own `portfolio_greeks.gamma` field), but this study has not run
    a separate gamma/attribution decomposition isolating convexity as the
    sole or dominant cause of this specific gap, so it is reported here as an
    observed, persistent difference between the two methods that is
@@ -385,8 +386,8 @@ period and confidence level:
    ratio more precisely than the original phrasing's pairing. The underlying
    VaR/ES values themselves (1,789.1 / 909.4 / 737.5) are unchanged and
    correctly cited in both places; this is a restatement of the ratio
-   language, not a correction to any number. See `CITATION-REDTEAM.md`
-   finding CIT-1.)
+   language, not a correction to any number. This was identified
+   during independent review.)
 
 **Revised conclusion.** Running all three methods side-by-side remains
 useful: DEV/VAL show Delta-Normal is not systematically conservative
@@ -438,9 +439,8 @@ Consolidating §3.1 and §2.1:
 
 ## 5. Limitations
 
-Reproduced from `SOURCE-GATE.md`'s "Known limitations and caveats (full
-list)" section (field 14 gives the concise version) /
-`research/historical-volatility-and-tail-risk.md` §8, not softened:
+Reproduced from `research/historical-volatility-and-tail-risk.md` §8, not
+softened:
 
 - No paid options tapes; no invented option panels.
 - DGS3MO is a short-term Treasury constant-maturity yield proxy, not a full
@@ -459,8 +459,8 @@ list)" section (field 14 gives the concise version) /
   boundary than the pre-fix figure (0.717) suggested — this is weaker, not
   stronger, evidence for correct coverage than the pre-fix numbers implied.
 - SPY's raw bytes are reused from a sibling repository's already-verified
-  acquisition, not freshly pulled here (§1.1 / `SOURCE-GATE.md`'s
-  "Additional dataset provenance" section).
+  acquisition, not freshly pulled here (§1.1 / the SPY dataset
+  manifest under `data/manifests/`).
 - The Monte Carlo leg's vectorized implementation, while validated to
   floating-point tolerance against the reference implementation, is a
   distinct code path from this repository's stress-testing module.
@@ -475,7 +475,7 @@ list)" section (field 14 gives the concise version) /
 Both studies are standardized, hypothetical constructs evaluated on real
 historical risk-factor paths, never a claim about deployed trading or real
 historical options P&L. The central methodological contribution of this
-publication pack is not a new empirical result but an accurate accounting
+writeup is not a new empirical result but an accurate accounting
 of a previously-reported empirical claim: the large Delta-Normal/Monte
 Carlo-vs-Historical-Simulation divergence originally attributed to vol
 regime and convexity was, in fact, mostly a units-conversion defect. With

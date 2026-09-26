@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""D10-C publication pack — deterministic table builder.
+"""Reproducibility bundle — deterministic table builder.
 
 Reads ONLY already-committed, already-frozen result artifacts under
 results/historical_risk/ (current AND superseded) and the dataset/config
@@ -361,7 +361,7 @@ def build_figure_via_sibling_script() -> str:
     result = build_figures.build_figure()
     if result is None:
         return (
-            "matplotlib not importable in this environment -- figure skipped (see D10-STATUS.md)."
+            "matplotlib not importable in this environment -- figure skipped (install matplotlib)."
         )
     return f"figure written to {Path(result).relative_to(REPO_ROOT)}"
 

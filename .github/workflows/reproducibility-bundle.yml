@@ -1,10 +1,10 @@
-name: Publication pack (D10-C)
+name: Reproducibility bundle
 
 # Validates publication/options-risk-study/ ONLY. This workflow never runs
 # scripts/run_historical_risk_study_v2.py, never touches results/, configs/,
 # data/, or src/, and never fetches data over the network -- it validates
-# that the already-committed publication pack is internally consistent with
-# the already-committed, already-frozen D9-C artifacts it cites.
+# that the already-committed reproducibility bundle is internally consistent with
+# the already-committed, already-frozen study artifacts it cites.
 
 on:
   push:
@@ -12,7 +12,7 @@ on:
   pull_request:
     paths:
       - publication/options-risk-study/**
-      - .github/workflows/publication-pack.yml
+      - .github/workflows/reproducibility-bundle.yml
 
 jobs:
   verify-pack:
@@ -35,20 +35,20 @@ jobs:
           # content-level fallback check when byte-identity does not hold.
           python -m pip install "matplotlib==3.11.2" pillow
 
-      - name: Ruff lint (publication pack scripts only)
+      - name: Ruff lint (bundle scripts only)
         run: ruff check publication/options-risk-study/scripts
 
-      - name: Ruff format check (publication pack scripts only)
+      - name: Ruff format check (bundle scripts only)
         run: ruff format --check publication/options-risk-study/scripts
 
-      - name: mypy (publication pack scripts only)
+      - name: mypy (bundle scripts only)
         run: |
           mypy --ignore-missing-imports \
             publication/options-risk-study/scripts/build_tables.py \
             publication/options-risk-study/scripts/build_figures.py \
             publication/options-risk-study/scripts/verify_pack.py
 
-      - name: Verify publication pack (hashes, citations, tables, figure)
+      - name: Verify reproducibility bundle (hashes, references, tables, figure)
         run: python publication/options-risk-study/scripts/verify_pack.py
 
       - name: Confirm this job touched nothing outside publication/
