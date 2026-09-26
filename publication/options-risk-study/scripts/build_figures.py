@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""D10-C publication pack -- deterministic figure builder.
+"""Reproducibility bundle -- deterministic figure builder.
 
 Reads ONLY already-committed, already-frozen result artifacts under
 results/historical_risk/ (current AND superseded), via the exact same
@@ -58,7 +58,7 @@ def build_figure() -> str | None:
         import matplotlib.pyplot as plt
     except ImportError:
         note = (
-            "matplotlib not importable in this environment -- figure skipped (see D10-STATUS.md)."
+            "matplotlib not importable in this environment -- figure skipped (install matplotlib)."
         )
         print(note)
         return None

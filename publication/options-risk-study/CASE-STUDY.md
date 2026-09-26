@@ -40,7 +40,7 @@ realized_vol_20d = 0.235506  (more precisely: 0.23550571215256)
 ```
 
 This is an **annualized** volatility figure — correct and unmodified by the
-D9-C fix. It is exactly what feeds Black-Scholes-Merton option pricing in
+volatility-units fix. It is exactly what feeds Black-Scholes-Merton option pricing in
 `build_standardized_portfolio()` (`historical_risk_study_v2.py:419`), which
 expects an annualized sigma paired with maturity `T = 30/252` (also
 expressed in years). Nothing about this step changed as part of the fix —
@@ -142,9 +142,9 @@ Monte Carlo's ratio varies roll-to-roll and period-to-period — consistent
 with the full-revaluation book's nonlinearity (convexity) making the
 input-vol-to-output-VaR mapping non-proportional, though this observation
 alone does not decompose how much of that variation owes to convexity
-specifically versus other nonlinear-revaluation effects — but stays in the
-same broad ~35–41x range throughout (also in
-that same CSV). Historical Simulation is unaffected everywhere, at every
+specifically versus other nonlinear-revaluation effects — and its six period/confidence aggregate
+cells span 35.2–40.5x (also in that same CSV; this is a range across
+aggregate cells, not a per-roll bound). Historical Simulation is unaffected everywhere, at every
 roll, in every period — confirmed by the "byte-identical outside
 `var_es.{primary,secondary}.{delta_normal,monte_carlo}`" field-level diff
 already documented in `research/historical-volatility-and-tail-risk.md` §6.2,

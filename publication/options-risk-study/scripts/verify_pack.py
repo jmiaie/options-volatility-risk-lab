@@ -1,14 +1,13 @@
 #!/usr/bin/env python3
-"""D10-C publication pack -- CI verification script.
+"""Reproducibility bundle -- CI verification script.
 
 Fails closed if:
-  1. Any sha256 that SOURCE-GATE.md cites for a D9-C artifact/config/dataset
-     does not match the real, currently-committed file it claims to
-     describe (dataset manifests' own `dataset_canonical` field, the frozen
-     config, all current + superseded result artifacts).
-  2. Any RESULT-SOURCE-MAP.md section reference in CLAIM-REGISTER.md's
-     evidentiary-basis column does not resolve to an actual heading in
-     RESULT-SOURCE-MAP.md.
+  1. Any sha256 for a study artifact/config/dataset (dataset manifests' own
+     `dataset_canonical` field, the frozen config, all current + superseded
+     result artifacts) is not cited in reproducibility.json, i.e. the
+     recorded hash is stale relative to the currently-committed file.
+  2. Any public document in the bundle references a Markdown file in this
+     directory that does not exist (dangling cross-reference).
   3. Regenerating the tables (via build_tables.py's own functions) or the
      figure (via build_figures.py) from the same committed source artifacts
      produces output that differs from what is currently committed --
@@ -42,8 +41,8 @@ import build_tables  # noqa: E402
 
 REPO_ROOT = build_tables.REPO_ROOT
 PUB_DIR = build_tables.PUB_DIR
-SOURCE_GATE = PUB_DIR / "SOURCE-GATE.md"
-CLAIM_REGISTER = PUB_DIR / "CLAIM-REGISTER.md"
+REPRODUCIBILITY = PUB_DIR / "reproducibility.json"
+PUBLIC_DOCS = ("TECHNICAL-PAPER.md", "CASE-STUDY.md", "RESULT-SOURCE-MAP.md")
 RESULT_SOURCE_MAP = PUB_DIR / "RESULT-SOURCE-MAP.md"
 FIGURE_NAME = "var_es_corrected_vs_superseded_95_all_periods.png"
 
@@ -63,8 +62,8 @@ def sha256_of(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
-def check_source_gate_hashes() -> None:
-    gate_text = SOURCE_GATE.read_text(encoding="utf-8")
+def check_recorded_hashes() -> None:
+    gate_text = REPRODUCIBILITY.read_text(encoding="utf-8")
     checks: dict[str, str] = {
         "config": sha256_of(
             REPO_ROOT / "configs" / "experiments" / "options_historical_risk_study_v2.yaml"
@@ -88,57 +87,27 @@ def check_source_gate_hashes() -> None:
 
     for name, digest in checks.items():
         if digest in gate_text:
-            ok(f"SOURCE-GATE.md cites the correct, currently-true sha256 for {name}")
+            ok(f"reproducibility.json records the correct, currently-true sha256 for {name}")
         else:
             fail(
-                f"SOURCE-GATE.md does NOT contain the freshly-recomputed sha256 for "
+                f"reproducibility.json does NOT contain the freshly-recomputed sha256 for "
                 f"{name} ({digest}) -- the cited hash is stale, or the source file "
-                f"changed since SOURCE-GATE.md was written"
+                f"changed since reproducibility.json was written"
             )
 
 
-SECTION_RE = re.compile(r"§(\d+(?:\.\d+)*)")
-# Matches "RESULT-SOURCE-MAP.md" followed immediately by a chain of one or
-# more "§N[.M]" tokens, optionally joined by "/" (e.g. "§2.2/§3"). Anchoring
-# the chain right after the filename -- rather than scanning the whole
-# line -- avoids false positives from an unrelated "§N" reference to a
-# DIFFERENT document appearing later on the same line (e.g. a citation to
-# "research/historical-volatility-and-tail-risk.md §7" on the same table
-# row as a "RESULT-SOURCE-MAP.md §2.1" citation must not be misread as a
-# RESULT-SOURCE-MAP.md §7 citation).
-CITE_CHAIN_RE = re.compile(
-    r"RESULT-SOURCE-MAP\.md((?:\s*§\d+(?:\.\d+)*\s*/)*(?:\s*§\d+(?:\.\d+)*)?)"
-)
+DOC_REF_RE = re.compile(r"`([A-Za-z0-9_-]+\.md)`")
 
 
-def check_claim_citations_resolve() -> None:
-    claim_text = CLAIM_REGISTER.read_text(encoding="utf-8")
-    map_text = RESULT_SOURCE_MAP.read_text(encoding="utf-8")
-
-    map_headings = "\n".join(line for line in map_text.splitlines() if line.startswith("#"))
-    map_sections = set(SECTION_RE.findall(map_headings))
-
-    cited_sections: set[str] = set()
-    for match in CITE_CHAIN_RE.finditer(claim_text):
-        cited_sections.update(SECTION_RE.findall(match.group(1)))
-
-    if not cited_sections:
-        fail("No RESULT-SOURCE-MAP.md section citations found anywhere in CLAIM-REGISTER.md")
-        return
-
-    missing = sorted(cited_sections - map_sections, key=lambda s: [int(p) for p in s.split(".")])
-    if missing:
-        fail(
-            f"CLAIM-REGISTER.md cites RESULT-SOURCE-MAP.md section(s) {missing} that do "
-            f"not appear in any RESULT-SOURCE-MAP.md heading (headings found for: "
-            f"{sorted(map_sections, key=lambda s: [int(p) for p in s.split('.')])})"
-        )
-    else:
-        ok(
-            f"Every RESULT-SOURCE-MAP.md section CLAIM-REGISTER.md cites "
-            f"({sorted(cited_sections, key=lambda s: [int(p) for p in s.split('.')])}) "
-            f"resolves to an actual heading there"
-        )
+def check_doc_references_resolve() -> None:
+    for doc in PUBLIC_DOCS:
+        text = (PUB_DIR / doc).read_text(encoding="utf-8")
+        for name in sorted(set(DOC_REF_RE.findall(text))):
+            # Only bundle-level documents use UPPER-CASE names (e.g. CASE-STUDY.md).
+            if not name[:-3].isupper() or (PUB_DIR / name).exists():
+                continue
+            fail(f"{doc} references `{name}`, which does not exist in {PUB_DIR.name}/")
+        ok(f"{doc}: every referenced bundle document exists")
 
 
 def check_tables_reproducible(tmp_dir: Path) -> None:
@@ -263,9 +232,9 @@ def check_figure_reproducible(tmp_dir: Path) -> None:
 
 
 def main() -> int:
-    print("=== D10-C publication pack verification ===")
-    check_source_gate_hashes()
-    check_claim_citations_resolve()
+    print("=== Reproducibility bundle verification ===")
+    check_recorded_hashes()
+    check_doc_references_resolve()
     with tempfile.TemporaryDirectory() as tmp:
         tmp_dir = Path(tmp)
         check_tables_reproducible(tmp_dir)
@@ -277,7 +246,7 @@ def main() -> int:
         for msg in FAILURES:
             print(f"  - {msg}")
         return 1
-    print("All publication-pack verification checks passed.")
+    print("All reproducibility-bundle verification checks passed.")
     return 0
 
 

@@ -1,7 +1,7 @@
 # RESULT-SOURCE-MAP
 
 Every table/number appearing in `TECHNICAL-PAPER.md` (and reused in
-`CASE-STUDY.md`, `SOURCE-GATE.md`), mapped to its exact source file, exact
+`CASE-STUDY.md`), mapped to its exact source file, exact
 JSON key path (or manifest/config field), and the sha256 of that source
 file. All sha256 values were computed independently in this session
 (`sha256sum` / Python `hashlib.sha256`), not copied from the task brief
@@ -88,8 +88,10 @@ definition already used in `research/historical-volatility-and-tail-risk.md` §6
 The exactly-`sqrt(252)` Delta-Normal ratio claim in §3 is the
 `var_ratio_prefix_over_corrected` / `es_ratio_prefix_over_corrected` columns
 for every `delta_normal` row (all read `15.875` at 3-decimal rounding);
-the Monte Carlo ratio range ("~35–41x") is the min/max of the same column
-across all `monte_carlo` rows (35.248 to 40.463).
+the Monte Carlo ratio range (35.2–40.5x) is the min/max of the same column
+across the six `monte_carlo` aggregate cells (period × confidence): 35.248
+to 40.463. It is a range across aggregate cells, not a bound on individual
+rolls.
 
 ## §2.1's "16.33% / 15.15% / 11.84%" mean realized vol figures
 
@@ -134,10 +136,10 @@ computed for all 6 period × confidence rows from
 `tables/var_es_corrected_vs_prefix.csv`; source artifacts and hashes as in
 the §2.2/§3 table above. This range is an observed, artifact-backed gap
 between the two methods' ES; its attribution to convexity specifically is
-stated throughout this pack as "consistent with," not "proven by," since no
+stated throughout these documents as "consistent with," not "proven by," since no
 separate gamma/attribution decomposition was performed to isolate
-convexity as the sole cause (see `QUANT-REDTEAM.md`/`CLAIM-REDTEAM.md` for
-this precision fix).
+convexity as the sole cause (this wording was tightened during independent
+review).
 
 ## §5 — figure: `figures/var_es_corrected_vs_superseded_95_all_periods.png`
 
@@ -163,4 +165,4 @@ this precision fix).
 | `monte_carlo_var()` (reference, scalar) | `src/options_risk/risk/var.py` | line 190 |
 | `kupiec_pof_test()` | `src/options_risk/risk/backtesting.py` | line 74 |
 | `christoffersen_independence_test()` | `src/options_risk/risk/backtesting.py` | line 134 |
-| `build_figure()` (figure builder, this pack's own script) | `publication/options-risk-study/scripts/build_figures.py` | imports `build_var_es_table()` from `build_tables.py` in the same directory |
+| `build_figure()` (figure builder, this study's own script) | `publication/options-risk-study/scripts/build_figures.py` | imports `build_var_es_table()` from `build_tables.py` in the same directory |
