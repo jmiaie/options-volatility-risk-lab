@@ -34,6 +34,7 @@ def test_final_wealth_equals_terminal_cash() -> None:
     assert result.final_wealth == pytest.approx(result.path.iloc[-1]["cash"])
 
 
+@pytest.mark.slow
 def test_dividend_yield_hedge_is_unbiased_in_expectation() -> None:
     # With q != 0, correctly-specified vol, and zero cost, the hedge should
     # still be unbiased on average -- this is the regression check for the
@@ -61,6 +62,7 @@ def test_dividend_yield_hedge_is_unbiased_in_expectation() -> None:
     assert abs(np.mean(errors)) < 0.05 * premium
 
 
+@pytest.mark.slow
 def test_zero_cost_zero_vol_gives_near_perfect_replication_in_continuum_limit() -> None:
     # With realized == pricing vol and many rebalances, the average hedging
     # error across seeds should be small relative to the option premium.
@@ -111,6 +113,7 @@ def test_invalid_inputs_raise() -> None:
         simulate_delta_hedge(**BASE, n_steps=10, cost_rate=-0.01)
 
 
+@pytest.mark.slow
 def test_rebalance_frequency_experiment_reduces_dispersion_with_more_steps() -> None:
     df = rebalance_frequency_experiment(
         S0=BASE["S0"],
@@ -129,6 +132,7 @@ def test_rebalance_frequency_experiment_reduces_dispersion_with_more_steps() -> 
     assert std_252 < std_12
 
 
+@pytest.mark.slow
 def test_transaction_cost_experiment_costs_increase_with_rate() -> None:
     df = transaction_cost_experiment(
         S0=BASE["S0"],
@@ -148,6 +152,7 @@ def test_transaction_cost_experiment_costs_increase_with_rate() -> None:
     assert zero_cost == pytest.approx(0.0)
 
 
+@pytest.mark.slow
 def test_vol_misspecification_experiment_matched_vol_has_smallest_mean_error() -> None:
     df = vol_misspecification_experiment(
         S0=BASE["S0"],

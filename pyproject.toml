@@ -39,6 +39,9 @@ where = ["src"]
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 addopts = "-ra"
+markers = [
+    "slow: long-running study/simulation tests (>5s); CI runs them in a separate job. Deselect locally with -m 'not slow'.",
+]
 
 [tool.ruff]
 line-length = 100
