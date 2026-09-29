@@ -32,5 +32,27 @@ jobs:
       - name: mypy
         run: mypy
 
-      - name: pytest
-        run: pytest --cov=options_risk --cov-report=term-missing
+      - name: pytest (fast suite)
+        run: pytest -m "not slow" --cov=options_risk --cov-report=term-missing
+
+  slow-tests:
+    # The long-running historical-study and hedging-simulation tests, split out
+    # so the fast suite reports quickly. Together the two jobs run every test.
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.11", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install package and dev dependencies
+        run: python -m pip install -e ".[dev,viz]"
+
+      - name: pytest (slow suite)
+        run: pytest -m slow --durations=15

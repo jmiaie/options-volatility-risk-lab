@@ -234,6 +234,7 @@ class TestStandardizedPortfolio:
 
 
 class TestFullRevaluationMcVarEs:
+    @pytest.mark.slow
     def test_matches_reference_scalar_implementation(self):
         """full_revaluation_mc_var_es exists purely as a performance
         rewrite of options_risk.risk.var.monte_carlo_var (same rng draws,
@@ -283,6 +284,7 @@ class TestVarEsAllMethods:
             assert result[method]["var"] > 0
             assert result[method]["es"] >= result[method]["var"]
 
+    @pytest.mark.slow
     def test_higher_confidence_yields_higher_var(self):
         portfolio = build_standardized_portfolio(S0=100.0, T=30 / 252, r=0.02, sigma=0.2, q=0.0)
         rng = np.random.default_rng(0)
@@ -334,6 +336,7 @@ class TestVarEsAllMethods:
 
 
 class TestRunNonlinearPortfolioStudy:
+    @pytest.mark.slow
     def test_end_to_end_produces_snapshots_and_backtest(self):
         # Just past the primary HS lookback, with ~2 monthly roll dates in
         # the eval window -- enough to exercise the logic without the cost
@@ -360,6 +363,7 @@ class TestRunNonlinearPortfolioStudy:
             assert "secondary" in snap["var_es"]
         assert "kupiec_christoffersen_backtest" in out
 
+    @pytest.mark.slow
     def test_vix_context_present_when_series_available(self):
         prices = _synthetic_prices(n=HS_LOOKBACKS["primary"] + 45, seed=3)
         rate_series = pd.Series(0.02, index=prices.index)
@@ -375,6 +379,7 @@ class TestRunNonlinearPortfolioStudy:
         assert out["snapshots"]
         assert all(snap["vixcls_context"] == pytest.approx(0.20) for snap in out["snapshots"])
 
+    @pytest.mark.slow
     def test_every_roll_gets_full_var_es_snapshot(self):
         """Every eligible monthly roll gets the full 3-method, 2-confidence
         VaR/ES snapshot (including Monte Carlo) -- tractable now that Monte
@@ -468,6 +473,7 @@ class TestNextSessionBacktestAlignment:
             prices, rate_series, vix_series, period, mc_n_sims=200, mc_seed=0
         )
 
+    @pytest.mark.slow
     def test_breach_uses_next_session_return_not_roll_date_return(self):
         """The return ENDING ON the roll date is a huge -30% shock (this is
         exactly what the pre-fix code, returns.iloc[ret_pos_val], would have
@@ -485,6 +491,7 @@ class TestNextSessionBacktestAlignment:
         assert backtest["kupiec"]["n_breaches"] == 0
         assert backtest["kupiec"]["n_obs"] == len(usable_rolls)
 
+    @pytest.mark.slow
     def test_breach_direction_flips_when_next_session_is_the_shock(self):
         """Mirror image of the test above: this time the return ENDING ON
         the roll date is flat (0.0) and the NEXT session carries the -30%
@@ -500,6 +507,7 @@ class TestNextSessionBacktestAlignment:
         assert backtest["kupiec"]["n_breaches"] == 1
         assert backtest["kupiec"]["n_obs"] == len(usable_rolls)
 
+    @pytest.mark.slow
     def test_last_roll_with_no_next_session_is_excluded_not_fabricated(self):
         """Truncate the price series so the LAST usable roll date is also
         the very last price in the series -- it has no next trading session
@@ -528,6 +536,7 @@ class TestNextSessionBacktestAlignment:
         assert "kupiec" in backtest, backtest.get("note")
         assert backtest["kupiec"]["n_obs"] == len(usable_rolls) - 1
 
+    @pytest.mark.slow
     def test_var_forecast_is_unaffected_by_the_next_session_outcome(self):
         """The spike roll's OWN VaR forecast must be identical regardless of
         what actually happens in its next session -- it is computed purely
@@ -556,6 +565,7 @@ class TestNextSessionBacktestAlignment:
             == out_b["snapshots"][0]["hs_var_95_primary_every_roll"]
         )
 
+    @pytest.mark.slow
     def test_next_session_is_the_next_trading_day_not_a_calendar_day(self):
         """Pick whichever usable roll in the fixture falls on a Friday (bdate_range
         guarantees the very next entry in the index is the following Monday,
@@ -744,6 +754,7 @@ class TestVolatilityUnitsFix:
         # this isn't a vacuous comparison) -- Delta-Normal DOES change.
         assert result_daily["delta_normal"]["var"] != result_annualized["delta_normal"]["var"]
 
+    @pytest.mark.slow
     def test_next_session_kupiec_christoffersen_wiring_remains_intact(self):
         """6. The Kupiec/Christoffersen backtest's per-roll forecast
         (hs_var_95_primary_every_roll) must still be drawn from the
@@ -796,6 +807,7 @@ class TestVolatilityUnitsFix:
         assert pre_fix.var / post_fix.var == pytest.approx(np.sqrt(252.0), rel=1e-9)
         assert pre_fix.es / post_fix.es == pytest.approx(np.sqrt(252.0), rel=1e-9)
 
+    @pytest.mark.slow
     def test_full_revaluation_mc_matches_scalar_reference_under_daily_scaled_vol(self):
         """8. full_revaluation_mc_var_es's vectorized-vs-scalar-reference
         equivalence (see TestFullRevaluationMcVarEs) must continue to hold

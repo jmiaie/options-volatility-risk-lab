@@ -97,6 +97,7 @@ def test_monte_carlo_var_reproducible_with_seed() -> None:
     assert r1.es == r2.es
 
 
+@pytest.mark.slow
 def test_monte_carlo_var_es_at_least_var() -> None:
     portfolio = _single_underlying_option_portfolio()
     summary = monte_carlo_var(portfolio, mean_return=0.0, vol=0.02, n_sims=5000, seed=8)
