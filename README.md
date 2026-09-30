@@ -9,6 +9,41 @@ round-trip solve, a closed-form toy answer, an out-of-sample backtest).
 No live trading, no brokerage integration, no invented market data or
 performance numbers.
 
+## Disclaimer
+
+**Not investment advice.** This repository is an engineering and research
+library for derivatives pricing, volatility, hedging simulation, and
+portfolio-risk analytics under stated model assumptions. It does **not**
+recommend trades, allocations, or securities. Synthetic example outputs and
+historical-study artifacts characterize model behavior on fixtures or a
+**hypothetical** option book — they do **not** assert predictive edge,
+options-tape P&L, or live-trading performance. Aligns with the Micap
+[quant research portfolio](https://github.com/jmiaie/quant-research-portfolio-public)
+honesty standard (null / withdrawn findings reported as found). Portfolio
+placement: [`docs/POSITIONING.md`](docs/POSITIONING.md).
+
+## Quick Start (offline / synthetic)
+
+No network required. Unit tests, CI, and `examples/` use seeded synthetic
+fixtures only.
+
+```bash
+git clone https://github.com/jmiaie/options-volatility-risk-lab.git
+cd options-volatility-risk-lab
+python -m venv .venv && source .venv/bin/activate   # Windows: .venv\Scripts\activate
+pip install -e ".[dev,viz]"
+
+pytest -m "not slow"                  # fast suite (synthetic invariants)
+python examples/01_price_option.py    # BSM price + Greeks (toy inputs)
+python examples/04_vol_smile_from_fixture.py  # vol surface from synthetic chain
+```
+
+Full suite (includes slow hedging / historical-study tests): `pytest`.
+Historical-study reproduction uses committed frozen snapshots under
+`data/` / `results/historical_risk/` — see
+[`publication/options-risk-study/`](publication/options-risk-study/) and the
+hub VERIFYING page linked from [`docs/POSITIONING.md`](docs/POSITIONING.md).
+
 ## Historical evaluation (SPY 2015–2025)
 
 Alongside the synthetic library, the repo contains one historical study on
@@ -135,10 +170,9 @@ vol, lognormal diffusion, continuous/frictionless trading for
 Black-Scholes; linearized exposure and normal returns for Delta-Normal VaR;
 finite sampling for Monte Carlo and historical VaR; no arbitrage
 enforcement for the vol surface. **See
-[`docs/model-risk.md`](docs/model-risk.md) for the full list.** Nothing in
-this repository should be read as investment advice, a live-trading
-signal, or a guarantee about real market behavior — every number is a
-model output under stated assumptions.
+[`docs/model-risk.md`](docs/model-risk.md) for the full list.** See also the
+[Disclaimer](#disclaimer) above: every number is a model output under stated
+assumptions, not investment advice or a live-trading signal.
 
 ## Scope & data
 
@@ -167,6 +201,16 @@ extra kept out of the core install and out of CI. CI runs on GitHub Actions
 against Python 3.11 and 3.12 (`.github/workflows/ci.yml`): ruff lint,
 ruff format check, mypy, and the full pytest suite.
 
+## Related projects
+
+| Project | Role |
+|---------|------|
+| This repo (`options-volatility-risk-lab`) | Derivatives / vol / portfolio-risk research library + historical evaluation pack |
+| [quant-research-portfolio-public](https://github.com/jmiaie/quant-research-portfolio-public) | Public portfolio hub — findings index, [portfolio page](https://github.com/jmiaie/quant-research-portfolio-public/blob/main/portfolio/options-volatility-risk-lab.md), VERIFYING |
+| [quant-research-portfolio](https://github.com/jmiaie/quant-research-portfolio) | Private hub (same cluster; internal tooling) — optional |
+
+See [`docs/POSITIONING.md`](docs/POSITIONING.md) for what belongs where.
+
 ## Package layout
 
 ```
@@ -185,5 +229,5 @@ examples/        10 runnable, seeded example scripts
 results/         reproducible small artifacts written by examples/
 research/        research reports referenced above
 publication/     historical-study writeup + reproducibility bundle
-docs/            model-risk.md
+docs/            model-risk.md, POSITIONING.md (portfolio hub placement)
 ```
