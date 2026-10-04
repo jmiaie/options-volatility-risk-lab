@@ -1,4 +1,4 @@
-# Historical risk validation artifacts (Directive #9)
+# Historical risk validation artifacts
 
 JSON result packs from `scripts/run_historical_risk_study.py`.
 
