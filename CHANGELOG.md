@@ -16,7 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   [quant-research-portfolio-public](https://github.com/jmiaie/quant-research-portfolio-public)
   honesty standard (null / withdrawn findings reported as found).
 - **`docs/POSITIONING.md`** — places this lab in the quant research cluster;
-  public hub vs private hub roles; explicit non-goals (no fabricated Greeks/PnL,
+  public hub role; explicit non-goals (no fabricated Greeks/PnL,
   no live-trading claims).
 
 ### Deferred
