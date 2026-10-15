@@ -15,8 +15,8 @@ Fails closed if:
      labels, visual encodings, source hashes, and dimensions. The committed
      PNG is separately protected by its published SHA-256 and validated as a
      readable image of the contracted dimensions. Regenerated PNG bytes are
-     reported, but are not treated as portable across FreeType/fontconfig/
-     libpng builds.
+     reported and checked with the existing 2% differing-pixel gate. Contract
+     agreement alone cannot establish that the rendered image is equivalent.
 
 This script performs NO network calls and NEVER re-runs
 scripts/run_historical_risk_study_v2.py or touches results/historical_risk/,
@@ -216,7 +216,8 @@ def check_figure_reproducible(tmp_dir: Path) -> None:
     try:
         import io
 
-        from PIL import Image
+        import numpy as np
+        from PIL import Image, ImageChops
 
         committed_img = Image.open(io.BytesIO(committed_bytes)).convert("RGB")
         fresh_img = Image.open(io.BytesIO(fresh_bytes)).convert("RGB")
@@ -237,6 +238,18 @@ def check_figure_reproducible(tmp_dir: Path) -> None:
             )
         else:
             ok(f"regenerated {FIGURE_NAME} dimensions match {expected_dimensions}")
+        if committed_img.size == fresh_img.size:
+            diff = np.asarray(ImageChops.difference(committed_img, fresh_img))
+            fraction = float((diff.max(axis=-1) > 8).mean())
+            print(f"DISCLOSED: {fraction:.4%} of pixels differ by more than 8/255.")
+            if fraction > 0.02:
+                fail(
+                    f"figure visual comparison differs at {fraction:.4%} of pixels "
+                    "(existing 2% threshold). Semantic contract agreement does not "
+                    "resolve this visual mismatch; rendering investigation is required."
+                )
+            else:
+                ok("figure visual comparison is within the existing 2% threshold")
     except ImportError:
         fail(
             "Pillow is unavailable; cannot validate committed and regenerated PNG "
@@ -249,8 +262,8 @@ def check_figure_reproducible(tmp_dir: Path) -> None:
         print(
             "DISCLOSED: regenerated PNG bytes differ from the fixed committed PNG "
             f"(committed {committed_sha[:12]}..., regenerated {fresh_sha[:12]}...). "
-            "This is not a tolerance-based pass: the portable semantic render contract "
-            "was checked byte-for-byte above. Raster byte identity is environment-specific."
+            "Semantic contract and visual comparison results are reported separately above. "
+            "Contract agreement does not waive a failed visual comparison."
         )
 
 

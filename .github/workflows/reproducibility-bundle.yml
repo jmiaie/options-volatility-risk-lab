@@ -30,8 +30,8 @@ jobs:
           python -m pip install -e ".[dev]"
           # Matplotlib is pinned to the documented publication environment.
           # Pillow validates PNG readability and contracted dimensions. The
-          # portable semantic render contract, not cross-platform raster
-          # bytes or a pixel-difference threshold, is the fail-closed gate.
+          # semantic contract and existing 2% pixel gate both remain required.
+          # Contract agreement cannot waive an unresolved visual mismatch.
           python -m pip install -r publication/options-risk-study/requirements.txt
 
       - name: Ruff lint (bundle scripts only)
