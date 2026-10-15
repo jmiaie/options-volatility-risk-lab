@@ -1,0 +1,149 @@
+{
+  "figure": {
+    "confidence_key": "primary",
+    "corrected_style": {
+      "alpha": 1.0,
+      "fill": "solid"
+    },
+    "dpi": 150,
+    "expected_pixel_dimensions": [
+      1650,
+      975
+    ],
+    "facecolor": "#fcfcfb",
+    "figsize_inches": [
+      11.0,
+      6.5
+    ],
+    "method_colors": {
+      "delta_normal": "#eb6834",
+      "historical_simulation_primary": "#2a78d6",
+      "monte_carlo": "#1baf7a"
+    },
+    "method_order": [
+      "historical_simulation_primary",
+      "delta_normal",
+      "monte_carlo"
+    ],
+    "name": "var_es_corrected_vs_superseded_95_all_periods.png",
+    "period_order": [
+      "dev_formation",
+      "val_2024",
+      "historical_evaluation_2025"
+    ],
+    "source_note": "Source: results/historical_risk/options_hist_risk_v2_{dev_formation,val_2024,\nhistorical_evaluation_2025}.json (corrected) and results/historical_risk/\nsuperseded_volatility_units_fix/*.json (pre-fix). See RESULT-SOURCE-MAP.md. No experiment was rerun to produce this figure.",
+    "superseded_style": {
+      "alpha": 0.35,
+      "hatch": "///"
+    },
+    "title": "Mean 95% 1-day VaR by method: corrected (authoritative) vs. pre-fix (superseded)\nHistorical Simulation is unaffected by the volatility-units fix and is byte-identical in both bars",
+    "y_label": "Mean 95% 1-day VaR, $ per 1-lot-equivalent standardized book (log scale)",
+    "y_limits": [
+      50,
+      60000
+    ],
+    "y_scale": "log"
+  },
+  "plotted_rows": [
+    {
+      "mean_var_corrected": 226.8,
+      "mean_var_prefix_superseded": 226.8,
+      "method_key": "historical_simulation_primary",
+      "method_label": "Historical Simulation (252d)",
+      "period_key": "dev_formation",
+      "period_label": "DEV"
+    },
+    {
+      "mean_var_corrected": 201.2,
+      "mean_var_prefix_superseded": 3193.6,
+      "method_key": "delta_normal",
+      "method_label": "Delta-Normal",
+      "period_key": "dev_formation",
+      "period_label": "DEV"
+    },
+    {
+      "mean_var_corrected": 227.8,
+      "mean_var_prefix_superseded": 8403.7,
+      "method_key": "monte_carlo",
+      "method_label": "Monte Carlo (50k)",
+      "period_key": "dev_formation",
+      "period_label": "DEV"
+    },
+    {
+      "mean_var_corrected": 259.3,
+      "mean_var_prefix_superseded": 259.3,
+      "method_key": "historical_simulation_primary",
+      "method_label": "Historical Simulation (252d)",
+      "period_key": "val_2024",
+      "period_label": "VAL 2024"
+    },
+    {
+      "mean_var_corrected": 201.1,
+      "mean_var_prefix_superseded": 3192.1,
+      "method_key": "delta_normal",
+      "method_label": "Delta-Normal",
+      "period_key": "val_2024",
+      "period_label": "VAL 2024"
+    },
+    {
+      "mean_var_corrected": 249.3,
+      "mean_var_prefix_superseded": 10043.1,
+      "method_key": "monte_carlo",
+      "method_label": "Monte Carlo (50k)",
+      "period_key": "val_2024",
+      "period_label": "VAL 2024"
+    },
+    {
+      "mean_var_corrected": 408.6,
+      "mean_var_prefix_superseded": 408.6,
+      "method_key": "historical_simulation_primary",
+      "method_label": "Historical Simulation (252d)",
+      "period_key": "historical_evaluation_2025",
+      "period_label": "2025 HISTORICAL EVALUATION"
+    },
+    {
+      "mean_var_corrected": 455.2,
+      "mean_var_prefix_superseded": 7225.7,
+      "method_key": "delta_normal",
+      "method_label": "Delta-Normal",
+      "period_key": "historical_evaluation_2025",
+      "period_label": "2025 HISTORICAL EVALUATION"
+    },
+    {
+      "mean_var_corrected": 513.0,
+      "mean_var_prefix_superseded": 18083.9,
+      "method_key": "monte_carlo",
+      "method_label": "Monte Carlo (50k)",
+      "period_key": "historical_evaluation_2025",
+      "period_label": "2025 HISTORICAL EVALUATION"
+    }
+  ],
+  "research_classification": "HISTORICAL EVALUATION",
+  "schema_version": 1,
+  "source_artifacts": [
+    {
+      "path": "results/historical_risk/options_hist_risk_v2_dev_formation.json",
+      "sha256": "6e840d4934ead483233aa83bebd232abd94b1652ed410f85408a5a898f5e5f26"
+    },
+    {
+      "path": "results/historical_risk/options_hist_risk_v2_historical_evaluation_2025.json",
+      "sha256": "b2c3594445b7f1a726be135cb5cb17f43f69d6a3a938657b3e4faca3dcb62799"
+    },
+    {
+      "path": "results/historical_risk/options_hist_risk_v2_val_2024.json",
+      "sha256": "4df81b2d7d6078f9f5bf2cb8526838291d2de249e96fe4cbdd7ed4b2a76ef0b8"
+    },
+    {
+      "path": "results/historical_risk/superseded_volatility_units_fix/options_hist_risk_v2_dev_formation.json",
+      "sha256": "7bd4ea0c3a278c86c31e71fc265fda967d8d8a8ffb3481662f995e95576f459a"
+    },
+    {
+      "path": "results/historical_risk/superseded_volatility_units_fix/options_hist_risk_v2_historical_evaluation_2025.json",
+      "sha256": "8449bf6e20d2095ed564b693ff9567f46490b719de384d593078504710909a2f"
+    },
+    {
+      "path": "results/historical_risk/superseded_volatility_units_fix/options_hist_risk_v2_val_2024.json",
+      "sha256": "3a8b75fdd52d17727409b99844426b75fc307a8d38df41f9dabeffd2d89e7918"
+    }
+  ]
+}

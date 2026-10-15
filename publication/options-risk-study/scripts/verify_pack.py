@@ -8,21 +8,21 @@ Fails closed if:
      recorded hash is stale relative to the currently-committed file.
   2. Any public document in the bundle references a Markdown file in this
      directory that does not exist (dangling cross-reference).
-  3. Regenerating the tables (via build_tables.py's own functions) or the
-     figure (via build_figures.py) from the same committed source artifacts
-     produces output that differs from what is currently committed --
-     byte-for-byte for the CSV/JSON tables (no tolerance: these are pure
-     textual, deterministic outputs), and byte-for-byte for the PNG figure
-     with a disclosed content-level (pixel-difference) fallback check for
-     the case where a genuine, benign cross-environment rendering
-     difference (not a real data change) is the cause.
+  3. Regenerating the tables and the figure's canonical render contract from
+     the same committed source artifacts differs from what is committed.
+     CSV/JSON tables and the semantic render contract are compared
+     byte-for-byte with no tolerance. The contract fixes all plotted values,
+     labels, visual encodings, source hashes, and dimensions. The committed
+     PNG is separately protected by its published SHA-256 and validated as a
+     readable image of the contracted dimensions. Regenerated PNG bytes are
+     reported and checked with the existing 2% differing-pixel gate. Contract
+     agreement alone cannot establish that the rendered image is equivalent.
 
 This script performs NO network calls and NEVER re-runs
 scripts/run_historical_risk_study_v2.py or touches results/historical_risk/,
 data/, configs/, or src/ -- it only reads already-committed files and
-writes table output to a private temporary directory for comparison. The figure is
-different: `build_figures.build_figure()` writes to the committed `figures/` path, so the check
-snapshots the committed bytes first and writes them back afterwards.
+writes every regenerated output to a private temporary directory. It never
+overwrites the committed publication figure during verification.
 """
 
 from __future__ import annotations
@@ -45,6 +45,7 @@ REPRODUCIBILITY = PUB_DIR / "reproducibility.json"
 PUBLIC_DOCS = ("TECHNICAL-PAPER.md", "CASE-STUDY.md", "RESULT-SOURCE-MAP.md")
 RESULT_SOURCE_MAP = PUB_DIR / "RESULT-SOURCE-MAP.md"
 FIGURE_NAME = "var_es_corrected_vs_superseded_95_all_periods.png"
+CONTRACT_NAME = "var_es_corrected_vs_superseded_95_all_periods.render-contract.json"
 
 FAILURES: list[str] = []
 
@@ -152,17 +153,46 @@ def check_tables_reproducible(tmp_dir: Path) -> None:
 
 def check_figure_reproducible(tmp_dir: Path) -> None:
     committed_path = build_tables.FIGURES_DIR / FIGURE_NAME
+    committed_contract_path = build_tables.FIGURES_DIR / CONTRACT_NAME
     if not committed_path.exists():
         fail(f"figures/{FIGURE_NAME} is missing from the committed pack")
         return
+    if not committed_contract_path.exists():
+        fail(f"figures/{CONTRACT_NAME} is missing from the committed pack")
+        return
+
     committed_bytes = committed_path.read_bytes()
     committed_sha = hashlib.sha256(committed_bytes).hexdigest()
+    reproducibility = build_tables.load_json(REPRODUCIBILITY)
+    recorded_sha = reproducibility["publication_pack_derived_artifacts"]["figure_output"][
+        "sha256_committed_png"
+    ]
+    recorded_contract_sha = reproducibility["publication_pack_derived_artifacts"]["figure_output"][
+        "render_contract_sha256"
+    ]
+    if committed_sha != recorded_sha:
+        fail(
+            f"figures/{FIGURE_NAME} sha256 is {committed_sha}, not the published "
+            f"committed-PNG hash {recorded_sha}; the presentation artifact changed"
+        )
+    else:
+        ok(f"figures/{FIGURE_NAME} matches its published sha256 ({committed_sha[:12]}...)")
 
-    # Regenerate into the real FIGURES_DIR (build_figures.py's path is not
-    # parameterized), then move the result aside into tmp_dir before any
-    # later step could re-read it, so the committed file on disk ends the
-    # job exactly as it started (this job never intends to change it).
-    result = build_figures.build_figure()
+    committed_contract_sha = sha256_of(committed_contract_path)
+    if committed_contract_sha != recorded_contract_sha:
+        fail(
+            f"figures/{CONTRACT_NAME} sha256 is {committed_contract_sha}, not the "
+            f"published contract hash {recorded_contract_sha}"
+        )
+    else:
+        ok(
+            f"figures/{CONTRACT_NAME} matches its published sha256 "
+            f"({committed_contract_sha[:12]}...)"
+        )
+
+    fresh_path = tmp_dir / FIGURE_NAME
+    fresh_contract_path = tmp_dir / CONTRACT_NAME
+    result = build_figures.build_figure(fresh_path, fresh_contract_path)
     if result is None:
         fail(
             "matplotlib is not importable in this CI job -- the figure could not be "
@@ -170,24 +200,19 @@ def check_figure_reproducible(tmp_dir: Path) -> None:
         )
         return
 
-    fresh_bytes = Path(result).read_bytes()
+    fresh_bytes = fresh_path.read_bytes()
     fresh_sha = hashlib.sha256(fresh_bytes).hexdigest()
-    # Restore the committed bytes immediately (this script's job is to
-    # verify, not to modify the working tree).
-    committed_path.write_bytes(committed_bytes)
+    committed_contract = committed_contract_path.read_bytes()
+    fresh_contract = fresh_contract_path.read_bytes()
+    if committed_contract != fresh_contract:
+        fail(
+            f"figures/{CONTRACT_NAME} does NOT match the freshly recomputed semantic "
+            "contract -- a plotted value, label, source hash, dimension, ordering, or "
+            "material visual encoding changed"
+        )
+    else:
+        ok(f"figures/{CONTRACT_NAME} matches freshly recomputed content byte-for-byte")
 
-    if fresh_sha == committed_sha:
-        ok(f"figures/{FIGURE_NAME} regenerates byte-identical (sha256 {fresh_sha[:12]}...)")
-        return
-
-    print(
-        "NOTE: the regenerated figure is not byte-identical to the committed one. "
-        "This can be a genuine data drift OR a benign cross-environment rendering "
-        "difference (font hinting / freetype / libpng build differences across OS "
-        "or matplotlib patch versions) even with a pinned matplotlib version. "
-        "Falling back to a disclosed content-level check (dimensions + normalized "
-        "pixel difference) rather than failing closed on byte identity alone."
-    )
     try:
         import io
 
@@ -196,38 +221,49 @@ def check_figure_reproducible(tmp_dir: Path) -> None:
 
         committed_img = Image.open(io.BytesIO(committed_bytes)).convert("RGB")
         fresh_img = Image.open(io.BytesIO(fresh_bytes)).convert("RGB")
-        if committed_img.size != fresh_img.size:
-            fail(
-                f"figures/{FIGURE_NAME} content-level check FAILED: dimensions differ "
-                f"(committed {committed_img.size} vs. regenerated {fresh_img.size})"
-            )
-            return
-        diff = ImageChops.difference(committed_img, fresh_img)
-        arr = np.asarray(diff)
-        frac_differing = float((arr.max(axis=-1) > 8).mean())
-        print(
-            f"DISCLOSED: byte-identity check failed but the content-level check ran -- "
-            f"{frac_differing:.4%} of pixels differ by more than a small tolerance "
-            f"(committed sha256 {committed_sha[:12]}..., regenerated {fresh_sha[:12]}...)."
+        expected_dimensions = tuple(
+            json.loads(committed_contract)["figure"]["expected_pixel_dimensions"]
         )
-        if frac_differing > 0.02:
+        if committed_img.size != expected_dimensions:
             fail(
-                f"figures/{FIGURE_NAME} content-level check FAILED: {frac_differing:.4%} "
-                f"of pixels differ (2% threshold) -- this looks like a real data change, "
-                f"not just font/rendering drift"
+                f"figures/{FIGURE_NAME} dimensions {committed_img.size} do not match "
+                f"the semantic contract {expected_dimensions}"
             )
         else:
-            ok(
-                f"figures/{FIGURE_NAME} content-level check PASSED with disclosure: not "
-                f"byte-identical, but only {frac_differing:.4%} of pixels differ (within "
-                f"the 2% cross-environment-rendering tolerance)"
+            ok(f"figures/{FIGURE_NAME} committed dimensions match {expected_dimensions}")
+        if fresh_img.size != expected_dimensions:
+            fail(
+                f"regenerated {FIGURE_NAME} dimensions {fresh_img.size} do not match "
+                f"the semantic contract {expected_dimensions}"
             )
+        else:
+            ok(f"regenerated {FIGURE_NAME} dimensions match {expected_dimensions}")
+        if committed_img.size == fresh_img.size:
+            diff = np.asarray(ImageChops.difference(committed_img, fresh_img))
+            fraction = float((diff.max(axis=-1) > 8).mean())
+            print(f"DISCLOSED: {fraction:.4%} of pixels differ by more than 8/255.")
+            if fraction > 0.02:
+                fail(
+                    f"figure visual comparison differs at {fraction:.4%} of pixels "
+                    "(existing 2% threshold). Semantic contract agreement does not "
+                    "resolve this visual mismatch; rendering investigation is required."
+                )
+            else:
+                ok("figure visual comparison is within the existing 2% threshold")
     except ImportError:
         fail(
-            f"figures/{FIGURE_NAME} is not byte-identical and Pillow/numpy are "
-            f"unavailable for the content-level fallback check -- cannot confirm "
-            f"whether this is a real data change or a benign rendering difference. "
-            f"Failing closed."
+            "Pillow is unavailable; cannot validate committed and regenerated PNG "
+            "dimensions against the semantic render contract"
+        )
+
+    if fresh_sha == committed_sha:
+        ok(f"figures/{FIGURE_NAME} also regenerates byte-identical in this environment")
+    else:
+        print(
+            "DISCLOSED: regenerated PNG bytes differ from the fixed committed PNG "
+            f"(committed {committed_sha[:12]}..., regenerated {fresh_sha[:12]}...). "
+            "Semantic contract and visual comparison results are reported separately above. "
+            "Contract agreement does not waive a failed visual comparison."
         )
 
 

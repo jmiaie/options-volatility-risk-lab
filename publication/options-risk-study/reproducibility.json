@@ -21,7 +21,7 @@
       "ruff": "0.16.8",
       "matplotlib": "3.11.2"
     },
-    "note": "Versions read directly from `pip freeze`/`pip show` in the provided venv in this session -- not asserted from memory. matplotlib was installed in this venv in a follow-up remediation pass (pip install matplotlib, resolved to 3.11.2) specifically to generate the required figure; it was not present in the venv when this pack was first built. Pin matplotlib==3.11.2 when regenerating the figure to maximize byte-for-byte reproducibility (see publication_pack_derived_artifacts.figure_builder_script below)."
+    "note": "Versions read directly from `pip freeze`/`pip show` in the provided venv in this session -- not asserted from memory. matplotlib was installed in this venv in a follow-up remediation pass (pip install matplotlib, resolved to 3.11.2) specifically to generate the required figure; it was not present in the venv when this pack was first built. matplotlib is pinned for a stable documented environment, but PNG byte identity also depends on system FreeType/fontconfig/libpng builds. The portable verification target is the byte-identical semantic render contract described under publication_pack_derived_artifacts.figure_output."
   },
   "experiment_runner": {
     "script": "scripts/run_historical_risk_study_v2.py",
@@ -153,13 +153,16 @@
       "publication/options-risk-study/tables/kupiec_christoffersen.csv",
       "publication/options-risk-study/tables/case_study_dev_first_roll.json",
       "publication/options-risk-study/tables/dataset_and_artifact_hashes.json",
+      "publication/options-risk-study/figures/var_es_corrected_vs_superseded_95_all_periods.render-contract.json",
       "publication/options-risk-study/figures/var_es_corrected_vs_superseded_95_all_periods.png"
     ],
     "figure_output": {
       "path": "publication/options-risk-study/figures/var_es_corrected_vs_superseded_95_all_periods.png",
-      "sha256_computed_this_session": "ee5b2502abb247cfea7d9664b484ad5ffcbc8890596191a47abab72f4a5ec3d4",
+      "sha256_committed_png": "ee5b2502abb247cfea7d9664b484ad5ffcbc8890596191a47abab72f4a5ec3d4",
       "title": "Corrected vs. superseded 95% VaR by method, DEV / VAL 2024 / 2025",
-      "determinism_note": "Confirmed byte-identical (sha256 match) across repeated regenerations in this same environment/matplotlib version in this session. savefig() metadata fields (Software/Creation Time/Author/Description) are explicitly blanked to avoid embedding a variable timestamp or matplotlib-version string in the PNG's own metadata chunk. Cross-environment byte-identity additionally depends on the exact matplotlib/freetype/fontconfig build, which the publication-pack.yml CI workflow pins as closely as possible and falls back to a content-level check with disclosure if genuine rendering differences persist -- see .github/workflows/publication-pack.yml."
+      "render_contract_path": "publication/options-risk-study/figures/var_es_corrected_vs_superseded_95_all_periods.render-contract.json",
+      "render_contract_sha256": "9793a0ceb7341d86a270212f1649c7a9c983596045cb3738bcff8a48bb2a5daf",
+      "determinism_note": "The committed PNG is immutable under the published sha256 above. Re-rendered PNG bytes are not claimed portable across FreeType/fontconfig/libpng builds, even with the same matplotlib version. Instead, verify_pack.py fails closed unless the freshly derived canonical render contract is byte-identical to the committed contract. That contract fixes every plotted value, source-artifact hash, label, categorical order, color, fill encoding, scale, limit, canvas size, and DPI. It also requires both the committed and regenerated PNGs to be readable at the contracted dimensions. The existing visual gate remains: at most 2% of pixels may differ by more than 8/255 in any RGB channel. Semantic contract agreement does not waive a failed visual comparison or prove that rendering drift is benign. savefig() metadata fields remain blank to eliminate known variable PNG metadata."
     }
   },
   "test_suite": {
