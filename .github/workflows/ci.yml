@@ -7,7 +7,7 @@ on:
 
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     strategy:
       fail-fast: false
       matrix:
@@ -38,7 +38,7 @@ jobs:
   slow-tests:
     # The long-running historical-study and hedging-simulation tests, split out
     # so the fast suite reports quickly. Together the two jobs run every test.
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     strategy:
       fail-fast: false
       matrix:
@@ -62,7 +62,7 @@ jobs:
     # (resolved for Python 3.12) so this job is reproducible regardless of new
     # upstream releases. The matrix jobs above deliberately keep using loose
     # ranges to catch upstream breakage.
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
 
