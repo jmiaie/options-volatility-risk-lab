@@ -9,7 +9,7 @@ claims this lab does and does not make.
 | Repo | Visibility | Role |
 |------|------------|------|
 | [`jmiaie/options-volatility-risk-lab`](https://github.com/jmiaie/options-volatility-risk-lab) | public | **This lab** — BSM pricing, Greeks, IV, Monte Carlo, discrete hedging, VaR/ES, stress, and one historical evaluation on frozen SPY/FRED paths. Research library, not a trading system. |
-| [`jmiaie/quant-research-portfolio-public`](https://github.com/jmiaie/quant-research-portfolio-public) | public | **Portfolio hub (public)** — findings-led index, portfolio pages, publications list, and VERIFYING entrypoints across flagship projects. Prefer linking here for recruiter / external narrative. |
+| [`jmiaie/quant-research-portfolio-public`](https://github.com/jmiaie/quant-research-portfolio-public) | public | **Portfolio hub (public)** — findings-led index, portfolio pages, publications list, and VERIFYING entrypoints across flagship projects. Prefer linking here for public-facing / external narrative. |
 | [`jmiaie/quant-research-portfolio`](https://github.com/jmiaie/quant-research-portfolio) | private | **Portfolio hub (private)** — same cluster narrative plus internal export / interview tooling. Not required to run or understand this lab. |
 
 Sibling flagships on the public hub (separate repos): Financial Dynamics Model,
@@ -20,7 +20,7 @@ Statistical Arbitrage Engine, ML Sentiment Augmented Price Predictor.
 | Change type | Land in |
 |-------------|---------|
 | Pricing / risk library code, synthetic examples, this repo's historical study pack | **options-volatility-risk-lab** |
-| Cross-project headline findings, VERIFYING SHAs, recruiter index copy | **quant-research-portfolio-public** (and private hub when syncing) |
+| Cross-project headline findings, VERIFYING SHAs, public index copy | **quant-research-portfolio-public** (and private hub when syncing) |
 | Live trading, brokerage, invented performance, fabricated Greeks/PnL | **Nowhere** — out of scope for the cluster honesty standard |
 
 ## Explicit non-goals for this repository

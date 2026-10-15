@@ -1,4 +1,4 @@
-# Experiment configs (Directive #9)
+# Experiment configs
 
 | Config | Status |
 |---|---|

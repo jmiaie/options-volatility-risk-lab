@@ -1,4 +1,4 @@
-# Dataset manifests (Directive #9)
+# Dataset manifests
 
 Committed provenance for frozen historical underlyings.
 
