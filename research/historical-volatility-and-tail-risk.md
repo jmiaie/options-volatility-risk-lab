@@ -260,7 +260,7 @@ experiment's 20-session vol warm-up.)
 ### 6.2 VaR / ES by method, confidence level, and period
 
 **Corrected 2026-09-18 — volatility-units defect (independent review,
-tracker Issue #3).** `trailing_realized_vol()` returns **annualized**
+study tracker).** `trailing_realized_vol()` returns **annualized**
 volatility (`std(daily log returns) * sqrt(252)`) — correct as-is for the
 Black-Scholes option pricing used to build the standardized portfolio
 above (paired with maturity `T` already in years) — but the Delta-Normal

@@ -218,7 +218,6 @@ Regenerate with the `uv pip compile` command recorded in the lock file's header.
 |---------|------|
 | This repo (`options-volatility-risk-lab`) | Derivatives / vol / portfolio-risk research library + historical evaluation pack |
 | [quant-research-portfolio-public](https://github.com/jmiaie/quant-research-portfolio-public) | Public portfolio hub — findings index, [portfolio page](https://github.com/jmiaie/quant-research-portfolio-public/blob/main/portfolio/options-volatility-risk-lab.md), VERIFYING |
-| [quant-research-portfolio](https://github.com/jmiaie/quant-research-portfolio) | Private hub (same cluster; internal tooling) — optional |
 
 See [`docs/POSITIONING.md`](docs/POSITIONING.md) for what belongs where.
 

@@ -10,7 +10,6 @@ claims this lab does and does not make.
 |------|------------|------|
 | [`jmiaie/options-volatility-risk-lab`](https://github.com/jmiaie/options-volatility-risk-lab) | public | **This lab** — BSM pricing, Greeks, IV, Monte Carlo, discrete hedging, VaR/ES, stress, and one historical evaluation on frozen SPY/FRED paths. Research library, not a trading system. |
 | [`jmiaie/quant-research-portfolio-public`](https://github.com/jmiaie/quant-research-portfolio-public) | public | **Portfolio hub (public)** — findings-led index, portfolio pages, publications list, and VERIFYING entrypoints across flagship projects. Prefer linking here for public-facing / external narrative. |
-| [`jmiaie/quant-research-portfolio`](https://github.com/jmiaie/quant-research-portfolio) | private | **Portfolio hub (private)** — same cluster narrative plus internal export / interview tooling. Not required to run or understand this lab. |
 
 Sibling flagships on the public hub (separate repos): Financial Dynamics Model,
 Statistical Arbitrage Engine, ML Sentiment Augmented Price Predictor.
@@ -20,7 +19,7 @@ Statistical Arbitrage Engine, ML Sentiment Augmented Price Predictor.
 | Change type | Land in |
 |-------------|---------|
 | Pricing / risk library code, synthetic examples, this repo's historical study pack | **options-volatility-risk-lab** |
-| Cross-project headline findings, VERIFYING SHAs, public index copy | **quant-research-portfolio-public** (and private hub when syncing) |
+| Cross-project headline findings, VERIFYING SHAs, public index copy | **quant-research-portfolio-public** |
 | Live trading, brokerage, invented performance, fabricated Greeks/PnL | **Nowhere** — out of scope for the cluster honesty standard |
 
 ## Explicit non-goals for this repository
@@ -30,7 +29,7 @@ Statistical Arbitrage Engine, ML Sentiment Augmented Price Predictor.
 - Do **not** invent options-tape P&L; the historical study prices options with
   BSM off realized vol on a **hypothetical** book (see README historical
   evaluation and `publication/options-risk-study/`).
-- Do **not** treat the private hub as a runtime dependency — clone this repo
+- Do **not** treat any portfolio hub as a runtime dependency — clone this repo
   alone for library + study reproduction.
 - Dashboard / interactive viz remains **deferred** (stated on the hub portfolio
   page); do not imply a shipped product UI here.
