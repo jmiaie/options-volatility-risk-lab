@@ -17,11 +17,14 @@ Run from the repository root:
 
 from __future__ import annotations
 
+import hashlib
+import json
 import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
+import build_tables  # noqa: E402
 from build_tables import (  # noqa: E402
     CONF_DISPLAY,
     FIGURES_DIR,
@@ -48,9 +51,116 @@ INK_SECONDARY = "#52514e"
 INK_MUTED = "#898781"
 GRIDLINE = "#e1e0d9"
 SURFACE = "#fcfcfb"
+FIGURE_NAME = "var_es_corrected_vs_superseded_95_all_periods.png"
+CONTRACT_NAME = "var_es_corrected_vs_superseded_95_all_periods.render-contract.json"
+FIGSIZE_INCHES = (11.0, 6.5)
+DPI = 150
+Y_LIMITS = (50, 60000)
+PERIODS = ["dev_formation", "val_2024", "historical_evaluation_2025"]
+CONFIDENCE_KEY = "primary"
+TITLE = (
+    f"Mean {CONF_DISPLAY[CONFIDENCE_KEY]} 1-day VaR by method: corrected (authoritative) "
+    "vs. pre-fix (superseded)\nHistorical Simulation is unaffected by the volatility-units "
+    "fix and is byte-identical in both bars"
+)
+Y_LABEL = "Mean 95% 1-day VaR, $ per 1-lot-equivalent standardized book (log scale)"
+SOURCE_NOTE = (
+    "Source: results/historical_risk/options_hist_risk_v2_{dev_formation,val_2024,\n"
+    "historical_evaluation_2025}.json (corrected) and results/historical_risk/\n"
+    "superseded_volatility_units_fix/*.json (pre-fix). See RESULT-SOURCE-MAP.md. "
+    "No experiment was rerun to produce this figure."
+)
 
 
-def build_figure() -> str | None:
+def _sha256(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def build_render_contract() -> dict[str, object]:
+    """Return the portable, deterministic semantic contract for the figure.
+
+    PNG raster bytes are not portable across FreeType/fontconfig/libpng builds.
+    This contract is: it fixes every plotted value, label, categorical mapping,
+    axis setting, source hash, canvas size, and material visual encoding. The
+    publication verifier compares this object byte-for-byte after canonical JSON
+    serialization and validates the committed PNG separately by its fixed hash.
+    """
+
+    rows = build_var_es_table()
+    plotted_rows = [
+        {
+            "period_key": period_key,
+            "period_label": PERIOD_DISPLAY[period_key],
+            "method_key": method_key,
+            "method_label": METHOD_DISPLAY[method_key],
+            "mean_var_corrected": next(
+                row["mean_var_corrected"]
+                for row in rows
+                if row["confidence_key"] == CONFIDENCE_KEY
+                and row["period_key"] == period_key
+                and row["method_key"] == method_key
+            ),
+            "mean_var_prefix_superseded": next(
+                row["mean_var_prefix_superseded"]
+                for row in rows
+                if row["confidence_key"] == CONFIDENCE_KEY
+                and row["period_key"] == period_key
+                and row["method_key"] == method_key
+            ),
+        }
+        for period_key in PERIODS
+        for method_key in METHOD_KEYS
+    ]
+
+    source_paths = sorted(
+        [
+            *[path for path in build_tables.CURRENT_ARTIFACTS.values()],
+            *[path for path in build_tables.SUPERSEDED_VOL_UNITS.values()],
+        ]
+    )
+    sources = [
+        {
+            "path": str(path.relative_to(build_tables.REPO_ROOT)),
+            "sha256": _sha256(path),
+        }
+        for path in source_paths
+    ]
+
+    return {
+        "schema_version": 1,
+        "research_classification": "HISTORICAL EVALUATION",
+        "figure": {
+            "name": FIGURE_NAME,
+            "figsize_inches": list(FIGSIZE_INCHES),
+            "dpi": DPI,
+            "expected_pixel_dimensions": [1650, 975],
+            "facecolor": SURFACE,
+            "y_scale": "log",
+            "y_limits": list(Y_LIMITS),
+            "confidence_key": CONFIDENCE_KEY,
+            "period_order": PERIODS,
+            "method_order": list(METHOD_KEYS),
+            "method_colors": METHOD_COLOR,
+            "corrected_style": {"alpha": 1.0, "fill": "solid"},
+            "superseded_style": {"alpha": 0.35, "hatch": "///"},
+            "title": TITLE,
+            "y_label": Y_LABEL,
+            "source_note": SOURCE_NOTE,
+        },
+        "plotted_rows": plotted_rows,
+        "source_artifacts": sources,
+    }
+
+
+def write_render_contract(contract: dict[str, object], path: Path) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(contract, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+
+
+def build_figure(
+    output_path: Path | None = None,
+    contract_path: Path | None = None,
+) -> str | None:
     try:
         import matplotlib
 
@@ -63,14 +173,20 @@ def build_figure() -> str | None:
         print(note)
         return None
 
+    contract = build_render_contract()
+    if output_path is None and contract_path is None:
+        contract_path = FIGURES_DIR / CONTRACT_NAME
+    if contract_path is not None:
+        write_render_contract(contract, contract_path)
+
     rows = build_var_es_table()
-    periods = ["dev_formation", "val_2024", "historical_evaluation_2025"]
-    conf = "primary"  # 95% confidence, per the requested figure
+    periods = PERIODS
+    conf = CONFIDENCE_KEY  # 95% confidence, per the requested figure
 
     # rows_by[(period_key, method_key)] -> row dict, for the 95%-confidence rows only
     rows_by = {(r["period_key"], r["method_key"]): r for r in rows if r["confidence_key"] == conf}
 
-    fig, ax = plt.subplots(figsize=(11, 6.5), facecolor=SURFACE)
+    fig, ax = plt.subplots(figsize=FIGSIZE_INCHES, facecolor=SURFACE)
     ax.set_facecolor(SURFACE)
 
     n_periods = len(periods)
@@ -138,11 +254,11 @@ def build_figure() -> str | None:
             )
 
     ax.set_yscale("log")
-    ax.set_ylim(50, 60000)
+    ax.set_ylim(*Y_LIMITS)
     ax.set_xticks(group_centers)
     ax.set_xticklabels([PERIOD_DISPLAY[p] for p in periods], fontsize=10.5, color=INK_PRIMARY)
     ax.set_ylabel(
-        "Mean 95% 1-day VaR, $ per 1-lot-equivalent standardized book (log scale)",
+        Y_LABEL,
         fontsize=9.5,
         color=INK_SECONDARY,
     )
@@ -155,9 +271,7 @@ def build_figure() -> str | None:
         ax.spines[spine].set_color(INK_MUTED)
 
     ax.set_title(
-        f"Mean {CONF_DISPLAY[conf]} 1-day VaR by method: corrected (authoritative) vs. "
-        "pre-fix (superseded)\nHistorical Simulation is unaffected by the volatility-units "
-        "fix and is byte-identical in both bars",
+        TITLE,
         fontsize=11.5,
         color=INK_PRIMARY,
         pad=14,
@@ -211,10 +325,7 @@ def build_figure() -> str | None:
     fig.text(
         0.01,
         0.035,
-        "Source: results/historical_risk/options_hist_risk_v2_{dev_formation,val_2024,\n"
-        "historical_evaluation_2025}.json (corrected) and results/historical_risk/\n"
-        "superseded_volatility_units_fix/*.json (pre-fix). See RESULT-SOURCE-MAP.md. "
-        "No experiment was rerun to produce this figure.",
+        SOURCE_NOTE,
         fontsize=6.6,
         color=INK_MUTED,
         linespacing=1.5,
@@ -223,10 +334,11 @@ def build_figure() -> str | None:
     fig.tight_layout(rect=(0, 0.075, 1, 1))
 
     FIGURES_DIR.mkdir(parents=True, exist_ok=True)
-    out_path = FIGURES_DIR / "var_es_corrected_vs_superseded_95_all_periods.png"
+    out_path = output_path or FIGURES_DIR / FIGURE_NAME
+    out_path.parent.mkdir(parents=True, exist_ok=True)
     fig.savefig(
         out_path,
-        dpi=150,
+        dpi=DPI,
         facecolor=SURFACE,
         metadata={"Software": "", "Creation Time": "", "Author": "", "Description": ""},
     )

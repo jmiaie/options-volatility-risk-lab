@@ -28,12 +28,11 @@ jobs:
       - name: Install package and dev dependencies (offline after this step)
         run: |
           python -m pip install -e ".[dev]"
-          # Pinned to match the exact version used to generate the committed
-          # figure, to maximize byte-for-byte reproducibility of the PNG
-          # across environments (see reproducibility.json's environment
-          # note). Pillow + numpy are pulled in for the figure's
-          # content-level fallback check when byte-identity does not hold.
-          python -m pip install "matplotlib==3.11.2" pillow
+          # Matplotlib is pinned to the documented publication environment.
+          # Pillow validates PNG readability and contracted dimensions. The
+          # portable semantic render contract, not cross-platform raster
+          # bytes or a pixel-difference threshold, is the fail-closed gate.
+          python -m pip install -r publication/options-risk-study/requirements.txt
 
       - name: Ruff lint (bundle scripts only)
         run: ruff check publication/options-risk-study/scripts
