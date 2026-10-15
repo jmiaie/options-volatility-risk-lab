@@ -56,3 +56,25 @@ jobs:
 
       - name: pytest (slow suite)
         run: pytest -m slow --durations=15
+
+  locked-env:
+    # Installs the exact, fully resolved dependency set from requirements-lock.txt
+    # (resolved for Python 3.12) so this job is reproducible regardless of new
+    # upstream releases. The matrix jobs above deliberately keep using loose
+    # ranges to catch upstream breakage.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install from lock
+        run: |
+          python -m pip install -r requirements-lock.txt
+          python -m pip install -e . --no-deps
+
+      - name: pytest (fast suite, locked env)
+        run: pytest -m "not slow"

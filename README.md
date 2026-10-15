@@ -201,6 +201,17 @@ extra kept out of the core install and out of CI. CI runs on GitHub Actions
 against Python 3.11 and 3.12 (`.github/workflows/ci.yml`): ruff lint,
 ruff format check, mypy, and the full pytest suite.
 
+## Reproducible install
+
+`requirements-lock.txt` pins the full resolved dependency set (dev + viz extras, Python 3.12, no hashes).
+`pyproject.toml` keeps the loose ranges; the lock is for exact, repeatable environments (CI job `locked-env`):
+
+```bash
+pip install -r requirements-lock.txt && pip install -e . --no-deps
+```
+
+Regenerate with the `uv pip compile` command recorded in the lock file's header.
+
 ## Related projects
 
 | Project | Role |
