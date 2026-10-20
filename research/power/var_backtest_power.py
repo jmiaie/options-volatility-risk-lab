@@ -185,6 +185,10 @@ def kupiec_thresholds(n: int, confidence_level: float) -> tuple[int, int]:
 
 
 def power_from_thresholds(n: int, x_lo: int, x_hi: int, p: float | np.ndarray) -> Any:
+    # Clip: m * (1 - confidence) can overshoot 1.0 by one ulp at the top of the fine
+    # grid (1 - 0.95 = 0.050000000000000044), where scipy's binom returns NaN.
+    # Amendment A1 in PROTOCOL.md.
+    p = np.clip(p, 0.0, 1.0)
     upper = binom.sf(x_hi - 1, n, p) if x_hi <= n else 0.0 * np.asarray(p)
     lower = binom.cdf(x_lo, n, p) if x_lo >= 0 else 0.0 * np.asarray(p)
     return upper + lower

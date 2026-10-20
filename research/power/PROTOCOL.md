@@ -167,4 +167,15 @@ finding with evidence. Production code is not changed in this study.
 
 ## Amendments
 
-(none)
+**A1 (2026-10-20, after the first full run, before any results were committed).**
+Harness bug, not a design change. At the top of the fine multiple grid,
+`m * (1 - 0.95)` evaluates to 1.0000000000000009 because `1 - 0.95` is
+0.050000000000000044 in floating point. `scipy.stats.binom` returns NaN for
+p > 1. The NaN made the "sustained" Kupiec MDE (§4.4 item 1) come out empty
+(`null`) in every cell. `power_from_thresholds` now clips p to [0, 1], which is
+exact because the intended rate is 1.0, and a regression test covers the case.
+Nothing else in the design changed: grids, seeds, replications, definitions and
+rules are untouched. The full run was repeated in full. All simulated counts
+were byte-identical to the first run, as the per-cell seeds guarantee. The
+first-crossing MDEs, all power values at the grid multiples, and the n-search
+results did not depend on the top grid point and were unchanged.

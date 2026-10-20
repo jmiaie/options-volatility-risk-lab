@@ -52,6 +52,14 @@ class TestKupiecEnumeration:
         assert vbp.kupiec_thresholds(37, 0.95)[0] == -1
         assert vbp.kupiec_thresholds(38, 0.95)[0] == 0
 
+    def test_power_at_top_of_fine_grid_is_finite(self) -> None:
+        # Regression (Amendment A1): 20 * (1 - 0.95) overshoots 1.0 by one ulp.
+        m = vbp.fine_multiples(0.95)
+        lo, hi = vbp.kupiec_thresholds(95, 0.95)
+        pw = vbp.power_from_thresholds(95, lo, hi, m * (1 - 0.95))
+        assert np.all(np.isfinite(pw)) and pw[-1] == pytest.approx(1.0)
+        assert vbp.sustained_first(pw, m, 0.8)["sustained"] is not None
+
     def test_sustained_first(self) -> None:
         grid = np.arange(6.0)
         vals = np.array([0.1, 0.85, 0.7, 0.9, 0.95, 0.99])
