@@ -241,3 +241,7 @@ research/        research reports referenced above
 publication/     historical-study writeup + reproducibility bundle
 docs/            model-risk.md, POSITIONING.md (portfolio hub placement)
 ```
+
+## License
+
+Apache-2.0 — see [LICENSE](LICENSE). © 2026 Micap AI LLC.
