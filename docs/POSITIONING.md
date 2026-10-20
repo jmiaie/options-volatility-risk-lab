@@ -1,25 +1,25 @@
 # Positioning: Options Volatility Risk Lab in the quant research cluster
 
-This note places this repository in the Micap / Jeffrey Milam quantitative
-research portfolio so viewers know where the **hub narrative** lives and what
-claims this lab does and does not make.
+This note places this repository in the Micap AI quantitative research
+portfolio: where the **hub narrative** lives and what claims this lab does and
+does not make.
 
 ## One-line roles
 
 | Repo | Visibility | Role |
 |------|------------|------|
 | [`jmiaie/options-volatility-risk-lab`](https://github.com/jmiaie/options-volatility-risk-lab) | public | **This lab** — BSM pricing, Greeks, IV, Monte Carlo, discrete hedging, VaR/ES, stress, and one historical evaluation on frozen SPY/FRED paths. Research library, not a trading system. |
-| [`jmiaie/quant-research-portfolio-public`](https://github.com/jmiaie/quant-research-portfolio-public) | public | **Portfolio hub (public)** — findings-led index, portfolio pages, publications list, and VERIFYING entrypoints across flagship projects. Prefer linking here for public-facing / external narrative. |
+| [`jmiaie/quant-research-portfolio-public`](https://github.com/jmiaie/quant-research-portfolio-public) | public | **Portfolio hub (public)** — findings-led index, portfolio pages, publications list, and VERIFYING entrypoints across flagship projects. |
 
 Sibling flagships on the public hub (separate repos): Financial Dynamics Model,
 Statistical Arbitrage Engine, ML Sentiment Augmented Price Predictor.
 
 ## What belongs where
 
-| Change type | Land in |
+| Content | Lives in |
 |-------------|---------|
 | Pricing / risk library code, synthetic examples, this repo's historical study pack | **options-volatility-risk-lab** |
-| Cross-project headline findings, VERIFYING SHAs, public index copy | **quant-research-portfolio-public** |
+| Cross-project headline findings, VERIFYING SHAs, public findings index | **quant-research-portfolio-public** |
 | Live trading, brokerage, invented performance, fabricated Greeks/PnL | **Nowhere** — out of scope for the cluster honesty standard |
 
 ## Explicit non-goals for this repository
@@ -31,8 +31,8 @@ Statistical Arbitrage Engine, ML Sentiment Augmented Price Predictor.
   evaluation and `publication/options-risk-study/`).
 - Do **not** treat any portfolio hub as a runtime dependency — clone this repo
   alone for library + study reproduction.
-- Dashboard / interactive viz remains **deferred** (stated on the hub portfolio
-  page); do not imply a shipped product UI here.
+- No dashboard or interactive visualization ships with this repository; it
+  remains **deferred** (see the hub portfolio page).
 
 ## Honesty alignment
 

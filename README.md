@@ -17,7 +17,7 @@ portfolio-risk analytics under stated model assumptions. It does **not**
 recommend trades, allocations, or securities. Synthetic example outputs and
 historical-study artifacts characterize model behavior on fixtures or a
 **hypothetical** option book — they do **not** assert predictive edge,
-options-tape P&L, or live-trading performance. Aligns with the Micap
+options-tape P&L, or live-trading performance. Aligns with the Micap AI
 [quant research portfolio](https://github.com/jmiaie/quant-research-portfolio-public)
 honesty standard (null / withdrawn findings reported as found). Portfolio
 placement: [`docs/POSITIONING.md`](docs/POSITIONING.md).
@@ -241,3 +241,7 @@ research/        research reports referenced above
 publication/     historical-study writeup + reproducibility bundle
 docs/            model-risk.md, POSITIONING.md (portfolio hub placement)
 ```
+
+## License
+
+Apache-2.0 — see [LICENSE](LICENSE). © 2026 Micap AI LLC.
