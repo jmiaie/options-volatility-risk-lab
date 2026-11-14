@@ -64,6 +64,11 @@ BSM off realized vol), no deployed strategy, no live trading.
 > [`docs/post-publication-corrections.md`](docs/post-publication-corrections.md): the "persistently
 > low-biased" realised-volatility claim is not supported by the committed episodes, and about half of
 > the 2025 increase in dollar hedging error is SPY's higher price level. The frozen pack is unchanged.
+>
+> **What the VaR backtest could have detected.** A power study
+> ([`research/power/REPORT.md`](research/power/REPORT.md)) found that with 12 forecasts the coverage
+> test flags a VaR whose true breach rate is double the 5% target only 11% of the time, and 48% of the
+> time with 95 forecasts. The published non-rejections do not rule out mis-calibration of that size.
 
 Links: [technical paper](publication/options-risk-study/TECHNICAL-PAPER.md) ·
 [case study](publication/options-risk-study/CASE-STUDY.md) ·
