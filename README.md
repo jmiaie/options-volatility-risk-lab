@@ -17,7 +17,7 @@ portfolio-risk analytics under stated model assumptions. It does **not**
 recommend trades, allocations, or securities. Synthetic example outputs and
 historical-study artifacts characterize model behavior on fixtures or a
 **hypothetical** option book — they do **not** assert predictive edge,
-options-tape P&L, or live-trading performance. Aligns with the Micap
+options-tape P&L, or live-trading performance. Aligns with the Micap AI
 [quant research portfolio](https://github.com/jmiaie/quant-research-portfolio-public)
 honesty standard (null / withdrawn findings reported as found). Portfolio
 placement: [`docs/POSITIONING.md`](docs/POSITIONING.md).
@@ -59,6 +59,11 @@ Result summary, quoted from the committed writeup:
 EVALUATION, not an untouched holdout) of a hypothetical, standardized
 portfolio and hedging construct. No options tape (options are priced with
 BSM off realized vol), no deployed strategy, no live trading.
+
+> **Corrections (2026-11-14).** Two statements in the write-up are corrected in
+> [`docs/post-publication-corrections.md`](docs/post-publication-corrections.md): the "persistently
+> low-biased" realised-volatility claim is not supported by the committed episodes, and about half of
+> the 2025 increase in dollar hedging error is SPY's higher price level. The frozen pack is unchanged.
 
 Links: [technical paper](publication/options-risk-study/TECHNICAL-PAPER.md) ·
 [case study](publication/options-risk-study/CASE-STUDY.md) ·
@@ -241,3 +246,7 @@ research/        research reports referenced above
 publication/     historical-study writeup + reproducibility bundle
 docs/            model-risk.md, POSITIONING.md (portfolio hub placement)
 ```
+
+## License
+
+Apache-2.0 — see [LICENSE](LICENSE). © 2026 Micap AI LLC.
