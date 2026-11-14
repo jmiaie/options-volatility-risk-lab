@@ -14,6 +14,9 @@ on:
       - publication/options-risk-study/**
       - .github/workflows/reproducibility-bundle.yml
 
+permissions:
+  contents: read
+
 jobs:
   verify-pack:
     runs-on: ubuntu-24.04

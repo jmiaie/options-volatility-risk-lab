@@ -60,6 +60,11 @@ EVALUATION, not an untouched holdout) of a hypothetical, standardized
 portfolio and hedging construct. No options tape (options are priced with
 BSM off realized vol), no deployed strategy, no live trading.
 
+> **Corrections (2026-11-14).** Two statements in the write-up are corrected in
+> [`docs/post-publication-corrections.md`](docs/post-publication-corrections.md): the "persistently
+> low-biased" realised-volatility claim is not supported by the committed episodes, and about half of
+> the 2025 increase in dollar hedging error is SPY's higher price level. The frozen pack is unchanged.
+
 Links: [technical paper](publication/options-risk-study/TECHNICAL-PAPER.md) ·
 [case study](publication/options-risk-study/CASE-STUDY.md) ·
 [result source map](publication/options-risk-study/RESULT-SOURCE-MAP.md) ·
