@@ -1,6 +1,6 @@
 # Pinned, fully resolved dependency set for reproducible installs (no hashes).
 # Python: 3.12 (resolved with --python-version 3.12, linux x86_64)
-# Date:   2026-10-15 (uv 0.13.1)
+# Date:   2026-10-27 (uv 0.11.32)
 # Extras locked: dev, viz. The optional `data` extra (yfinance) is NOT locked.
 # Install:    pip install -r requirements-lock.txt && pip install -e . --no-deps
 # Regenerate (from repo root; overwrites this file, then re-add these header lines):
@@ -22,7 +22,7 @@ packaging==26.3
 pandas==3.0.6
 pandas-stubs==3.0.5.260914
 pathspec==1.1.1
-pillow==12.3.0
+pillow==13.0.0
 pluggy==1.6.0
 pygments==2.21.0
 pyparsing==3.3.3
