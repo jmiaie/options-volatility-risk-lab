@@ -15,7 +15,7 @@ iniconfig==2.3.1
 kiwisolver==1.5.1
 librt==0.16.0
 matplotlib==3.11.2
-mypy==2.4.0
+mypy==2.4.1
 mypy-extensions==1.1.0
 numpy==2.5.4
 packaging==26.3
