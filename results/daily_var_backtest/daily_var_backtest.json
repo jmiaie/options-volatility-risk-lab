@@ -1,0 +1,1608 @@
+{
+  "classification": "PREVIOUSLY INSPECTED / HISTORICAL EVALUATION",
+  "data_quality": {
+    "dropped_no_rate": 0,
+    "dropped_no_recent_vix": 0,
+    "kept_sessions": 2766,
+    "spy_sessions": 2766,
+    "vix_carried_forward": 0
+  },
+  "dataset_manifest": {
+    "dataset_ids": [
+      "yf_spy_daily_2015_2025_n2",
+      "fred_vixcls_daily_2015_2025_n2",
+      "fred_dgs3mo_daily_2015_2025_n2"
+    ],
+    "datasets": {
+      "fred_dgs3mo_daily_2015_2025_n2": {
+        "citation": "Board of Governors of the Federal Reserve System (US), Market Yield on U.S. Treasury Securities at 3-Month Constant Maturity [DGS3MO], retrieved from FRED, Federal Reserve Bank of St. Louis; https://fred.stlouisfed.org/series/DGS3MO.",
+        "retrieval_timestamp_utc": "2026-11-15T07:38:54Z",
+        "sha256": {
+          "DGS3MO.csv": "1a9399ac815de5641fc8956cedb88b4a81c61344935af839b27f15ac02380888",
+          "dataset_canonical": "1a9399ac815de5641fc8956cedb88b4a81c61344935af839b27f15ac02380888"
+        },
+        "source": "fred"
+      },
+      "fred_vixcls_daily_2015_2025_n2": {
+        "citation": "Chicago Board Options Exchange, CBOE Volatility Index: VIX [VIXCLS], retrieved from FRED, Federal Reserve Bank of St. Louis; https://fred.stlouisfed.org/series/VIXCLS. Copyright Cboe; FRED marks this series 'Copyrighted: Citation Required'.",
+        "retrieval_timestamp_utc": "2026-11-15T07:38:54Z",
+        "sha256": {
+          "VIXCLS.csv": "0644f7e79440fff2551b71d812e1fecc4e0d8e365c2ec32c855f1d6a7bda5ed2",
+          "dataset_canonical": "0644f7e79440fff2551b71d812e1fecc4e0d8e365c2ec32c855f1d6a7bda5ed2"
+        },
+        "source": "fred"
+      },
+      "yf_spy_daily_2015_2025_n2": {
+        "retrieval_timestamp_utc": "2026-11-15T07:38:53Z",
+        "sha256": {
+          "SPY.csv": "8d92d36da4e3f12dbf4d9056ccce5bc8e9fb2e5eddec151e3e3dc722ec6a54f8",
+          "dataset_canonical": "2b6b08093cb733e865d2b22156b32a912dcb9270dacc728f7a1ad22072d6561d"
+        },
+        "source": "yfinance"
+      }
+    }
+  },
+  "p4_scale_fitted_to_dev": {
+    "corr": -0.7270899849,
+    "sd_dvix": 0.07965900609,
+    "sd_ret": 0.01143921807
+  },
+  "protocol": "research/daily_var_backtest/PROTOCOL.md",
+  "result": {
+    "M1": {
+      "T1": {
+        "p_value": 0.008587891677,
+        "statistic": 6.906583832
+      },
+      "T2": {
+        "p_value": 6.320322989e-07,
+        "statistic": 24.81198618
+      },
+      "T3": {
+        "n": 2513,
+        "p_value": 0.2434486282,
+        "statistic": 0.01460404141,
+        "z": 1.166410221
+      },
+      "Z2": {
+        "critical_95": 0.3547017533,
+        "n_sim": 10000,
+        "p_value": 0.05709429057,
+        "statistic": 0.3436555721
+      },
+      "holm_T1_T2_T3": [
+        0.01717578335,
+        1.896096897e-06,
+        0.2434486282
+      ],
+      "n": 2513,
+      "n_breaches_95": 98
+    },
+    "M1_by_period": {
+      "2025": {
+        "T1": {
+          "p_value": 0.1673271219,
+          "p_value_holm_across_periods": 0.3105309302,
+          "statistic": 1.906728442
+        },
+        "T2": {
+          "p_value": 0.01826804459,
+          "p_value_holm_across_periods": 0.03653608917,
+          "statistic": 5.570260327
+        },
+        "T3": {
+          "n": 249,
+          "p_value": 0.9889905641,
+          "p_value_holm_across_periods": 1.0,
+          "statistic": 0.01242092516,
+          "z": -0.01379871955
+        },
+        "n": 249,
+        "n_breaches_95": 8
+      },
+      "DEV": {
+        "T1": {
+          "p_value": 0.04964524909,
+          "p_value_holm_across_periods": 0.1489357473,
+          "statistic": 3.853400252
+        },
+        "T2": {
+          "p_value": 1.683684088e-05,
+          "p_value_holm_across_periods": 5.051052264e-05,
+          "statistic": 18.5173077
+        },
+        "T3": {
+          "n": 2012,
+          "p_value": 0.221439688,
+          "p_value_holm_across_periods": 0.6643190639,
+          "statistic": 0.01496495091,
+          "z": 1.222708837
+        },
+        "n": 2012,
+        "n_breaches_95": 82
+      },
+      "VAL2024": {
+        "T1": {
+          "p_value": 0.1552654651,
+          "p_value_holm_across_periods": 0.3105309302,
+          "statistic": 2.019742542
+        },
+        "T2": {
+          "p_value": 0.2377948313,
+          "p_value_holm_across_periods": 0.2377948313,
+          "statistic": 1.393619329
+        },
+        "T3": {
+          "n": 252,
+          "p_value": 0.7446546635,
+          "p_value_holm_across_periods": 1.0,
+          "statistic": 0.01435528593,
+          "z": 0.3256956133
+        },
+        "n": 252,
+        "n_breaches_95": 8
+      }
+    },
+    "M2_by_period": {
+      "2025": {
+        "T1": {
+          "p_value": 0.6673543895,
+          "p_value_holm_across_periods": 1.0,
+          "statistic": 0.1847123764
+        },
+        "T2": {
+          "p_value": 0.3121720022,
+          "p_value_holm_across_periods": 0.8549270489,
+          "statistic": 1.021463973
+        },
+        "T3": {
+          "n": 249,
+          "p_value": 0.4869639331,
+          "p_value_holm_across_periods": 0.909906325,
+          "statistic": 0.01648359743,
+          "z": 0.6951458028
+        },
+        "n": 249,
+        "n_breaches_95": 11
+      },
+      "DEV": {
+        "T1": {
+          "p_value": 0.6548533308,
+          "p_value_holm_across_periods": 1.0,
+          "statistic": 0.1998359057
+        },
+        "T2": {
+          "p_value": 0.284975683,
+          "p_value_holm_across_periods": 0.8549270489,
+          "statistic": 1.143207037
+        },
+        "T3": {
+          "n": 2012,
+          "p_value": 0.1296560964,
+          "p_value_holm_across_periods": 0.3889682891,
+          "statistic": 0.0155551289,
+          "z": 1.515459432
+        },
+        "n": 2012,
+        "n_breaches_95": 105
+      },
+      "VAL2024": {
+        "T1": {
+          "p_value": 0.9084112138,
+          "p_value_holm_across_periods": 1.0,
+          "statistic": 0.01323484116
+        },
+        "T2": {
+          "p_value": 0.6931781262,
+          "p_value_holm_across_periods": 0.8549270489,
+          "statistic": 0.1556663818
+        },
+        "T3": {
+          "n": 252,
+          "p_value": 0.4549531625,
+          "p_value_holm_across_periods": 0.909906325,
+          "statistic": 0.01675623764,
+          "z": 0.7471829036
+        },
+        "n": 252,
+        "n_breaches_95": 13
+      }
+    },
+    "mde": {
+      "T1_kupiec_multiple_at_holm_level": 1.3,
+      "T3_p4_tail_multiplied": {
+        "1.5": 1.0,
+        "2.0": 1.0
+      }
+    },
+    "n_forecasts": 2513,
+    "preconditions": {
+      "P1": {
+        "decay_loss_direct_bs": -4.392989174,
+        "decay_loss_portfolio": -4.392989174,
+        "decay_loss_vectorised": -4.392989174,
+        "decay_vs_direct_abs_diff": 1.051603249e-12,
+        "decay_vs_theta_rel_diff": 0.01133532544,
+        "passed": true,
+        "zero_shock_max_abs_loss": 0.0
+      },
+      "P2": {
+        "forecast_date": "2021-12-15",
+        "forecast_number": 1500,
+        "passed": true
+      },
+      "P3": {
+        "code_equivalence_passed": true,
+        "max_rel_diff_vs_published": 0.002536664958,
+        "n_rolls": 119,
+        "note": "Differences from the published values reflect data vintage (the supplied SPY series is not the published snapshot) and are informational only; P3 here tests code equivalence.",
+        "passed": true,
+        "published_snapshot_supplied": false,
+        "rolls": [
+          {
+            "abs_diff": 0.0,
+            "harness_var": 137.3644249,
+            "passed": true,
+            "production_var": 137.3644249,
+            "published_var": 137.7086761,
+            "rel_diff_vs_published": 0.002499850948,
+            "roll_date": "2016-02-01"
+          },
+          {
+            "abs_diff": 0.0,
+            "harness_var": 128.5834261,
+            "passed": true,
+            "production_var": 128.5834261,
+            "published_var": 128.9007431,
+            "rel_diff_vs_published": 0.002461716233,
+            "roll_date": "2016-03-01"
+          },
+          {
+            "abs_diff": 1.98951966e-12,
+            "harness_var": 81.65628125,
+            "passed": true,
+            "production_var": 81.65628125,
+            "published_var": 81.86238752,
+            "rel_diff_vs_published": 0.002517716343,
+            "roll_date": "2016-04-01"
+          },
+          {
+            "abs_diff": 1.634248292e-12,
+            "harness_var": 85.3844053,
+            "passed": true,
+            "production_var": 85.3844053,
+            "published_var": 85.59825249,
+            "rel_diff_vs_published": 0.0024982658,
+            "roll_date": "2016-05-02"
+          },
+          {
+            "abs_diff": 0.0,
+            "harness_var": 90.23549971,
+            "passed": true,
+            "production_var": 90.23549971,
+            "published_var": 90.46260218,
+            "rel_diff_vs_published": 0.002510456988,
+            "roll_date": "2016-06-01"
+          },
+          {
+            "abs_diff": 3.637978807e-12,
+            "harness_var": 147.4340376,
+            "passed": true,
+            "production_var": 147.4340376,
+            "published_var": 147.7994262,
+            "rel_diff_vs_published": 0.002472192486,
+            "roll_date": "2016-07-01"
+          },
+          {
+            "abs_diff": 2.003730515e-12,
+            "harness_var": 109.8395162,
+            "passed": true,
+            "production_var": 109.8395162,
+            "published_var": 110.1096427,
+            "rel_diff_vs_published": 0.002453249998,
+            "roll_date": "2016-08-01"
+          },
+          {
+            "abs_diff": 1.98951966e-12,
+            "harness_var": 132.2391903,
+            "passed": true,
+            "production_var": 132.2391903,
+            "published_var": 132.5674772,
+            "rel_diff_vs_published": 0.00247637618,
+            "roll_date": "2016-09-01"
+          },
+          {
+            "abs_diff": 1.634248292e-12,
+            "harness_var": 111.833792,
+            "passed": true,
+            "production_var": 111.833792,
+            "published_var": 112.1128827,
+            "rel_diff_vs_published": 0.002489372812,
+            "roll_date": "2016-10-03"
+          },
+          {
+            "abs_diff": 0.0,
+            "harness_var": 87.79164048,
+            "passed": true,
+            "production_var": 87.79164048,
+            "published_var": 88.00844003,
+            "rel_diff_vs_published": 0.002463395048,
+            "roll_date": "2016-11-01"
+          },
+          {
+            "abs_diff": 2.003730515e-12,
+            "harness_var": 77.90494737,
+            "passed": true,
+            "production_var": 77.90494737,
+            "published_var": 78.09890933,
+            "rel_diff_vs_published": 0.002483542535,
+            "roll_date": "2016-12-01"
+          },
+          {
+            "abs_diff": 5.272227099e-12,
+            "harness_var": 75.66796514,
+            "passed": true,
+            "production_var": 75.66796514,
+            "published_var": 75.85326747,
+            "rel_diff_vs_published": 0.002442904979,
+            "roll_date": "2017-01-03"
+          },
+          {
+            "abs_diff": 1.634248292e-12,
+            "harness_var": 79.28592754,
+            "passed": true,
+            "production_var": 79.28592754,
+            "published_var": 79.47928862,
+            "rel_diff_vs_published": 0.002432848602,
+            "roll_date": "2017-02-01"
+          },
+          {
+            "abs_diff": 3.637978807e-12,
+            "harness_var": 94.74286589,
+            "passed": true,
+            "production_var": 94.74286589,
+            "published_var": 94.98061464,
+            "rel_diff_vs_published": 0.002503129196,
+            "roll_date": "2017-03-01"
+          },
+          {
+            "abs_diff": 0.0,
+            "harness_var": 61.95827565,
+            "passed": true,
+            "production_var": 61.95827565,
+            "published_var": 62.11051443,
+            "rel_diff_vs_published": 0.002451095154,
+            "roll_date": "2017-04-03"
+          },
+          {
+            "abs_diff": 2.003730515e-12,
+            "harness_var": 58.99607219,
+            "passed": true,
+            "production_var": 58.99607219,
+            "published_var": 59.14265693,
+            "rel_diff_vs_published": 0.002478494353,
+            "roll_date": "2017-05-01"
+          },
+          {
+            "abs_diff": 0.0,
+            "harness_var": 52.73971305,
+            "passed": true,
+            "production_var": 52.73971305,
+            "published_var": 52.87097125,
+            "rel_diff_vs_published": 0.002482613886,
+            "roll_date": "2017-06-01"
+          },
+          {
+            "abs_diff": 1.64135372e-12,
+            "harness_var": 38.54658937,
+            "passed": true,
+            "production_var": 38.54658937,
+            "published_var": 38.64314471,
+            "rel_diff_vs_published": 0.002498640841,
+            "roll_date": "2017-07-03"
+          },
+          {
+            "abs_diff": 1.634248292e-12,
+            "harness_var": 47.3918718,
+            "passed": true,
+            "production_var": 47.3918718,
+            "published_var": 47.51119706,
+            "rel_diff_vs_published": 0.00251151867,
+            "roll_date": "2017-08-01"
+          },
+          {
+            "abs_diff": 5.634603895e-12,
+            "harness_var": 44.2890005,
+            "passed": true,
+            "production_var": 44.2890005,
+            "published_var": 44.39962795,
+            "rel_diff_vs_published": 0.002491630244,
+            "roll_date": "2017-09-01"
+          },
+          {
+            "abs_diff": 3.637978807e-12,
+            "harness_var": 50.6316964,
+            "passed": true,
+            "production_var": 50.6316964,
+            "published_var": 50.75786032,
+            "rel_diff_vs_published": 0.00248560353,
+            "roll_date": "2017-10-02"
+          },
+          {
+            "abs_diff": 3.637978807e-12,
+            "harness_var": 52.95853604,
+            "passed": true,
+            "production_var": 52.95853604,
+            "published_var": 53.09058539,
+            "rel_diff_vs_published": 0.00248724613,
+            "roll_date": "2017-11-01"
+          },
+          {
+            "abs_diff": 2.003730515e-12,
+            "harness_var": 44.15297255,
+            "passed": true,
+            "production_var": 44.15297255,
+            "published_var": 44.26372111,
+            "rel_diff_vs_published": 0.002502016357,
+            "roll_date": "2017-12-01"
+          },
+          {
+            "abs_diff": 1.634248292e-12,
+            "harness_var": 52.34232286,
+            "passed": true,
+            "production_var": 52.34232286,
+            "published_var": 52.47308444,
+            "rel_diff_vs_published": 0.002491974278,
+            "roll_date": "2018-01-02"
+          },
+          {
+            "abs_diff": 1.996625087e-12,
+            "harness_var": 46.41501881,
+            "passed": true,
+            "production_var": 46.41501881,
+            "published_var": 46.52883116,
+            "rel_diff_vs_published": 0.002446060785,
+            "roll_date": "2018-02-01"
+          },
+          {
+            "abs_diff": 2.01794137e-12,
+            "harness_var": 141.3245178,
+            "passed": true,
+            "production_var": 141.3245178,
+            "published_var": 141.6758676,
+            "rel_diff_vs_published": 0.002479954869,
+            "roll_date": "2018-03-01"
+          },
+          {
+            "abs_diff": 2.003730515e-12,
+            "harness_var": 120.2307927,
+            "passed": true,
+            "production_var": 120.2307927,
+            "published_var": 120.5328636,
+            "rel_diff_vs_published": 0.002506128819,
+            "roll_date": "2018-04-02"
+          },
+          {
+            "abs_diff": 2.003730515e-12,
+            "harness_var": 107.1545637,
+            "passed": true,
+            "production_var": 107.1545637,
+            "published_var": 107.422099,
+            "rel_diff_vs_published": 0.002490504883,
+            "roll_date": "2018-05-01"
+          },
+          {
+            "abs_diff": 1.634248292e-12,
+            "harness_var": 85.38419231,
+            "passed": true,
+            "production_var": 85.38419231,
+            "published_var": 85.60133422,
+            "rel_diff_vs_published": 0.002536664958,
+            "roll_date": "2018-06-01"
+          },
+          {
+            "abs_diff": 1.634248292e-12,
+            "harness_var": 87.99771749,
+            "passed": true,
+            "production_var": 87.99771749,
+            "published_var": 88.21796049,
+            "rel_diff_vs_published": 0.002496577877,
+            "roll_date": "2018-07-02"
+          },
+          {
+            "abs_diff": 3.637978807e-12,
+            "harness_var": 90.55528583,
+            "passed": true,
+            "production_var": 90.55528583,
+            "published_var": 90.78210806,
+            "rel_diff_vs_published": 0.002498534538,
+            "roll_date": "2018-08-01"
+          },
+          {
+            "abs_diff": 1.648459147e-12,
+            "harness_var": 100.1812513,
+            "passed": true,
+            "production_var": 100.1812513,
+            "published_var": 100.4312588,
+            "rel_diff_vs_published": 0.002489339623,
+            "roll_date": "2018-09-04"
+          },
+          {
+            "abs_diff": 3.637978807e-12,
+            "harness_var": 154.2064062,
+            "passed": true,
+            "production_var": 154.2064062,
+            "published_var": 154.5812844,
+            "rel_diff_vs_published": 0.002425120186,
+            "roll_date": "2018-10-01"
+          },
+          {
+            "abs_diff": 1.648459147e-12,
+            "harness_var": 177.5139893,
+            "passed": true,
+            "production_var": 177.5139893,
+            "published_var": 177.9536445,
+            "rel_diff_vs_published": 0.002470616383,
+            "roll_date": "2018-11-01"
+          },
+          {
+            "abs_diff": 3.637978807e-12,
+            "harness_var": 169.0325786,
+            "passed": true,
+            "production_var": 169.0325786,
+            "published_var": 169.4508961,
+            "rel_diff_vs_published": 0.002468664738,
+            "roll_date": "2018-12-03"
+          },
+          {
+            "abs_diff": 0.0,
+            "harness_var": 207.4874781,
+            "passed": true,
+            "production_var": 207.4874781,
+            "published_var": 208.0005801,
+            "rel_diff_vs_published": 0.002466829369,
+            "roll_date": "2019-01-02"
+          },
+          {
+            "abs_diff": 2.01794137e-12,
+            "harness_var": 176.5045319,
+            "passed": true,
+            "production_var": 176.5045319,
+            "published_var": 176.948555,
+            "rel_diff_vs_published": 0.002509334303,
+            "roll_date": "2019-02-01"
+          },
+          {
+            "abs_diff": 2.003730515e-12,
+            "harness_var": 106.9541453,
+            "passed": true,
+            "production_var": 106.9541453,
+            "published_var": 107.2100432,
+            "rel_diff_vs_published": 0.002386884098,
+            "roll_date": "2019-03-01"
+          },
+          {
+            "abs_diff": 0.0,
+            "harness_var": 113.9731898,
+            "passed": true,
+            "production_var": 113.9731898,
+            "published_var": 114.2548544,
+            "rel_diff_vs_published": 0.002465231096,
+            "roll_date": "2019-04-01"
+          },
+          {
+            "abs_diff": 5.627498467e-12,
+            "harness_var": 189.1387681,
+            "passed": true,
+            "production_var": 189.1387681,
+            "published_var": 189.6141989,
+            "rel_diff_vs_published": 0.002507358844,
+            "roll_date": "2019-05-01"
+          },
+          {
+            "abs_diff": 0.0,
+            "harness_var": 129.1654969,
+            "passed": true,
+            "production_var": 129.1654969,
+            "published_var": 129.4858587,
+            "rel_diff_vs_published": 0.002474106614,
+            "roll_date": "2019-06-03"
+          },
+          {
+            "abs_diff": 3.637978807e-12,
+            "harness_var": 108.9124951,
+            "passed": true,
+            "production_var": 108.9124951,
+            "published_var": 109.1827609,
+            "rel_diff_vs_published": 0.002475351856,
+            "roll_date": "2019-07-01"
+          },
+          {
+            "abs_diff": 1.634248292e-12,
+            "harness_var": 109.575768,
+            "passed": true,
+            "production_var": 109.575768,
+            "published_var": 109.8473346,
+            "rel_diff_vs_published": 0.002472218159,
+            "roll_date": "2019-08-01"
+          },
+          {
+            "abs_diff": 0.0,
+            "harness_var": 215.5729118,
+            "passed": true,
+            "production_var": 215.5729118,
+            "published_var": 216.1067762,
+            "rel_diff_vs_published": 0.002470373212,
+            "roll_date": "2019-09-03"
+          },
+          {
+            "abs_diff": 2.003730515e-12,
+            "harness_var": 116.1473956,
+            "passed": true,
+            "production_var": 116.1473956,
+            "published_var": 116.4347046,
+            "rel_diff_vs_published": 0.002467554722,
+            "roll_date": "2019-10-01"
+          },
+          {
+            "abs_diff": 3.637978807e-12,
+            "harness_var": 110.4212059,
+            "passed": true,
+            "production_var": 110.4212059,
+            "published_var": 110.6979201,
+            "rel_diff_vs_published": 0.002499723315,
+            "roll_date": "2019-11-01"
+          },
+          {
+            "abs_diff": 3.637978807e-12,
+            "harness_var": 168.6267932,
+            "passed": true,
+            "production_var": 168.6267932,
+            "published_var": 169.0533821,
+            "rel_diff_vs_published": 0.002523397826,
+            "roll_date": "2019-12-02"
+          },
+          {
+            "abs_diff": 0.0,
+            "harness_var": 124.3705862,
+            "passed": true,
+            "production_var": 124.3705862,
+            "published_var": 124.6849035,
+            "rel_diff_vs_published": 0.002520892879,
+            "roll_date": "2020-01-02"
+          },
+          {
+            "abs_diff": 0.0,
+            "harness_var": 103.8501295,
+            "passed": true,
+            "production_var": 103.8501295,
+            "published_var": 104.1053277,
+            "rel_diff_vs_published": 0.002451346447,
+            "roll_date": "2020-02-03"
+          },
+          {
+            "abs_diff": 0.0,
+            "harness_var": 184.3756558,
+            "passed": true,
+            "production_var": 184.3756558,
+            "published_var": 184.8362631,
+            "rel_diff_vs_published": 0.002491974524,
+            "roll_date": "2020-03-02"
+          },
+          {
+            "abs_diff": 1.98951966e-12,
+            "harness_var": 293.207357,
+            "passed": true,
+            "production_var": 293.207357,
+            "published_var": 293.9366109,
+            "rel_diff_vs_published": 0.002480990263,
+            "roll_date": "2020-04-01"
+          },
+          {
+            "abs_diff": 1.648459147e-12,
+            "harness_var": 441.0806245,
+            "passed": true,
+            "production_var": 441.0806245,
+            "published_var": 442.1777671,
+            "rel_diff_vs_published": 0.002481225152,
+            "roll_date": "2020-05-01"
+          },
+          {
+            "abs_diff": 0.0,
+            "harness_var": 408.4373685,
+            "passed": true,
+            "production_var": 408.4373685,
+            "published_var": 409.4644531,
+            "rel_diff_vs_published": 0.002508360933,
+            "roll_date": "2020-06-01"
+          },
+          {
+            "abs_diff": 1.648459147e-12,
+            "harness_var": 490.8776852,
+            "passed": true,
+            "production_var": 490.8776852,
+            "published_var": 492.1107215,
+            "rel_diff_vs_published": 0.002505607618,
+            "roll_date": "2020-07-01"
+          },
+          {
+            "abs_diff": 0.0,
+            "harness_var": 324.1473038,
+            "passed": true,
+            "production_var": 324.1473038,
+            "published_var": 324.9649393,
+            "rel_diff_vs_published": 0.002516072974,
+            "roll_date": "2020-08-03"
+          },
+          {
+            "abs_diff": 0.0,
+            "harness_var": 331.4211562,
+            "passed": true,
+            "production_var": 331.4211562,
+            "published_var": 332.2627534,
+            "rel_diff_vs_published": 0.002532926679,
+            "roll_date": "2020-09-01"
+          },
+          {
+            "abs_diff": 1.648459147e-12,
+            "harness_var": 482.4406191,
+            "passed": true,
+            "production_var": 482.4406191,
+            "published_var": 483.6540933,
+            "rel_diff_vs_published": 0.002508971095,
+            "roll_date": "2020-10-01"
+          },
+          {
+            "abs_diff": 5.627498467e-12,
+            "harness_var": 429.3045643,
+            "passed": true,
+            "production_var": 429.3045643,
+            "published_var": 430.3820735,
+            "rel_diff_vs_published": 0.002503610792,
+            "roll_date": "2020-11-02"
+          },
+          {
+            "abs_diff": 0.0,
+            "harness_var": 401.5959067,
+            "passed": true,
+            "production_var": 401.5959067,
+            "published_var": 402.60879,
+            "rel_diff_vs_published": 0.002515800089,
+            "roll_date": "2020-12-01"
+          },
+          {
+            "abs_diff": 0.0,
+            "harness_var": 347.1577142,
+            "passed": true,
+            "production_var": 347.1577142,
+            "published_var": 348.0340208,
+            "rel_diff_vs_published": 0.00251787615,
+            "roll_date": "2021-01-04"
+          },
+          {
+            "abs_diff": 4.035882739e-12,
+            "harness_var": 418.8962176,
+            "passed": true,
+            "production_var": 418.8962176,
+            "published_var": 419.9520127,
+            "rel_diff_vs_published": 0.002514085249,
+            "roll_date": "2021-02-01"
+          },
+          {
+            "abs_diff": 7.275957614e-12,
+            "harness_var": 425.6759306,
+            "passed": true,
+            "production_var": 425.6759306,
+            "published_var": 426.7480369,
+            "rel_diff_vs_published": 0.002512270163,
+            "roll_date": "2021-03-01"
+          },
+          {
+            "abs_diff": 3.240074875e-12,
+            "harness_var": 273.5151656,
+            "passed": true,
+            "production_var": 273.5151656,
+            "published_var": 274.1941609,
+            "rel_diff_vs_published": 0.002476330328,
+            "roll_date": "2021-04-01"
+          },
+          {
+            "abs_diff": 1.05444542e-11,
+            "harness_var": 187.2380641,
+            "passed": true,
+            "production_var": 187.2380641,
+            "published_var": 187.7026666,
+            "rel_diff_vs_published": 0.002475204646,
+            "roll_date": "2021-05-03"
+          },
+          {
+            "abs_diff": 7.275957614e-12,
+            "harness_var": 229.3889826,
+            "passed": true,
+            "production_var": 229.3889826,
+            "published_var": 229.9609445,
+            "rel_diff_vs_published": 0.002487213414,
+            "roll_date": "2021-06-01"
+          },
+          {
+            "abs_diff": 7.275957614e-12,
+            "harness_var": 175.198581,
+            "passed": true,
+            "production_var": 175.198581,
+            "published_var": 175.6299075,
+            "rel_diff_vs_published": 0.002455882743,
+            "roll_date": "2021-07-01"
+          },
+          {
+            "abs_diff": 0.0,
+            "harness_var": 202.4014058,
+            "passed": true,
+            "production_var": 202.4014058,
+            "published_var": 202.9016715,
+            "rel_diff_vs_published": 0.002465557173,
+            "roll_date": "2021-08-02"
+          },
+          {
+            "abs_diff": 0.0,
+            "harness_var": 183.3276887,
+            "passed": true,
+            "production_var": 183.3276887,
+            "published_var": 183.787077,
+            "rel_diff_vs_published": 0.002499568318,
+            "roll_date": "2021-09-01"
+          },
+          {
+            "abs_diff": 3.268496584e-12,
+            "harness_var": 198.1996701,
+            "passed": true,
+            "production_var": 198.1996701,
+            "published_var": 198.688176,
+            "rel_diff_vs_published": 0.002458656374,
+            "roll_date": "2021-10-01"
+          },
+          {
+            "abs_diff": 4.00746103e-12,
+            "harness_var": 171.501641,
+            "passed": true,
+            "production_var": 171.501641,
+            "published_var": 171.9261316,
+            "rel_diff_vs_published": 0.002469029161,
+            "roll_date": "2021-11-01"
+          },
+          {
+            "abs_diff": 0.0,
+            "harness_var": 191.4475344,
+            "passed": true,
+            "production_var": 191.4475344,
+            "published_var": 191.9255847,
+            "rel_diff_vs_published": 0.002490810725,
+            "roll_date": "2021-12-01"
+          },
+          {
+            "abs_diff": 0.0,
+            "harness_var": 265.0275278,
+            "passed": true,
+            "production_var": 265.0275278,
+            "published_var": 265.6846782,
+            "rel_diff_vs_published": 0.002473422219,
+            "roll_date": "2022-01-03"
+          },
+          {
+            "abs_diff": 7.275957614e-12,
+            "harness_var": 281.9103603,
+            "passed": true,
+            "production_var": 281.9103603,
+            "published_var": 282.6090062,
+            "rel_diff_vs_published": 0.00247212883,
+            "roll_date": "2022-02-01"
+          },
+          {
+            "abs_diff": 1.131184035e-11,
+            "harness_var": 324.3094637,
+            "passed": true,
+            "production_var": 324.3094637,
+            "published_var": 325.1178409,
+            "rel_diff_vs_published": 0.002486412845,
+            "roll_date": "2022-03-01"
+          },
+          {
+            "abs_diff": 1.125499693e-11,
+            "harness_var": 360.3355893,
+            "passed": true,
+            "production_var": 360.3355893,
+            "published_var": 361.2296294,
+            "rel_diff_vs_published": 0.002474991195,
+            "roll_date": "2022-04-01"
+          },
+          {
+            "abs_diff": 0.0,
+            "harness_var": 357.0263179,
+            "passed": true,
+            "production_var": 357.0263179,
+            "published_var": 357.91635,
+            "rel_diff_vs_published": 0.002486704409,
+            "roll_date": "2022-05-02"
+          },
+          {
+            "abs_diff": 3.296918294e-12,
+            "harness_var": 471.8446806,
+            "passed": true,
+            "production_var": 471.8446806,
+            "published_var": 473.0168415,
+            "rel_diff_vs_published": 0.002478053272,
+            "roll_date": "2022-06-01"
+          },
+          {
+            "abs_diff": 0.0,
+            "harness_var": 471.9238933,
+            "passed": true,
+            "production_var": 471.9238933,
+            "published_var": 473.0967214,
+            "rel_diff_vs_published": 0.002479045066,
+            "roll_date": "2022-07-01"
+          },
+          {
+            "abs_diff": 3.240074875e-12,
+            "harness_var": 411.9135703,
+            "passed": true,
+            "production_var": 411.9135703,
+            "published_var": 412.938165,
+            "rel_diff_vs_published": 0.002481230185,
+            "roll_date": "2022-08-01"
+          },
+          {
+            "abs_diff": 4.035882739e-12,
+            "harness_var": 412.2853862,
+            "passed": true,
+            "production_var": 412.2853862,
+            "published_var": 413.3175365,
+            "rel_diff_vs_published": 0.002497233115,
+            "roll_date": "2022-09-01"
+          },
+          {
+            "abs_diff": 0.0,
+            "harness_var": 435.5886025,
+            "passed": true,
+            "production_var": 435.5886025,
+            "published_var": 436.6788539,
+            "rel_diff_vs_published": 0.002496689299,
+            "roll_date": "2022-10-03"
+          },
+          {
+            "abs_diff": 0.0,
+            "harness_var": 553.0648351,
+            "passed": true,
+            "production_var": 553.0648351,
+            "published_var": 554.4390974,
+            "rel_diff_vs_published": 0.002478653197,
+            "roll_date": "2022-11-01"
+          },
+          {
+            "abs_diff": 3.183231456e-12,
+            "harness_var": 609.9519246,
+            "passed": true,
+            "production_var": 609.9519246,
+            "published_var": 611.4629766,
+            "rel_diff_vs_published": 0.002471207561,
+            "roll_date": "2022-12-01"
+          },
+          {
+            "abs_diff": 0.0,
+            "harness_var": 463.3304323,
+            "passed": true,
+            "production_var": 463.3304323,
+            "published_var": 464.4775242,
+            "rel_diff_vs_published": 0.002469639092,
+            "roll_date": "2023-01-03"
+          },
+          {
+            "abs_diff": 0.0,
+            "harness_var": 470.6601225,
+            "passed": true,
+            "production_var": 470.6601225,
+            "published_var": 471.8261857,
+            "rel_diff_vs_published": 0.002471382997,
+            "roll_date": "2023-02-01"
+          },
+          {
+            "abs_diff": 0.0,
+            "harness_var": 449.7293883,
+            "passed": true,
+            "production_var": 449.7293883,
+            "published_var": 450.844456,
+            "rel_diff_vs_published": 0.002473286931,
+            "roll_date": "2023-03-01"
+          },
+          {
+            "abs_diff": 3.240074875e-12,
+            "harness_var": 491.6795228,
+            "passed": true,
+            "production_var": 491.6795228,
+            "published_var": 492.9017402,
+            "rel_diff_vs_published": 0.002479637107,
+            "roll_date": "2023-04-03"
+          },
+          {
+            "abs_diff": 3.296918294e-12,
+            "harness_var": 435.1173706,
+            "passed": true,
+            "production_var": 435.1173706,
+            "published_var": 436.1989474,
+            "rel_diff_vs_published": 0.002479549311,
+            "roll_date": "2023-05-01"
+          },
+          {
+            "abs_diff": 0.0,
+            "harness_var": 386.4396556,
+            "passed": true,
+            "production_var": 386.4396556,
+            "published_var": 387.4020278,
+            "rel_diff_vs_published": 0.00248416927,
+            "roll_date": "2023-06-01"
+          },
+          {
+            "abs_diff": 0.0,
+            "harness_var": 353.5386176,
+            "passed": true,
+            "production_var": 353.5386176,
+            "published_var": 354.4175567,
+            "rel_diff_vs_published": 0.002479953563,
+            "roll_date": "2023-07-03"
+          },
+          {
+            "abs_diff": 0.0,
+            "harness_var": 368.627254,
+            "passed": true,
+            "production_var": 368.627254,
+            "published_var": 369.5445986,
+            "rel_diff_vs_published": 0.002482365072,
+            "roll_date": "2023-08-01"
+          },
+          {
+            "abs_diff": 7.275957614e-12,
+            "harness_var": 326.5230155,
+            "passed": true,
+            "production_var": 326.5230155,
+            "published_var": 327.3326353,
+            "rel_diff_vs_published": 0.002473385576,
+            "roll_date": "2023-09-01"
+          },
+          {
+            "abs_diff": 3.240074875e-12,
+            "harness_var": 297.1175348,
+            "passed": true,
+            "production_var": 297.1175348,
+            "published_var": 297.8582628,
+            "rel_diff_vs_published": 0.002486847381,
+            "roll_date": "2023-10-02"
+          },
+          {
+            "abs_diff": 4.00746103e-12,
+            "harness_var": 245.6193527,
+            "passed": true,
+            "production_var": 245.6193527,
+            "published_var": 246.2291551,
+            "rel_diff_vs_published": 0.002476564591,
+            "roll_date": "2023-11-01"
+          },
+          {
+            "abs_diff": 7.275957614e-12,
+            "harness_var": 250.828197,
+            "passed": true,
+            "production_var": 250.828197,
+            "published_var": 251.4457269,
+            "rel_diff_vs_published": 0.002455917135,
+            "roll_date": "2023-12-01"
+          },
+          {
+            "abs_diff": 4.00746103e-12,
+            "harness_var": 254.0465615,
+            "passed": true,
+            "production_var": 254.0465615,
+            "published_var": 254.678207,
+            "rel_diff_vs_published": 0.002480171002,
+            "roll_date": "2024-01-02"
+          },
+          {
+            "abs_diff": 7.275957614e-12,
+            "harness_var": 257.8921462,
+            "passed": true,
+            "production_var": 257.8921462,
+            "published_var": 258.533572,
+            "rel_diff_vs_published": 0.002481015326,
+            "roll_date": "2024-02-01"
+          },
+          {
+            "abs_diff": 3.97903932e-12,
+            "harness_var": 271.4805495,
+            "passed": true,
+            "production_var": 271.4805495,
+            "published_var": 272.1529712,
+            "rel_diff_vs_published": 0.002470749418,
+            "roll_date": "2024-03-01"
+          },
+          {
+            "abs_diff": 7.275957614e-12,
+            "harness_var": 245.57818,
+            "passed": true,
+            "production_var": 245.57818,
+            "published_var": 246.1897555,
+            "rel_diff_vs_published": 0.002484163017,
+            "roll_date": "2024-04-01"
+          },
+          {
+            "abs_diff": 3.268496584e-12,
+            "harness_var": 237.7897531,
+            "passed": true,
+            "production_var": 237.7897531,
+            "published_var": 238.3764089,
+            "rel_diff_vs_published": 0.002461048131,
+            "roll_date": "2024-05-01"
+          },
+          {
+            "abs_diff": 4.00746103e-12,
+            "harness_var": 224.9911814,
+            "passed": true,
+            "production_var": 224.9911814,
+            "published_var": 225.5494234,
+            "rel_diff_vs_published": 0.002475032005,
+            "roll_date": "2024-06-03"
+          },
+          {
+            "abs_diff": 0.0,
+            "harness_var": 264.2980643,
+            "passed": true,
+            "production_var": 264.2980643,
+            "published_var": 264.9516835,
+            "rel_diff_vs_published": 0.002466937402,
+            "roll_date": "2024-07-01"
+          },
+          {
+            "abs_diff": 0.0,
+            "harness_var": 263.030623,
+            "passed": true,
+            "production_var": 263.030623,
+            "published_var": 263.681206,
+            "rel_diff_vs_published": 0.002467309122,
+            "roll_date": "2024-08-01"
+          },
+          {
+            "abs_diff": 3.240074875e-12,
+            "harness_var": 312.1296693,
+            "passed": true,
+            "production_var": 312.1296693,
+            "published_var": 312.9064683,
+            "rel_diff_vs_published": 0.002482527891,
+            "roll_date": "2024-09-03"
+          },
+          {
+            "abs_diff": 3.296918294e-12,
+            "harness_var": 269.082819,
+            "passed": true,
+            "production_var": 269.082819,
+            "published_var": 269.7489242,
+            "rel_diff_vs_published": 0.002469352536,
+            "roll_date": "2024-10-01"
+          },
+          {
+            "abs_diff": 1.128341864e-11,
+            "harness_var": 246.712095,
+            "passed": true,
+            "production_var": 246.712095,
+            "published_var": 247.3230744,
+            "rel_diff_vs_published": 0.002470369521,
+            "roll_date": "2024-11-01"
+          },
+          {
+            "abs_diff": 4.035882739e-12,
+            "harness_var": 256.977078,
+            "passed": true,
+            "production_var": 256.977078,
+            "published_var": 257.617501,
+            "rel_diff_vs_published": 0.002485945223,
+            "roll_date": "2024-12-02"
+          },
+          {
+            "abs_diff": 0.0,
+            "harness_var": 279.4900121,
+            "passed": true,
+            "production_var": 279.4900121,
+            "published_var": 280.1853116,
+            "rel_diff_vs_published": 0.002481570322,
+            "roll_date": "2025-01-02"
+          },
+          {
+            "abs_diff": 7.275957614e-12,
+            "harness_var": 274.5989034,
+            "passed": true,
+            "production_var": 274.5989034,
+            "published_var": 275.2813646,
+            "rel_diff_vs_published": 0.002479140616,
+            "roll_date": "2025-02-03"
+          },
+          {
+            "abs_diff": 7.275957614e-12,
+            "harness_var": 252.6575146,
+            "passed": true,
+            "production_var": 252.6575146,
+            "published_var": 253.2835976,
+            "rel_diff_vs_published": 0.002471865401,
+            "roll_date": "2025-03-03"
+          },
+          {
+            "abs_diff": 4.035882739e-12,
+            "harness_var": 346.2162713,
+            "passed": true,
+            "production_var": 346.2162713,
+            "published_var": 347.0786727,
+            "rel_diff_vs_published": 0.00248474332,
+            "roll_date": "2025-04-01"
+          },
+          {
+            "abs_diff": 3.97903932e-12,
+            "harness_var": 688.1206719,
+            "passed": true,
+            "production_var": 688.1206719,
+            "published_var": 689.8287874,
+            "rel_diff_vs_published": 0.002476144118,
+            "roll_date": "2025-05-01"
+          },
+          {
+            "abs_diff": 0.0,
+            "harness_var": 454.9395225,
+            "passed": true,
+            "production_var": 454.9395225,
+            "published_var": 456.0643523,
+            "rel_diff_vs_published": 0.002466384005,
+            "roll_date": "2025-06-02"
+          },
+          {
+            "abs_diff": 4.035882739e-12,
+            "harness_var": 383.0568843,
+            "passed": true,
+            "production_var": 383.0568843,
+            "published_var": 384.0044293,
+            "rel_diff_vs_published": 0.002467536566,
+            "roll_date": "2025-07-01"
+          },
+          {
+            "abs_diff": 3.296918294e-12,
+            "harness_var": 502.0750918,
+            "passed": true,
+            "production_var": 502.0750918,
+            "published_var": 503.3245831,
+            "rel_diff_vs_published": 0.002482476038,
+            "roll_date": "2025-08-01"
+          },
+          {
+            "abs_diff": 4.035882739e-12,
+            "harness_var": 351.8245785,
+            "passed": true,
+            "production_var": 351.8245785,
+            "published_var": 352.6953177,
+            "rel_diff_vs_published": 0.00246881435,
+            "roll_date": "2025-09-02"
+          },
+          {
+            "abs_diff": 3.296918294e-12,
+            "harness_var": 495.9094272,
+            "passed": true,
+            "production_var": 495.9094272,
+            "published_var": 497.1419906,
+            "rel_diff_vs_published": 0.002479298608,
+            "roll_date": "2025-10-01"
+          },
+          {
+            "abs_diff": 3.97903932e-12,
+            "harness_var": 430.7352019,
+            "passed": true,
+            "production_var": 430.7352019,
+            "published_var": 431.8051719,
+            "rel_diff_vs_published": 0.002477899829,
+            "roll_date": "2025-11-03"
+          },
+          {
+            "abs_diff": 4.035882739e-12,
+            "harness_var": 431.1147481,
+            "passed": true,
+            "production_var": 431.1147481,
+            "published_var": 432.185067,
+            "rel_diff_vs_published": 0.002476529051,
+            "roll_date": "2025-12-01"
+          }
+        ],
+        "spy_sha256": "8d92d36da4e3f12dbf4d9056ccce5bc8e9fb2e5eddec151e3e3dc722ec6a54f8"
+      },
+      "P4": {
+        "decision": {
+          "T1": {
+            "analytic_p": 0.7601038226,
+            "in_band": true,
+            "p4_rate": 0.046,
+            "p_used": 0.7601038226,
+            "simulated_p": 0.8615692154
+          },
+          "T2": {
+            "analytic_p": 0.353644874,
+            "in_band": true,
+            "p4_rate": 0.053,
+            "p_used": 0.353644874,
+            "simulated_p": 0.3548225887
+          },
+          "T3": {
+            "analytic_p": 0.07769933438,
+            "in_band": false,
+            "p4_rate": 0.004,
+            "p_used": 0.005497251374,
+            "simulated_p": 0.005497251374
+          },
+          "z2_replaces_t3": true
+        },
+        "length": 2760,
+        "n99_breaches": 68670,
+        "n_forecasts": 5016000,
+        "n_paths": 2000,
+        "rejection_rates": {
+          "T1": 0.046,
+          "T2": 0.053,
+          "T3": 0.004
+        },
+        "tail_k": 1.0
+      }
+    },
+    "primary_M2": {
+      "D1_rejected": false,
+      "holm_adjusted": {
+        "T1": 0.7601038226,
+        "T2": 0.7072897481,
+        "T3": 0.0500949905
+      },
+      "p_used": {
+        "T1": 0.7601038226,
+        "T2": 0.353644874,
+        "T3": 0.01669833017
+      },
+      "tests": {
+        "T1": {
+          "p_value": 0.7601038226,
+          "statistic": 0.09323523521
+        },
+        "T2": {
+          "p_value": 0.353644874,
+          "statistic": 0.8603353116
+        },
+        "T3": {
+          "n": 2513,
+          "p_value": 0.07769933438,
+          "statistic": 0.01568235988,
+          "z": 1.76419393
+        },
+        "Z2": {
+          "critical_95": 0.3604602703,
+          "n_sim": 10000,
+          "p_value": 0.01669833017,
+          "statistic": 0.437513492
+        },
+        "holm_T1_T2_T3": [
+          0.7601038226,
+          0.7072897481,
+          0.2330980031
+        ],
+        "n": 2513,
+        "n_breaches_95": 129
+      }
+    },
+    "secondary_M1": {
+      "conditional_coverage_95": {
+        "n": 2513,
+        "p_value": 1.295388496e-07,
+        "statistic": 31.71857001
+      }
+    },
+    "secondary_M2": {
+      "basel_zones_99": [
+        {
+          "breaches": 0,
+          "start": "2016-01-04",
+          "zone": "green"
+        },
+        {
+          "breaches": 1,
+          "start": "2016-12-29",
+          "zone": "green"
+        },
+        {
+          "breaches": 13,
+          "start": "2017-12-27",
+          "zone": "red"
+        },
+        {
+          "breaches": 1,
+          "start": "2018-12-26",
+          "zone": "green"
+        },
+        {
+          "breaches": 8,
+          "start": "2019-12-23",
+          "zone": "yellow"
+        },
+        {
+          "breaches": 0,
+          "start": "2020-12-18",
+          "zone": "green"
+        },
+        {
+          "breaches": 12,
+          "start": "2021-12-16",
+          "zone": "red"
+        },
+        {
+          "breaches": 1,
+          "start": "2022-12-14",
+          "zone": "green"
+        },
+        {
+          "breaches": 5,
+          "start": "2023-12-13",
+          "zone": "yellow"
+        },
+        {
+          "breaches": 5,
+          "start": "2024-12-11",
+          "zone": "yellow"
+        }
+      ],
+      "conditional_coverage_95": {
+        "n": 2513,
+        "p_value": 0.6207758121,
+        "statistic": 0.9535705468
+      },
+      "kupiec_99": 0.0001773679441,
+      "readings_99": {
+        "nominal": {
+          "binomial": {
+            "breaches": 46,
+            "n": 2513,
+            "observed_rate": 0.01830481496,
+            "p_value": 0.0001741029985,
+            "rate_tested": 0.01
+          },
+          "kupiec_p_value": 0.0001773679441,
+          "zone_thresholds": {
+            "green_max": 4,
+            "yellow_max": 9
+          },
+          "zones_by_250_block": [
+            {
+              "breaches": 0,
+              "start": "2016-01-04",
+              "zone": "green"
+            },
+            {
+              "breaches": 1,
+              "start": "2016-12-29",
+              "zone": "green"
+            },
+            {
+              "breaches": 13,
+              "start": "2017-12-27",
+              "zone": "red"
+            },
+            {
+              "breaches": 1,
+              "start": "2018-12-26",
+              "zone": "green"
+            },
+            {
+              "breaches": 8,
+              "start": "2019-12-23",
+              "zone": "yellow"
+            },
+            {
+              "breaches": 0,
+              "start": "2020-12-18",
+              "zone": "green"
+            },
+            {
+              "breaches": 12,
+              "start": "2021-12-16",
+              "zone": "red"
+            },
+            {
+              "breaches": 1,
+              "start": "2022-12-14",
+              "zone": "green"
+            },
+            {
+              "breaches": 5,
+              "start": "2023-12-13",
+              "zone": "yellow"
+            },
+            {
+              "breaches": 5,
+              "start": "2024-12-11",
+              "zone": "yellow"
+            }
+          ]
+        },
+        "own_rate": {
+          "binomial": {
+            "breaches": 46,
+            "n": 2513,
+            "observed_rate": 0.01830481496,
+            "p_value": 0.05800507801,
+            "rate_tested": 0.01369019139
+          },
+          "blocks": [
+            {
+              "breaches": 0,
+              "start": "2016-01-04",
+              "zone": "green"
+            },
+            {
+              "breaches": 1,
+              "start": "2016-12-29",
+              "zone": "green"
+            },
+            {
+              "breaches": 13,
+              "start": "2017-12-27",
+              "zone": "red"
+            },
+            {
+              "breaches": 1,
+              "start": "2018-12-26",
+              "zone": "green"
+            },
+            {
+              "breaches": 8,
+              "start": "2019-12-23",
+              "zone": "yellow"
+            },
+            {
+              "breaches": 0,
+              "start": "2020-12-18",
+              "zone": "green"
+            },
+            {
+              "breaches": 12,
+              "start": "2021-12-16",
+              "zone": "red"
+            },
+            {
+              "breaches": 1,
+              "start": "2022-12-14",
+              "zone": "green"
+            },
+            {
+              "breaches": 5,
+              "start": "2023-12-13",
+              "zone": "green"
+            },
+            {
+              "breaches": 5,
+              "start": "2024-12-11",
+              "zone": "green"
+            }
+          ],
+          "own_rate": 0.01369019139,
+          "thresholds": {
+            "green_max": 6,
+            "yellow_max": 11
+          }
+        }
+      },
+      "vix_regime_breaches_95": {
+        "above_median": {
+          "breaches": 106,
+          "n": 1147
+        },
+        "below_median": {
+          "breaches": 23,
+          "n": 1366
+        }
+      }
+    }
+  },
+  "study": "daily VaR and ES backtest of the standardised options book"
+}
