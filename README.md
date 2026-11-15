@@ -69,6 +69,14 @@ BSM off realized vol), no deployed strategy, no live trading.
 > ([`research/power/REPORT.md`](research/power/REPORT.md)) found that with 12 forecasts the coverage
 > test flags a VaR whose true breach rate is double the 5% target only 11% of the time, and 48% of the
 > time with 95 forecasts. The published non-rejections do not rule out mis-calibration of that size.
+>
+> **Daily backtest with volatility and time risk (2026-11-15).** A pre-specified follow-up
+> ([`research/daily_var_backtest/REPORT.md`](research/daily_var_backtest/REPORT.md)) re-marked the
+> book daily at VIX and ran 2,513 one-day forecasts over 2016–2025. A two-factor historical-simulation
+> VaR (SPY return and VIX change) is not rejected: 95% coverage p = 0.76, independence p = 0.35, and
+> the expected-shortfall test is at the boundary (Holm-adjusted p = 0.0501). The spot-only method,
+> scored against the same full P&L, is rejected on coverage and independence. Previously inspected
+> data; the published results are unchanged.
 
 Links: [technical paper](publication/options-risk-study/TECHNICAL-PAPER.md) ·
 [case study](publication/options-risk-study/CASE-STUDY.md) ·
