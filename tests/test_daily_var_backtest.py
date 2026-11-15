@@ -227,3 +227,143 @@ class TestRunner:
     def test_repo_has_no_protocol_yet(self) -> None:
         # The frozen copy is added by the owner; until then the real runner must refuse.
         assert runner.PROTOCOL.name == "PROTOCOL.md"
+
+
+def _p3_inputs(n: int = 420) -> tuple[pd.Series, pd.Series, list[pd.Timestamp]]:
+    rng = np.random.default_rng(11)
+    idx = pd.bdate_range("2019-01-01", periods=n)
+    spy = pd.Series(400.0 * np.exp(np.cumsum(rng.normal(0, 0.01, n))), index=idx)
+    rate = pd.Series([0.02, 0.025], index=[idx[0] - pd.Timedelta(days=5), idx[300]])
+    return spy, rate, [idx[260], idx[300], idx[350], idx[400]]
+
+
+class TestP3CodeEquivalence:
+    def test_passes_on_synthetic_series(self) -> None:
+        spy, rate, rolls = _p3_inputs()
+        res = dvb.p3_code_equivalence(spy, rate, rolls)
+        assert res["passed"] and res["n_rolls"] == 4
+        assert all(r["passed"] and r["abs_diff"] <= 1e-6 for r in res["rolls"])
+
+    def test_published_difference_is_informational(self) -> None:
+        spy, rate, rolls = _p3_inputs()
+        base = dvb.p3_code_equivalence(spy, rate, rolls)
+        pub = {rolls[0]: base["rolls"][0]["production_var"] * 1.01}
+        res = dvb.p3_code_equivalence(spy, rate, rolls, pub)
+        assert res["passed"]
+        assert res["rolls"][0]["rel_diff_vs_published"] == pytest.approx(
+            1 - 1 / 1.01 * 1.0, rel=1e-6
+        )
+        assert "rel_diff_vs_published" not in res["rolls"][1]
+
+    def test_fails_when_harness_pricer_perturbed(self, monkeypatch: pytest.MonkeyPatch) -> None:
+        spy, rate, rolls = _p3_inputs()
+        orig = dvb.book_value
+        monkeypatch.setattr(dvb, "book_value", lambda S, *a: orig(S, *a) + 1e-3 * np.asarray(S))
+        res = dvb.p3_code_equivalence(spy, rate, rolls)
+        assert not res["passed"]
+
+    def test_short_history_raises(self) -> None:
+        spy, rate, _ = _p3_inputs()
+        with pytest.raises(ValueError):
+            dvb.p3_code_equivalence(spy, rate, [spy.index[100]])
+
+
+class TestP3ShaGate:
+    def _setup(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch, *, match: bool
+    ) -> tuple[Path, pd.Series, pd.Series, dict[pd.Timestamp, float]]:
+        spy, rate, rolls = _p3_inputs()
+        path = tmp_path / "SPY.csv"
+        path.write_text("Date,Close\nx,1\n", encoding="utf-8")
+        sha = runner.sha256_file(path)
+        monkeypatch.setattr(runner, "PUBLISHED_SPY_SHA256", sha if match else "0" * 64)
+        base = dvb.p3_code_equivalence(spy, rate, rolls)
+        pub = {pd.Timestamp(r["roll_date"]): r["production_var"] for r in base["rolls"]}
+        return path, spy, rate, pub
+
+    def test_sha_match_requires_published_agreement(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        path, spy, rate, pub = self._setup(tmp_path, monkeypatch, match=True)
+        ok = runner.run_p3(path, spy, rate, pub)
+        assert ok["published_snapshot_supplied"] and ok["passed"] and ok["published_match_passed"]
+        bad = dict(pub)
+        first = next(iter(bad))
+        bad[first] *= 1.001
+        res = runner.run_p3(path, spy, rate, bad)
+        assert res["code_equivalence_passed"] and not res["published_match_passed"]
+        assert not res["passed"]
+
+    def test_sha_mismatch_records_difference_without_failing(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        path, spy, rate, pub = self._setup(tmp_path, monkeypatch, match=False)
+        bad = {k: v * 1.05 for k, v in pub.items()}
+        res = runner.run_p3(path, spy, rate, bad)
+        assert not res["published_snapshot_supplied"] and res["passed"]
+        assert res["max_rel_diff_vs_published"] > 0.04
+        assert "data vintage" in res["note"]
+
+    def test_published_loader_reads_committed_snapshots(self) -> None:
+        pub = runner.load_published_hs_var(REPO_ROOT / "results/historical_risk")
+        assert len(pub) >= 100 and all(v > 0 for v in pub.values())
+
+
+class TestConditionalCoverage:
+    def test_matches_production_without_gaps(self) -> None:
+        from options_risk.risk.backtesting import conditional_coverage_test
+
+        b = np.random.default_rng(3).random(400) < 0.07
+        res = dvb.conditional_coverage_gapped(b, np.ones(399, bool), 0.95)
+        prod = conditional_coverage_test(b, 0.95)
+        assert res["statistic"] == pytest.approx(prod.lr_statistic)
+        assert res["p_value"] == pytest.approx(prod.p_value)
+
+    def test_gap_drops_transitions_only_from_christoffersen_part(self) -> None:
+        from options_risk.risk.backtesting import kupiec_pof_test
+
+        b = np.random.default_rng(4).random(300) < 0.1
+        cont = np.ones(299, bool)
+        cont[[50, 120]] = False
+        res = dvb.conditional_coverage_gapped(b, cont, 0.95)
+        expect = (
+            kupiec_pof_test(b, 0.95).lr_statistic
+            + dvb.christoffersen_gapped(b, cont, 0.95)["statistic"]
+        )
+        assert res["statistic"] == pytest.approx(expect)
+        assert (
+            res["p_value"]
+            != dvb.conditional_coverage_gapped(b, np.ones(299, bool), 0.95)["p_value"]
+        )
+
+
+class TestOwnRate99:
+    def test_binomial_breach_test_known_values(self) -> None:
+        from scipy.stats import binomtest
+
+        res = dvb.binomial_breach_test(20, 1000, 0.0137)
+        assert res["p_value"] == pytest.approx(binomtest(20, 1000, 0.0137).pvalue)
+        assert dvb.binomial_breach_test(10, 1000, 0.01)["p_value"] == pytest.approx(1.0)
+        assert res["observed_rate"] == 0.02
+
+    def test_zone_thresholds_reproduce_basel_at_nominal(self) -> None:
+        assert dvb.basel_zone_thresholds(0.01) == {"green_max": 4, "yellow_max": 9}
+
+    def test_zone_thresholds_move_with_own_rate(self) -> None:
+        from scipy.stats import binom
+
+        th = dvb.basel_zone_thresholds(0.0137)
+        assert th["green_max"] >= 4 and th["yellow_max"] >= 9
+        g, y = th["green_max"], th["yellow_max"]
+        assert binom.cdf(g, 250, 0.0137) < 0.95 <= binom.cdf(g + 1, 250, 0.0137)
+        assert binom.cdf(y, 250, 0.0137) < 0.9999 <= binom.cdf(y + 1, 250, 0.0137)
+
+    def test_own_rate_pooled_from_p4_and_readings(self, frame: pd.DataFrame) -> None:
+        p4 = dvb.run_p4(2, length=330)
+        assert p4["n_forecasts"] > 0 and 0 <= dvb.own_rate_from_p4(p4) <= 1
+        assert dvb.own_rate_from_p4({"n99_breaches": 137, "n_forecasts": 10_000}) == 0.0137
+        fs = dvb.run_forecasts(frame, models=("M2",))
+        out = dvb.secondary_99_readings(fs, "M2", 0.0137)
+        assert out["nominal"]["zone_thresholds"] == {"green_max": 4, "yellow_max": 9}
+        assert out["own_rate"]["binomial"]["rate_tested"] == 0.0137
+        assert len(out["own_rate"]["blocks"]) == len(out["nominal"]["zones_by_250_block"])

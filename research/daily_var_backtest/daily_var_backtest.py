@@ -18,17 +18,27 @@ from typing import Any
 import numpy as np
 import pandas as pd
 from scipy.special import ndtr
-from scipy.stats import binom, norm
+from scipy.stats import binom, binomtest, chi2, norm
 
-from options_risk.historical_risk_study_v2 import build_standardized_portfolio
+from options_risk.historical_risk_study_v2 import (
+    HS_LOOKBACKS,
+    OPTION_MATURITY_SESSIONS,
+    REALIZED_VOL_WINDOW_PRIMARY,
+    _historical_log_returns_window,
+    build_standardized_portfolio,
+    log_returns,
+    point_in_time_value,
+    trailing_realized_vol,
+)
 from options_risk.portfolio.portfolio import Portfolio
 from options_risk.portfolio.positions import EquityPosition, OptionPosition
 from options_risk.pricing.black_scholes import bsm_price
 from options_risk.risk.backtesting import (
     christoffersen_independence_test,
+    conditional_coverage_test,
     kupiec_pof_test,
 )
-from options_risk.risk.var import compute_var_es
+from options_risk.risk.var import compute_var_es, historical_simulation_var
 from options_risk.stress.scenario import Scenario, revalue_portfolio
 
 WINDOW = 252
@@ -404,9 +414,27 @@ def christoffersen_gapped(
         int(((a == 0) & (c == 0)).sum()), int(((a == 0) & (c == 1)).sum()),
         int(((a == 1) & (c == 0)).sum()), int(((a == 1) & (c == 1)).sum()),
     )  # fmt: skip
-    from scipy.stats import chi2
-
     return {"statistic": float(lr), "p_value": float(chi2.sf(lr, 1))}
+
+
+def conditional_coverage_gapped(
+    breaches: np.ndarray, contiguous: np.ndarray, confidence_level: float
+) -> dict[str, float]:
+    """Conditional coverage (Kupiec LR + Christoffersen LR, chi2 with 2 df).
+
+    With no gaps this is the production ``conditional_coverage_test``. With gaps the Kupiec LR
+    still uses every forecast, and the Christoffersen LR drops transitions across a gap (the same
+    handling as ``christoffersen_gapped``).
+    """
+    b = np.asarray(breaches, dtype=bool)
+    if len(contiguous) != len(b) - 1:
+        raise ValueError("contiguous must have length len(breaches)-1")
+    if np.all(contiguous):
+        res = conditional_coverage_test(b, confidence_level)
+        return {"statistic": res.lr_statistic, "p_value": res.p_value, "n": int(len(b))}
+    lr = kupiec_pof_test(b, confidence_level).lr_statistic
+    lr += christoffersen_gapped(b, contiguous, confidence_level)["statistic"]
+    return {"statistic": float(lr), "p_value": float(chi2.sf(lr, 2)), "n": int(len(b))}
 
 
 def acerbi_szekely_z2(
@@ -541,6 +569,69 @@ def basel_zones_99(fs: ForecastSet, model: str, block: int = 250) -> list[dict[s
     return rows
 
 
+def basel_zone_thresholds(
+    p: float, n: int = 250, green_cum: float = 0.95, yellow_cum: float = 0.9999
+) -> dict[str, int]:
+    """Basel-style zone cut-offs from binomial(n, p) cumulative probabilities.
+
+    Green: P(X <= k) < ``green_cum``; yellow: P(X <= k) < ``yellow_cum``; red otherwise. At
+    p = 0.01, n = 250 this gives green <= 4 and yellow <= 9 (the standard Basel zones).
+    """
+    ks = np.arange(n + 1)
+    cdf = binom.cdf(ks, n, p)
+    green_max = int(ks[cdf < green_cum].max()) if (cdf < green_cum).any() else -1
+    yellow_max = int(ks[cdf < yellow_cum].max()) if (cdf < yellow_cum).any() else -1
+    return {"green_max": green_max, "yellow_max": yellow_max}
+
+
+def basel_zones_99_own_rate(
+    fs: ForecastSet, model: str, own_rate: float, block: int = 250
+) -> dict[str, Any]:
+    """The 250-day block zones at 99% under thresholds recomputed at the model's own breach rate."""
+    th = basel_zone_thresholds(own_rate, block)
+    breaches = fs.loss > fs.models[model].var[0.99]
+    blocks = []
+    for a in range(0, len(breaches) - block + 1, block):
+        k = int(breaches[a : a + block].sum())
+        zone = "green" if k <= th["green_max"] else "yellow" if k <= th["yellow_max"] else "red"
+        blocks.append({"start": str(fs.dates[a].date()), "breaches": k, "zone": zone})
+    return {"own_rate": own_rate, "thresholds": th, "blocks": blocks}
+
+
+def own_rate_from_p4(p4: dict[str, Any]) -> float:
+    """Pooled empirical 99% breach rate of M2 over the P4 synthetic paths (correct model)."""
+    return float(p4["n99_breaches"] / p4["n_forecasts"])
+
+
+def binomial_breach_test(k: int, n: int, rate: float) -> dict[str, float]:
+    """Two-sided exact binomial test of k breaches in n forecasts against ``rate``."""
+    return {
+        "breaches": int(k),
+        "n": int(n),
+        "rate_tested": float(rate),
+        "observed_rate": float(k / n),
+        "p_value": float(binomtest(int(k), int(n), rate, alternative="two-sided").pvalue),
+    }
+
+
+def secondary_99_readings(fs: ForecastSet, model: str, own_rate: float) -> dict[str, Any]:
+    """99% breaches read against nominal (1%) and the model's own rate (Kupiec/binomial, zones)."""
+    breaches = fs.loss > fs.models[model].var[0.99]
+    k, n = int(breaches.sum()), int(len(breaches))
+    return {
+        "nominal": {
+            "kupiec_p_value": kupiec_pof_test(breaches, 0.99).p_value,
+            "binomial": binomial_breach_test(k, n, 0.01),
+            "zone_thresholds": basel_zone_thresholds(0.01),
+            "zones_by_250_block": basel_zones_99(fs, model),
+        },
+        "own_rate": {
+            "binomial": binomial_breach_test(k, n, own_rate),
+            **basel_zones_99_own_rate(fs, model, own_rate),
+        },
+    }
+
+
 def kupiec_mde(
     n: int, alpha_level: float = 0.05 / 3, power: float = 0.8, p0: float = 0.05
 ) -> float:
@@ -619,11 +710,15 @@ def run_p4(
     """
     scale = scale or DEFAULT_T4_SCALE
     stats: dict[str, list[float]] = {"T1": [], "T2": [], "T3": []}
+    n99 = 0
+    n_fc = 0
     pvals: dict[str, list[float]] = {"T1": [], "T2": [], "T3": []}
     for i in range(n_paths):
         fr = synthetic_frame(i, length, scale)
-        fs = run_forecasts(fr, models=("M2",), levels=(0.95, 0.975))
+        fs = run_forecasts(fr, models=("M2",), levels=(0.95, 0.975, 0.99))
         mf = fs.models["M2"]
+        n99 += int((fs.loss > mf.var[0.99]).sum())  # untouched losses: the model's own 99% rate
+        n_fc += int(len(fs.loss))
         loss = fs.loss.copy()
         if tail_k != 1.0:
             hit = loss > mf.var[0.975]
@@ -638,6 +733,8 @@ def run_p4(
         "length": length,
         "tail_k": tail_k,
         "rejection_rates": rates,
+        "n99_breaches": n99,
+        "n_forecasts": n_fc,
         "statistics": stats,
     }
 
@@ -723,6 +820,64 @@ def check_repricing(
     }
 
 
+def p3_code_equivalence(
+    spy_close: pd.Series,
+    rate: pd.Series,
+    roll_dates: Any,
+    published: dict[Any, float] | None = None,
+) -> dict[str, Any]:
+    """P3 (code equivalence): production HS 95% VaR against this harness, on published inputs.
+
+    At each roll date the inputs are built as ``run_nonlinear_portfolio_study`` builds them: spot
+    S0 = close on the roll date; sigma = 20-session annualised realised vol over the returns
+    ending at t-1 (``trailing_realized_vol``); r from ``point_in_time_value``; q = 0;
+    T = OPTION_MATURITY_SESSIONS/252; the 252-return window ends at t-1.
+    (a) is ``historical_simulation_var`` on that book and window. (b) is this harness's vectorised
+    pricer and scenario code (spot-only shocks, no decay) on the same inputs. Passes when
+    |a-b| <= 1e-6 * max(1, |a|) at every roll. ``published`` (date -> published VaR) only adds an
+    informational relative difference of (a); it is never asserted on here.
+    """
+    returns = log_returns(spy_close)
+    T = OPTION_MATURITY_SESSIONS / YEAR_SESSIONS
+    lookback = HS_LOOKBACKS["primary"]
+    pub = {pd.Timestamp(k): float(v) for k, v in (published or {}).items()}
+    rolls: list[dict[str, Any]] = []
+    for d in roll_dates:
+        date = pd.Timestamp(d)
+        idx_pos = int(spy_close.index.get_indexer(pd.DatetimeIndex([date]))[0])
+        ret_pos = int(returns.index.get_indexer(pd.DatetimeIndex([date]))[0])
+        if idx_pos < 0 or ret_pos < 0:
+            raise ValueError(f"P3 roll date {date.date()} is not a session in the SPY series")
+        window = _historical_log_returns_window(returns, ret_pos, lookback)
+        sigma = trailing_realized_vol(returns, ret_pos, REALIZED_VOL_WINDOW_PRIMARY)
+        if window is None or not np.isfinite(sigma) or sigma <= 0:
+            raise ValueError(f"P3 roll date {date.date()} lacks history for the published inputs")
+        S0 = float(spy_close.iloc[idx_pos])
+        r = point_in_time_value(rate, date).value
+        pf = build_standardized_portfolio(S0, T, r, sigma, 0.0, put_moneyness=PUT_MONEYNESS)
+        a = float(historical_simulation_var(pf, window, confidence_level=0.95).var)
+        shocks = np.stack([window, np.zeros_like(window)], axis=1)[None]
+        s_, t_, r_, v_ = (np.array([x]) for x in (S0, T, r, sigma))
+        scen = scenario_losses(s_, s_, t_, r_, v_, shocks, model="M1")
+        b = float(compute_var_es(scen[0], 0.95)[0])
+        row: dict[str, Any] = {
+            "roll_date": str(date.date()),
+            "production_var": a,
+            "harness_var": b,
+            "abs_diff": abs(a - b),
+            "passed": bool(abs(a - b) <= 1e-6 * max(1.0, abs(a))),
+        }
+        if date in pub:
+            row["published_var"] = pub[date]
+            row["rel_diff_vs_published"] = abs(a - pub[date]) / max(abs(pub[date]), 1e-300)
+        rolls.append(row)
+    return {
+        "rolls": rolls,
+        "n_rolls": len(rolls),
+        "passed": bool(len(rolls) > 0 and all(r_["passed"] for r_ in rolls)),
+    }
+
+
 def check_prefix_invariance(frame: pd.DataFrame, n_forecast: int = 1500) -> dict[str, Any]:
     """P2: forecasts from data truncated at forecast number ``n_forecast`` equal the full run's.
 
@@ -756,7 +911,7 @@ def run_study(
     p4_scale: dict[str, float] | None = None,
     prefix_forecasts: int = 1500,
 ) -> dict[str, Any]:
-    """Preconditions P1, P2, P4, then the tests of sections 6 and 8. P3 is not implemented here."""
+    """Preconditions P1, P2, P4, then the tests (sections 6, 8). P3 runs earlier, in the runner."""
     out: dict[str, Any] = {"preconditions": {}}
     pre = out["preconditions"]
     pre["P1"] = check_repricing()
@@ -789,10 +944,20 @@ def run_study(
     out["M1"] = evaluate_model(fs, "M1")
     out["M1_by_period"] = evaluate_by_period(fs, "M1")
     mf = fs.models["M2"]
+    own = own_rate_from_p4(p4)
     out["secondary_M2"] = {
         "kupiec_99": kupiec_pof_test(fs.loss > mf.var[0.99], 0.99).p_value,
         "basel_zones_99": basel_zones_99(fs, "M2"),
+        "readings_99": secondary_99_readings(fs, "M2", own),
+        "conditional_coverage_95": conditional_coverage_gapped(
+            fs.loss > mf.var[0.95], fs.contiguous, 0.95
+        ),
         "vix_regime_breaches_95": vix_regime_breaches(fs, frame, "M2"),
+    }
+    out["secondary_M1"] = {
+        "conditional_coverage_95": conditional_coverage_gapped(
+            fs.loss > fs.models["M1"].var[0.95], fs.contiguous, 0.95
+        ),
     }
     out["mde"] = {
         "T1_kupiec_multiple_at_holm_level": kupiec_mde(len(fs.rows)),
